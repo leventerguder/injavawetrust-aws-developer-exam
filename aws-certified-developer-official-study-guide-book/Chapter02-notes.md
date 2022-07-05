@@ -74,3 +74,63 @@ if you omit the network configuration, Amazon EC2 assigns the instance to one of
 
 A security group protects the traffic entering and exiting the network interface. Security groups act as a stateful
 firewall. To make network connections to your instance, you must set security group rules to allow the connection.
+
+## Accessing Instances
+
+By default, Linux Amazon EC2 instances provide remote access through SSH, and Windows Amazon EC2 instances provide
+remote access through the Remote Desktop Protocol (RDP). To connect to these services, you must have the appropriate
+inbound rules on the security group for the instance.
+
+## Default User
+
+The default user for Amazon Linux instances is ec2-user. For other Linux operating systems, this default user may vary
+depending on the AMI provider. For example, the default user for Ubuntu Linux is ubuntu.
+For Windows instances, the default user is Administrator.
+
+## Amazon EC2 Key Pairs
+
+An Amazon EC2 key pair has a name, and it is composed of a public key and a private key.
+You are responsible for storing the private key file securely. You will not be able to download it again after it is
+created.
+
+Amazon EC2 key pairs are regional scope, so you need key pairs in each region where you launch EC2 instances.
+
+## Instance Lifecycle
+
+An Amazon EC2 instance has three primary states: running ,stopped, and terminated.
+Additionally, there are intermediate states of pending, stopping, shutting down.
+
+![](Amazon EC2 instance lifecycle.png)
+
+# Running Applications on Instances
+
+## Connecting to Amazon EC2 Instances
+
+By default, to connect a Linux instance, you can directly use the private key from the Amazon EC2 key pair with an SSH
+client.
+
+## Customizing Software with User Data
+
+For Linux instances, user data can be a shell script or a cloud-init directive.
+By default, commands supplied to user data execute only at first boot of the instance.
+
+## Assigning AWS API Credentials
+
+You can assign an IAM role to an Amazon EC2 instance. The AWS Software Development Kit (SDK) and AWS Command Line
+Interface (AWS CLI) can automatically discover these credentials through the Amazon EC2 metadata service.
+
+When you assign an IAM role to an instance, it is assigned indirectly, through an instance profile, which is a container
+for an IAM role.
+
+When an instance profile with an IAM role is associated with an instance, the Amazon EC2 service makes the necessary
+calls to the AWS Security Token Service(AWS STS) automatically to generate short-term credentials for that instance.
+
+## Monitoring Instances
+
+The results of these status checks are available in Amazon CloudWatch.
+For each of your instances, the Amazon EC2 service automatically collects metrics related to CPU utilization, disk reads
+and writes, and network utilization and makes them available in CloudWatch.
+
+# Customizing the Network
+
+
