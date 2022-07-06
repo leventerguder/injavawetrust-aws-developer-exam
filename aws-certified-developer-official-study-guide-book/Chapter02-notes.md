@@ -133,4 +133,133 @@ and writes, and network utilization and makes them available in CloudWatch.
 
 # Customizing the Network
 
+## Amazon Virtual Private Cloud
 
+Amazon Virtual Private Cloud (Amazon VPC) provides logically isolated networks within your AWS account.
+You define an Amazon VPC with one or more blocks of address specified in the Classless Inter-Domain Routing (CIDR)
+notation.
+
+## Connecting to Other Networks
+
+By default, an Amazon VPC is an isolated network. Instances within an Amazon VPC cannot communicate with the internet or
+other networks until you explicitly create connections.
+
+**Internet Gateway**
+
+A highly available connection that allows outbound and inbound requests to the internet from your Amazon VPC.
+
+**Egress Only Internet Gateway**
+
+A special type of internet gateway for IPv6 that allows outbound traffic and corresponding responses but blocks inbound
+connections.
+
+**Virtual Private Gateway**
+
+Allows you to establish a private connection to your corporate network by using a VPN connection or through Direct
+Connect (DX).
+
+**Amazon VPC Endpoints**
+
+Allows traffic from your Amazon VPC to go to specific AWS services or third-party SaaS services without traversing an
+internet gateway.
+
+**Amazon VPC Peering**
+
+Privately routes traffic from one Amazon VPC to another Amazon VPC by establishing a peer relationship between this VPC
+and another VPC.
+
+**AWS Transit Gateway**
+
+Allows you to centrally manage connectivity between many VPCs and an on-premises environment using a single gateway.
+
+## IP Addresses
+
+When working with Amazon VPC, all instances placed within a particular VPC are assigned one or more IP addresses.
+
+### Private IP Addresses
+
+Private IP addresses are IPv4 addresses that are not reachable from the internet. These addresses are unique within a
+VPC and used for traffic that is to be routed internally within the VPC, for private communication with corporate
+networks, or for private communication with other VPCs.
+
+### Public IP Addresses
+
+Whether an EC2 instance is assigned public IP addresses automatically, in addition to the private IP address, depends on
+the following factors:
+
+- Configuration passed when launching the instance
+- Options for the subnet in which that instance is launched
+
+Unlike the private IP address, the public IP address is an IPv4 address that is reachable from the internet.
+You cannot manually associate or disassociate public IP addresses from an instance.
+
+### Elastic IP Addresses
+
+An Elastic IP address is similar to a public IP address in that it is an IPv4 address that is reachable from the
+internet. However, unlike public IP addresses, you manage the association between instances and Elastic IP addresses.
+
+### IPv6 Addresses
+
+In addition to IPv4 addresses, you can associate an Amazon-provided block of IPv6 addresses to your VPC. When you enable
+IPv6 in your VPC, the network operates in dual-stack mode, meaning that IPv4 and IPv6 commutations are independent of
+each other.
+
+## Subnets
+
+A subnet is associated with a specific Availability ZOne within the region containing the Amazon VPC. Each subnet has
+its own block of private IP addresses defined using CIDR notation.
+
+Typically, you create at least two types of configurations for subnets in a VPC.
+
+The first is for subnets in which you place instances that you want to reach directly from the internet. This could be
+an instance running as a web server, for example. Subnets of this type are known as public subnets.
+
+The second type of configuration is usually a subnet that backend instances use that must be accessible to your other
+instances but should not be directly accessible from the internet. Subnets of this type are known as private subnets.
+
+## Route Tables
+
+Network traffic exiting a subnet is controlled with routes that are defined in a route table.
+Route define how the implicit router in the Amazon VPC routes IP traffic from a subnet to destinations outside that
+subnet. Each route table includes a rule called the local route.
+
+This rule or route is what allows traffic from instances in one subnet within the Amazon VPC to send traffic to
+instances in any other subnets within the same Amazon VPC. A route is composed of two parts: a destination and a target
+for the network traffic.
+
+Unless explicitly associated with a specific route table, subnets associate with a default route table called the main
+route table. By default, the main route table includes only the local route. This means that subnets that are associated
+with the default route table have no connection to the internet.
+
+## Security Groups
+
+Security groups act as a stateful firewall for your Amazon EC2 instances.
+When you define security group rules, you specify the source or destination of the network traffic in addition to the
+protocols and ports that you allow. If you change the security group rules, that change propagates to any instances
+associated with that security group.
+
+By using inbound security group rules, you can control the source, protocol, and ports of allowed network traffic.
+Security groups include a default outbound rule that allows all outbound requests on all protocols and ports to all
+destinations.
+
+Security groups only support rules to allow traffic. Therefore, if you assign multiple security groups to your instance,
+the security group rules combine in the most permissive way; each group contributes to opening up more access to the
+instance.
+
+## Network Access Control Lists
+
+In addition to routes, network access control lists (network ACLs) allow an administrator to control traffic that
+enters and leaves a subnet.
+
+A network ACL consists of inbound and outbound rules that you can associate with multiple subnets within a specific
+Amazon VPC. Network ACLs act as a stateless firewall for traffic to or from a specific subnet.
+
+Whereas security group rules provide only the capability to allow traffic, network ACL rules support the ability to
+allow specific types or traffic and to deny specific traffic.
+
+However, unlike security groups, network ACLs are stateless and do not track connections and their replies. This means
+that to allow for a particular traffic flow, both inbound and outbound rules must allow it for that network ACL.
+
+If you do not specify a network ACL, the subnet is associated with the default network ACL for the Amazon VPC. 
+
+![](Network-ACLs-and-security-groups.png)
