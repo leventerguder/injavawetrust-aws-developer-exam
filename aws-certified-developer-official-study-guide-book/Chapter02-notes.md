@@ -260,6 +260,131 @@ allow specific types or traffic and to deny specific traffic.
 However, unlike security groups, network ACLs are stateless and do not track connections and their replies. This means
 that to allow for a particular traffic flow, both inbound and outbound rules must allow it for that network ACL.
 
-If you do not specify a network ACL, the subnet is associated with the default network ACL for the Amazon VPC. 
+If you do not specify a network ACL, the subnet is associated with the default network ACL for the Amazon VPC.
 
 ![](Network-ACLs-and-security-groups.png)
+
+## Network Address Translation
+
+Network address translation(NAT) allows for instances in a private subnet to make out-bound requests to the internet
+without exposing those instances to inbound connections from internet users.
+
+The instances in the private subnet maintain their own private IP addresses and effectively share the public IP address
+of the NAT when making internet requests.
+
+For the NAT to perform its job, you must place the NAT instance or a NAT gateway in a correctly configured public subnet
+to forward traffic to the internet.
+
+![](NAT-gateway-in-amazon-vpc.png)
+
+## DHCP Option Sets
+
+The Dynamic Host Configuration Protocol (DHCP) provides a standard for passing configuration information to hosts on a
+TCP/IP network. The options field of a DHCP message contains the configuration parameters.
+
+## Monitoring Amazon VPC Network Traffic
+
+You can monitor the network flows within your Amazon VPC by enabling Amazon VPC Flow Logs. You can then publish these
+logs to Amazon CloudWatch Logs or store them as log files in Amazon Simple Storage Service (Amazon S3).
+
+# Managing Your Resources
+
+## Shared Responsibility Security Model
+
+AWS is responsible for the security of the cloud. This involves securing physical access
+to the underlying infrastructure, such as the AWS Regions and Availability Zones.
+
+As the AWS customer, you are responsible for security on the cloud. This responsibility includes making secure choices
+when configuring your infrastructure and developing your applications.
+
+![](shared-responsibility-security-model.png)
+
+Your responsibilities include the following tasks:
+
+- Making sure that any sensitive data is secured
+- Making sure that the guest operating system is patched regularly
+- Managing the guest operating system’s user accounts
+- Managing the guest operating system’s user accounts
+
+## Comparing Managed and Unmanaged Services
+
+Even though services such as Amazon EC2 provide many low-level customizations, other AWS services provide a managed
+experience. When you use AWS managed services, you may find that you have less responsibility. For example, for Amazon
+RDS, AWS manages the software installed on the underlying database instance.
+
+# Developer Tools
+
+With AWS Cloud9, you can create developer environments that execute on either an Amazon EC2 instance or another server.
+AWS Cloud9 provides a web interface for edit- ing code, debugging, and running commands. It supports more than 40
+programming languages, and it can automatically configure the AWS SDK to use short-term managed credentials.
+
+# Summary
+
+Amazon Elastic Compute Cloud (Amazon EC2) instances are compute environments that provide you with full control over the
+operating system and software. The instance type and instance size determine the hardware available to an instance. This
+includes properties such as vCPU, RAM, access to local storage, and network bandwidth.
+
+Amazon Elastic Block Store (Amazon EBS) provides persistent storage for EC2 instances.
+
+An Amazon Machine Image (AMI) provides the template for the software on the instance.
+
+Additionally, user data allows you to run a script on the instance to automatically update the software on the instance.
+To make AWS API calls from code running on an EC2 instance, assign an AWS Identity and Access Management (IAM) role to
+the instance by way of an instance profile.
+
+Use Amazon CloudWatch to collect instance monitoring and utilization metrics.
+
+Amazon Virtual Private Cloud (Amazon VPC) enables your EC2 instances to be placed into isolated networks where you have
+control over the connectivity to other networks, such as the internet, on-premises networks, or other VPCs.
+
+Within a VPC, the network is segmented into subnets. Instances within a subnet in a VPC are assigned private IPv4
+addresses. They can be assigned public IPv4 addresses, Elastic IP addresses, or IPv6 addresses.
+
+Routing between the instances in the VPC and other networks is controlled on a subnet level using routes and route
+tables. This configuration enables you to define some subnets as public and others as private.
+
+Network access control lists (network ACLs) act as a stateless firewall on all traffic that leaves or enters a subnet.
+
+Security groups act as a stateful firewall that protects individual traffic flows at an instance level.
+
+The responsibility for keeping your instances secure is shared between AWS and you, the customer. AWS is responsible for
+securing access to the infrastructure and providing you with controls that you can use to secure your instances. As an
+AWS customer, you are responsible for configuring your resources in a way that is secure and meets your application
+needs.
+
+# Exam Essentials
+
+**Know the basics of Amazon EC2, such as resource types, instance types, AMIs, and storage.**
+
+Be familiar with launching and connecting to Amazon EC2 instances. Understand the resource types of Amazon EC2 instance
+types. Be familiar with the purpose of an AMI in relation to launching an instance. Understand the distinction between
+persistent and ephemeral storage related to a particular Amazon EC2 instance.
+
+**Know about user data, instance metadata, and credentials.**
+
+Be familiar with using user data to customize the software by executing scripts on instances. Any scripts or code
+running on an instance can use the Amazon EC2 metadata service to discover the instance configuration. Use IAM roles to
+provide AWS Cloud API credentials automatically to code running on an Amazon EC2 instance.
+
+**Know how Amazon EC2 communicates with Amazon VPC.**
+
+Understand the relationship between an EC2 instance and the Amazon VPC network. There may be questions that ask you to
+troubleshoot issues related to connecting to an Amazon EC2 instance. Be familiar with how Amazon VPC enables
+communication between Amazon EC2 instances within the same Amazon VPC and isolates those instances from other Amazon
+VPCs. Recognize how route tables, network access control lists, and security groups control network traffic.
+
+**Know about public and private subnets.**
+
+Within an Amazon VPC, you must be able to distinguish between public and private subnets. Public subnets allow you to
+assign public IPv4 addresses to Amazon EC2 instances. By contrast, instances in a private subnet have only private IP
+addresses. The key distinction is that public subnets have a route table entry that forwards internet-bound traffic to
+an internet gateway. Private subnets do not have a direct route to the internet. Instead, these subnets have a route
+that forwards internet bound traffic through a NAT gateway or NAT instance.
+
+**Know about security groups and network ACLs.**
+
+Be familiar with the separation between AWS responsibility and your responsibility concerning Amazon EC2 instances.
+AWS is responsible for providing secure building blocks up until the hypervisor layer for the Amazon EC2 instance.
+This includes securing the physical facilities and machines and any hardware decommissioning. You are responsible for
+patching the guest operating system and applications. You are also responsible for configuring firewall rules,
+encryption, and access to the instance in a way that meets their requirements.
