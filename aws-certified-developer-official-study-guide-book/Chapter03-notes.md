@@ -202,3 +202,96 @@ separately using AWS KMS.
 
 You can also encrypt your files prior to placing them on the volume. Snapshots of encrypted Amazon EBS volumes are
 automatically encrypted. Amazon EBS volumes that are restored from encrypted snapshots are also automatically encrypted.
+
+## Amazon EBS Performance
+
+**Use Amazon EBS-optimized instances**
+
+The dedicated network throughput that you get when you request Amazon EBS–optimized support will make volume performance
+more predictable and consistent, and your Amazon EBS volume network traffic will not have to contend with your other
+instance traffic because they are kept separate.
+
+**Understand how performance is calculated**
+
+When you measure the performance of your Amazon EBS volumes, it is important to understand the units of measure involved
+and how performance is calculated.
+
+**Understand your workload**
+
+There is a relationship between the maximum performance of your Amazon EBS volumes, the size and number of I/O
+operations, and the time it takes for each action to complete. Each of these factors affects the others, and different
+applications are more sensitive to one factor or another.
+
+**Be aware of the performance penalty when initializing volumes from snapshots**
+
+New Amazon EBS volumes receive their maximum performance the moment that they are available and do not require
+initialization (formerly known as pre-warming).
+
+**Factors that can degrade HDD performance**
+
+When you create a snapshot of a Throughput-Optimized HDD or Cold HDD volume, performance may drop as far as the volume’s
+baseline value while the snapshot is in progress. This behavior is specific only to these volume types.
+
+**Increase read-ahead for high-throughput, read-heavy workloads**
+
+Some workloads are read-heavy and access the block device through the operating system page cache (for example, from a
+file system). In this case, to achieve the maximum throughput, we recommend that you configure the read-ahead setting to
+1 MiB. This is a per-block-device setting that should be applied only to your HDD volumes.
+
+**Use RAID 0 to maximize utilization of instance resources**
+
+Some instance types can drive more I/O throughput than what you can provision for a single Amazon EBS volume. You can
+join multiple volumes of certain instance types together in a RAID 0 configuration to use the available bandwidth for
+these instances.
+
+**Track performance with Amazon CloudWatch**
+
+Amazon CloudWatch, a monitoring and management service, provides performance metrics and status checks for your Amazon
+EBS volumes.
+
+## Amazon EBS Troubleshooting
+
+If you are using an Amazon EBS volume as a boot volume, your instance is no longer accessible, and you cannot use SSH
+or Remote Desktop Protocol (RDP) to access that boot volume.
+
+If you have an Amazon EC2 instance based on an Amazon Machine Image (AMI), you may just choose to terminate the instance
+and create a new one.
+
+If you do need access to that Amazon EBS boot volume, perform the following steps to make it accessible:
+
+- Create a new Amazon EC2 instance with its own boot volume (a micro instance is great for this purpose).
+- Detach the root Amazon EBS volume from the troubled instance.
+- Attach the root Amazon EBS volume from the troubled instance to your new Amazon EC2 instance as a secondary volume.
+- Connect to the new Amazon EC2 instance, and access the files on the secondary volume.
+
+## Instance Store
+
+Amazon EC2 instance store is another type of block storage available to your Amazon EC2 instances.
+It provides temporary block-level storage, and the storage is located on disks that are physically attached to the host
+computer (unlike Amazon EBS volumes, which are network-attached).
+
+### Instance Store Volumes
+
+Instance store should not be used for persistent storage needs. It is a type of ephemeral (short-lived) storage that
+does not persist if the instance fails or is terminated.
+
+After you launch an instance, the instance store volumes are available to the instance, but you cannot access them until
+they are mounted.
+
+Do not use instance store for any production data.
+
+### Instance Store–Backed Amazon EC2 Instances
+
+With Amazon EC2, you can use both instance store–backed storage volumes and Amazon EBS–backed storage volumes with your
+instances, meaning you can have your instance boot off instance store; however, you would want this configured so that
+you are using an AMI and that new instances will be created if one fails.
+
+Instance store–backed Amazon EC2 instances cannot be stopped and cannot take advantage of the auto recovery feature for
+Amazon EC2 instances.
+
+# AWS Object Storage Services
+
+An object is a piece of data like a document, image, or video that is stored with some metadata in a flat structure.
+
+## Amazon Simple Storage Service
+
