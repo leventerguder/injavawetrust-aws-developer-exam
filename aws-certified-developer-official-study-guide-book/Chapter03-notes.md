@@ -295,3 +295,224 @@ An object is a piece of data like a document, image, or video that is stored wit
 
 ## Amazon Simple Storage Service
 
+Building a web application, which delivers content to users by retrieving data via making API calls over the internet,
+is not a difficult task with Amazon S3. Amazon Simple Storage Service (Amazon S3) is storage for the internet.
+
+### Buckets
+
+A bucket is a container for objects stored in Amazon S3. Every object is contained in a bucket.
+
+### Limitations
+
+The following are limitations of which you should be aware when using Amazon S3 buckets:
+
+- Do not use buckets as folders, because there is a maximum limit of 100 buckets per account.
+- You cannot create a bucket within another bucket.
+- A bucket is owned by the AWS account that created it, and bucket ownership is not transferable.
+- A bucket must be empty before you can delete it.
+- After bucket is deleted , that name becomes available to reuse, but the name might not be available for you to reuse
+  for various reasons, such as someone else taking the name after you release it when deleting the bucket. If you expect
+  to use same bucket name, do not delete the bucket.
+
+You can only create up to 100 buckets per account. Do not use buckets as folders or design your application in a way
+that could result in more than 100 buckets as your application or data grows.
+
+### Universal Namespace
+
+A bucket name must be unique across all existing bucket names in Amazon S3 across all of AWS.
+Not just within your account or within your chosen AWS Region. You must comply with Domain Name System (DNS) naming
+conventions when choosing a bucket name.
+
+The rules for DNS-compliant bucket names are as follows:
+
+- Bucket names must be at least 3 and no more than 63 characters long.
+- A bucket name must consist of a series of one or more labels, with adjacent labels separated by a single period (.).
+- A bucket name must contain lowercase letters, numbers, and hyphens.
+- Each label must start and end with a lowercase letter or number.
+- Bucket names must not be formatted like IP addresses (for example, 192.168.5.4).
+- AWS recommends that you do not use periods (.) in bucket names. When using virtual hosted-style buckets with Secure
+  Sockets Layer (SSL), the SSL wildcard certificate only matches buckets that do not contain periods. To work around
+  this, use HTTP or write your own certificate verification logic.
+
+AWS S3 bucket names must be universally unique.
+
+### Versioning
+
+Versioning is a means of keeping multiple variants of an object in the same bucket. You can use versioning to preserve,
+retrieve, and restore every version of every object stored in your Amazon S3 bucket, including recovering deleted
+objects.
+
+There are several reasons that developers will turn on versioning of files in Amazon S3, including the following:
+
+- Protecting from accidental deletion.
+- Recovering an earlier version.
+- Retrieving deleted objects.
+
+Versioning is turned off by default. When you turn on versioning, Amazon S3 will cre- ate new versions of your object
+every time you overwrite a particular object key. Every time you update an object with the same key, Amazon S3 will
+maintain a new version of it.
+
+Amazon S3 versioning tracks the changes over time.
+
+Amazon S3 versioning also protects against unintended deletes. If you issue a delete command against an object in a
+versioned bucket, AWS places a delete marker on top of that object, which means that if you perform a GET on it, you
+will receive an error as if the object does not exist. However, an administrator, or anyone else with the necessary
+permissions, could remove the delete marker and access the data.
+
+Versioning-enabled buckets let you recover objects from accidental deletion or overwrite. Your bucket’s versioning
+configuration can also be MFA Delete–enabled for an additional layer of security.
+
+It is easy to set up a lifecycle policy to control the amount of data that’s being retained when you use versioning on a
+bucket.
+
+Once you enable versioning on a bucket, it can never return to an unversioned state. You can, however, suspend
+versioning on that bucket.
+
+### Region
+
+Amazon S3 creates buckets in a region that you specify. You can choose any AWS Region that is geographically close to
+you to optimize latency, minimize costs, or address regulatory requirements.
+
+Objects belonging to a bucket that you create in a specific AWS Region never leave that region unless you explicitly
+transfer them to another region.
+
+### Operations on Buckets
+
+There are a number of different operations (API calls) that you can perform on Amazon S3 buckets.
+
+## Object
+
+You can store an unlimited number of objects within Amazon S3, but an object can only be between 1 byte to 5 TB in size.
+If you have objects larger than 5 TB, use a file splitter and upload the file in chunks to Amazon S3. Then reassemble
+them if you download the file parts for later use.
+
+The largest object that can be uploaded in a single PUT is 5 GB. For objects larger than 100 MB, you should consider
+using multipart upload.For any objects larger than 5 GB, you must use multipart upload.
+
+### Object Facets
+
+An object consists of the following facets:
+
+**Key**
+
+The key is the name that you assign to an object, which may include a simulated folder structure. Each key must be
+unique within a bucket (unless the bucket has versioning turned on).
+
+Amazon S3 URLs can be thought of as a basic data map between “bucket + key + version” and the web service endpoint. For
+example, in the URL http://doc.s3.amazonaws.com/ 2006-03-01/AmazonS3.wsdl, doc is the name of the bucket and
+2006-03-01/AmazonS3.wsdl is the key.
+
+**Version ID**
+
+Within a bucket, a key and version ID uniquely identify an object. If versioning is turned off, you have only a single
+version. If versioning is turned on, you may have multiple versions of a stored object.
+
+**Value**
+
+The value is the actual content that you are storing. An object value can be any sequence of bytes, and objects can
+range in size from 1 byte up to 5 TB.
+
+**Metadata**
+
+Metadata is a set of name-value pairs with which you can store information regarding the object. You can assign
+metadata, referred to as user-defined metadata, to your objects in Amazon S3. Amazon S3 also assigns system metadata to
+these objects, which it uses for managing objects.
+
+**Subresources**
+
+Amazon S3 uses the subresource mechanism to store additional object-specific information. Because subresources are
+subordinates to objects, they are always associated with some other entity such as an object or a bucket.
+
+**Access Control Information**
+
+You can control access to the objects you store in Amazon S3. Amazon S3 supports both resource-based access control,
+such as an ACL and bucket policies, and user-based access control.
+
+### Object Tagging
+
+Object tagging enables you to categorize storage. Each tag is a key-value pair.
+
+Note the following limitations when working with tagging:
+
+- You can associate 10 tags with an object, and each tag associated with an object must have unique tag keys.
+- A tag key can be up to 128 Unicode characters in length, and tag values can be up to 256 Unicode characters in length.
+- Keys and values are case sensitive.
+
+### Cross-Origin Resource Sharing
+
+Cross-Origin Resource Sharing (CORS) defines a way for client web applications that are loaded in one domain to interact
+with resources in a different domain. With CORS support in Amazon S3, you can build client-side web applications with
+Amazon S3 and selectively allow cross-origin access to your Amazon S3 resources while avoiding the need to use a proxy.
+
+Suppose that you host a web font from your Amazon S3 bucket. Browsers require a CORS check (also referred as a preflight
+check) for loading web fonts, so you would configure the bucket that is hosting the web font to allow any origin to make
+these requests.
+
+## Storage Classes
+
+There are several different storage classes from which to choose when using Amazon S3. Your choice will depend on your
+level of need for durability, availability, and performance for your application.
+
+### Amazon S3 Standard
+
+Amazon S3 Standard offers high-durability, high-availability, and performance- object storage for frequently accessed
+data. Amazon S3 Standard is ideal for a wide variety of use cases, including the following:
+
+- Cloud applications
+- Dynamic websites
+- Content distribution
+- Mobile and gaming applications
+- Big data analytics
+
+Amazon S3 Standard is designed to achieve durability of 99.999999999 percent of objects (designed to sustain the loss of
+data in two facilities) and availability of 99.99 percent over a given year (which is backed by the Amazon S3 Service
+Level Agreement).
+
+### Reduced Redundancy Storage
+
+Reduced Redundancy Storage (RRS) (or Reduced_Redundancy) is an Amazon S3 storage option that enables customers to store
+noncritical, reproducible data at lower levels of redundancy than Amazon S3 Standard storage. It provides a highly
+available solution for distributing or sharing content that is durably stored elsewhere or for objects that can easily
+be regenerated, such as thumbnails or transcoded media.
+
+### Amazon S3 Standard-Infrequent Access
+
+Amazon S3 Standard-Infrequent Access (Standard_IA) is an Amazon S3 storage class for data that is accessed less
+frequently but requires rapid access when needed.
+
+The ideal use cases for using Standard_IA include the following:
+
+- Long-term storage
+- Backups
+- Data stores for disaster recovery
+
+Standard_IA is set at the object level and can exist in the same bucket as Amazon S3 Standard, allowing you to use
+lifecycle policies to transition objects automatically between storage classes without any application changes.
+
+Standard_IA is designed to achieve availability of 99.9 percent (but low retrieval time) and durability of 99.999999999
+percent of objects over a given year (same as Amazon S3 Standard).
+
+### Amazon S3 One Zone-Infrequent Access
+
+Amazon S3 One Zone-Infrequent Access (OneZone_IA) is similar to Amazon S3 Standard-IA. The difference is that the data
+is stored only in a single Availability Zone instead of a minimum of three Availability Zones. Because of this, storing
+data in OneZone_IA costs 20 percent less than storing it in Standard_IA.
+
+### Amazon Simple Storage Service Glacier
+
+Amazon Simple Storage Service Glacier (Amazon S3 Glacier) is a secure, durable, and extremely low-cost storage service
+for data archiving that offers the same high durability as Amazon S3. Unlike Amazon S3 Standard’s immediate retrieval
+times, Amazon S3 Glacier’s retrieval times run from a few minutes to several hours.
+
+### Vaults
+
+Amazon S3 Glacier uses vaults as containers to store archives. You can view a list of your vaults in the AWS Management
+Console and use the AWS software development kits (SDKs) to perform a variety of vault operations, such as the
+following:
+
+- Create Vault
+- Delete Vault
+- Lock Vault
+- ...
+
+
