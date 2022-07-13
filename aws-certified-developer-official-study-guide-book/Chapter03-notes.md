@@ -515,4 +515,137 @@ following:
 - Lock Vault
 - ...
 
+## Vaults Lock
+
+Amazon S3 Glacier Vault Lock allows you to deploy and enforce compliance controls easily on individual Amazon S3 Glacier
+vaults via a lockable policy.
+
+You can specify controls such as Write Once Read Many (WORM) in a Vault Lock policy and lock the policy from future
+edits.
+
+## Archives
+
+An archive is any object, such as a photo, video, or document that you store in a vault. It is a base unit of storage in
+Amazon S3 Glacier. Each archive has a unique ID and optional description.
+
+Amazon S3 Glacier provides a management console to create and delete vaults. However, all other interactions with Amazon
+S3 Glacier require that you use the AWS CLI or write code.
+
+To upload archives into your vaults, you must either use the AWS CLI or write code to make requests, using either the
+REST API directly or the AWS SDKs.
+
+### Maintaining Client-Side Archive Metadata
+
+Except for the optional archive description, Amazon S3 Glacier does not support any additional metadata for the
+archives. When you upload an archive, Amazon S3 Glacier assigns an ID.
+
+If you maintain client-side archive metadata, note that Amazon S3 Glacier maintains a vault inventory that includes
+archive IDs and any descriptions that you provided during the archive upload.
+
+### Using the AWS SDKs with Amazon S3 Glacier
+
+AWS provides SDKs for you to develop applications for Amazon S3 Glacier in various programming languages.
+
+The AWS SDKs for Java and .NET offer both high-level and low-level wrapper libraries.
+
+### Encryption
+
+All data in Amazon S3 Glacier will be encrypted on the server side using key management and key protection, which Amazon
+S3 Glacier handles using AES-256 encryption. If you want, you can manage your own keys and encrypt the data prior to
+uploading.
+
+### Restoring objects from Amazon S3 Glacier
+
+Objects in the Amazon S3 Glacier storage class are not immediately accessible and cannot be retrieved via copy/paste
+once they have been moved to Amazon S3 Glacier.
+
+Remember that Amazon S3 Glacier charges a retrieval fee for retrieving objects. When you restore an archive, you pay for
+both the archive and the restored copy. Because there is a storage cost for the copy, restore objects only for the
+duration that you need them.
+
+### Archive Retrieval Options
+
+There are several different options for restoring archived objects from Amazon S3 Glacier to Amazon S3;
+
+![](Amazon-S3-Glacier-Archive-Retrieval-Options.png)
+
+Do not use Amazon S3 Glacier for backups if your RTO is shorter than the lowest Amazon S3 Glacier retrieval time for
+your chosen retrieval option. For example, if your RTO requires data retrieval of two hours in a disaster recovery
+scenario, then Amazon S3 Glacier standard retrieval will not meet your RTO.
+
+### Storage Class Comparison
+
+This is an important table for the certification exam. Many storage decision questions on the exam center on the level
+of durability, availability, and cost. The table’s comparisons can help you make the right choice for a question, in
+addition to understanding trade-offs when choosing a data store for an application.
+
+![](Amazon-S3-Storage-Class-Comparison.png)
+
+### Data Consistency Model
+
+When deciding whether to choose Amazon S3 or Amazon EBS for your application, one important aspect to consider is the
+consistency model of the storage option.
+
+Amazon EBS provides read-after-write consistency for all operations, whereas Amazon S3 provides read-after-write
+consistency only for PUTs of new objects.
+
+Amazon S3 offers eventual consistency for overwrite PUTs and DELETEs in all regions, and updates to a single key are
+atomic. For example, if you PUT an object to update an existing object and immediately attempt to read that object, you
+may read either the old data or the new data.
+
+For PUT operations with new objects not yet in Amazon S3, you will experience read- after-write consistency. For PUT
+updates when you are overwriting an existing file or DELETE operations, you will experience eventual consistency.
+
+Amazon S3 does not currently support object locking. If two PUT requests are simultaneously made to the same key, the
+request with the latest time stamp wins. If this is an issue, you will be required to build an object lock- ing
+mechanism into your application.
+
+You may be wondering why Amazon S3 was designed with this style of consistency. The consistency, availability, and
+partition tolerance theorem (CAP theorem) states that you can highly achieve only two out of the three dimensions for a
+particular storage design.
+
+![](CAP-theorem.png)
+
+Think of partition tolerance in this equation as the storage durability. Amazon S3 was designed for high availability
+and high durability (multiple copies across multiple facilities), so the design trade-off is the consistency.
+
+### Concurrent Applications
+
+If your application requires read-after-write consistency on all operations, then Amazon S3 is not going to be the
+right choice for that application. If you are working with concurrent applications, it is important to know how your
+application performs PUT, GET, and DELETE operations concurrently to know whether eventual consistency will not be the
+right choice for your application.
+
+If you need a strongly consistent data store, choose a different data store than Amazon S3 or code consistency checks
+into your application.
+
+## Presigned URLs
+
+A presigned URL is a way to grant access to an object. One way that developers use presigned URLs is to allow users to
+upload or download objects without granting them direct access to Amazon S3 or the account.
+
+For example, if you need to send a document hosted in an Amazon S3 bucket to an external reviewer who is outside of your
+organization, you do not want to grant them access using IAM to your bucket or objects. Instead, generate a presigned
+URL to the object and send that to the user to download your file.
+
+Amazon S3 presigned URLs cannot be generated within the AWS Management Console, but they can be generated using the
+AWS CLI or AWS SDKs.
+
+### Encryption
+
+Data protection refers to protecting data while in transit (as it travels to and from Amazon S3) and at rest (while it
+is stored on Amazon S3 infrastructure). As a best practice, all sensitive data stored in Amazon S3 should be
+encrypted, both at rest and in transit.
+
+You can protect data in transit by using Amazon S3 SSL API endpoints, which ensures that all data sent to and from
+Amazon S3 is encrypted using the HTTPS protocol while in transit.
+
+For data at rest in Amazon S3, you can encrypt it using different options of Server-Side Encryption (SSE). Your objects
+in Amazon S3 are encrypted at the object level as they are written to disk in the data centers and then decrypted for
+you when you access the objects using AES-256.
+
+You can also use client-side encryption, with which you encrypt the objects before uploading to Amazon S3 and then
+decrypt them after you have downloaded them. Some customers, for some workloads, will use a combination of both
+server-side and client-side encryption for extra protection.
+
 
