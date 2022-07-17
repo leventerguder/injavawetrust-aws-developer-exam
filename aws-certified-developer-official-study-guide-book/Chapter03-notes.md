@@ -631,7 +631,7 @@ URL to the object and send that to the user to download your file.
 Amazon S3 presigned URLs cannot be generated within the AWS Management Console, but they can be generated using the
 AWS CLI or AWS SDKs.
 
-### Encryption
+## Encryption
 
 Data protection refers to protecting data while in transit (as it travels to and from Amazon S3) and at rest (while it
 is stored on Amazon S3 infrastructure). As a best practice, all sensitive data stored in Amazon S3 should be
@@ -648,4 +648,399 @@ You can also use client-side encryption, with which you encrypt the objects befo
 decrypt them after you have downloaded them. Some customers, for some workloads, will use a combination of both
 server-side and client-side encryption for extra protection.
 
+### Server-Side Encryption (SSE)
 
+You have 3 , mutually exclusive options for how you choose to manage your encryption keys when using SSE with Amazon S3.
+
+**SSE-S3 (Amazon S3 managed keys)**
+
+You can set an API flag or check a box in the AWS Management Console to have data encrypted before it is written to disk
+in Amazon S3. Each object is encrypted with a unique data key. As an additional safeguard, this key is encrypted with a
+periodically-rotated master key managed by Amazon S3. AES-256 is used for both object and master keys. This feature is
+offered at no additional cost beyond what you pay for using Amazon S3.
+
+**SSE-C (Customer-provided keys)**
+
+You can use your own encryption key while uploading an object to Amazon S3. This encryption key is used by Amazon S3
+to encrypt your data using AES-256. After the object is encrypted, the encryption key you supplied is deleted from the
+Amazon S3 system that used it to encrypt your data. When you retrieve this object from Amazon S3, you must provide the
+same encryption key in your request. Amazon S3 verifies that the encryption key matches, decrypts the object, and
+returns the object to you. This feature is also offered at no additional cost beyond what you pay for using Amazon S3.
+
+**SSE-KMS (AWS KMS managed encryption keys)**
+
+You can encrypt your data in Amazon S3 by defining an AWS KMS master key within your account to encrypt the unique
+object key (referred to as a data key) that will ultimately encrypt your object. When you upload your object, a request
+is sent to AWS KMS to create an object key.
+
+AWS KMS generates this object key and encrypts it using the master key that you specified earlier.
+Then, AWS KMS returns this encrypted object key along with the plaintext object key to Amazon S3. The Amazon S3 web
+server encrypts your object using the plaintext object key and stores the now encrypted object (with the encrypted
+object key) and deletes the plaintext object key from memory.
+
+For maximum simplicity and ease of use, use SSE with AWS managed keys (SSE-S3 or SSE-KMS). Also, know the difference
+between SSE-S3, SSE-KMS, and SSE-C for SSE.
+
+### Client-Side Encryption
+
+Client-side encryption refers to encrypting your data before sending it to Amazon S3. You have two options for using
+data encryption keys.
+
+#### Client-Side Master Key
+
+The first option is to use a client-side master key of your own. When uploading an object, you provide a client-side
+master key to the Amazon S3 encryption client.
+
+The client-side master key that you provide can be either a symmetric key or a public/private key pair.
+
+#### AWS KMS-Managed Customer Master Key (CMK)
+
+The second option is to use an AWS KMS managed customer master key (CMK). This process is similar to the process
+described earlier for using KMS-SSE, except that it is used for data at rest instead of data in transit. There is an
+Amazon S3 encryption client in the AWS SDK for Java.
+
+Know the difference between CMK and client-side master keys for client-side encryption.
+
+## Access Control
+
+By default, all Amazon S3 resources—buckets, objects, and related sub-resources (for example, lifecycle configuration
+and website configuration)—are private. Only the resource owner, an account that created it, can access the resource.
+The resource owner can optionally grant access permissions to others by writing an access policy.
+
+Access policies that you attach to your resources (buckets and objects) are referred to as resource-based policies.
+
+You can also attach access policies to users in your account. These are called user policies.
+
+### Using Bucket Policies and User Policies
+
+Bucket policy and user policy are two of the access policy options available for you to grant permissions to your Amazon
+S3 resources. Both use a JSON-based access policy language, as do all AWS services that use policies.
+
+A bucket policy is attached only to Amazon S3 buckets, and it specifies what actions are allowed or denied for whichever
+principals on the bucket to which the bucket policy is attached (for instance, allow user Alice to PUT but not DELETE
+objects in the bucket).
+
+A user policy is attached to IAM users to perform or not perform actions on your AWS resources.
+
+### Managing Access with Access Control Lists
+
+Access with access control lists (ACLs) are resource-based access policies that you can use to manage access to your
+buckets and objects, including granting basic read/write permissions to other accounts.
+
+There are limits to managing permissions using ACLs. For example, you can grant permissions only to other accounts; you
+cannot grant permissions to users in your account. You cannot grant conditional permissions, nor can you explicitly deny
+permissions using ACLs.
+
+ACLs are suitable only for specific scenarios (for example, if a bucket owner allows other accounts to upload objects),
+and permissions to these objects can be managed only using an object ACL by the account that owns the object.
+
+You can only grant access to other using ACLs , not users in your own account.
+
+### Defense in Depth - Amazon S3 Security
+
+Amazon S3 provides comprehensive security and compliance capabilities that meet the most stringent regulatory
+requirements, and it gives you flexibility in the way that you manage data for cost optimization, access control, and
+compliance. With this flexibility, however, comes the responsibility of ensuring that your content is secure.
+
+You can use an approach known as defense in depth in Amazon S3 to secure your data. This approach uses multiple layers
+of security to ensure redundancy if one of the multiple layers of security fails.
+
+To meet defense in depth requirements on Amazon S3:
+
+- Data must be encrypted at rest and during transit.
+- Data must be accessible only by a limited set of public IP addresses.
+- Data must not be publicly accessible directly from an Amazon S3 URL.
+- A domain name is required to consume the content.
+
+### Query String Authentication
+
+You can provide authentication information using query string parameters. Using query parameters to authenticate
+requests is useful when expressing a request entirely in a URL. This method is also referred to as presigning a URL.
+
+With presigned URLs, you can grant temporary access to your Amazon S3 resources.
+
+### Hosting a Static Website
+
+If your website contains static content and optionally client-side scripts, then you can host your static website
+directly in Amazon S3 without the use of web-hosting servers.
+
+To host a static website, you configure an Amazon S3 bucket for website hosting
+and upload your website content to the bucket. The website is then available at the AWS Region–specific website endpoint
+of the bucket in one of the following formats:
+
+    <bucket-name>.s3-website-<AWS-region>.amazonaws.com
+    <bucket-name>.s3-website.<AWS-region>.amazonaws.com
+
+Static websites can be hosted in Amazon S3.
+
+### MFA Delete
+
+MFA is another way to control deletes on your objects in Amazon S3. It does so by adding another layer of protection
+against unintentional or malicious deletes, requiring an authorized request against Amazon S3 to delete the object.
+MFA also requires a unique code from a token or an authentication device (virtual or hardware).
+
+### Cross-Region Replication
+
+Cross-Region Replication (CRR) is a bucket-level configuration that enables automatic, asynchronous copying of objects
+across buckets in different AWS Regions. We refer to these buckets as the source bucket and destination buckets.
+These buckets can be owned by different accounts.
+
+To activate this feature, add a replication configuration to your source bucket to direct Amazon S3 to replicate objects
+according to the configuration.
+
+You can replicate objects from a source bucket to only one destination bucket. After Amazon S3 replicates an object, the
+object cannot be replicated again. For example, even after you change the destination bucket in an existing replication
+configuration, Amazon S3 will not replicate it again.
+
+After Amazon S3 replicates an object using CRR, the object cannot be rep- licated again (such as to another destination
+bucket).
+
+Requirements for CRR include the following:
+
+- Versioning is enabled for both the source and destination buckets.
+- Source and destination buckets must be in different AWS Regions.
+- Amazon S3 must be granted appropriate permissions to replicate files.
+
+### VPC Endpoints
+
+A Virtual Private Cloud (VPC) endpoint enables you to connect your VPC privately to Amazon S3 without requiring an
+internet gateway, network address translation  (NAT) device, virtual private network (VPN) connection or AWS Direct
+Connect connection.
+
+Instances in your VPC do not require public IP addresses to communicate with the resources in the service.
+
+Amazon S3 uses a gateway type of VPC endpoint. The gateway is a target for a specified route in your route table, used
+for traffic destined for a supported AWS service. These endpoints are easy to configure, are highly reliable, and
+provide a secure connection to Amazon S3 that does not require a gateway or NAT instance.
+
+### Using the AWS SDKs, AWS CLI, and AW
+
+You can use the AWS SDKs when developing applications with Amazon S3. The AWS SDKs simplify your programming tasks by
+wrapping the underlying REST API.
+You can also use the AWS CLI to manage Amazon S3 buckets and objects.
+AWS has deprecated SOAP support over HTTP, but it is still available over HTTPS.
+
+### Data Lake
+
+A data lake is an architectural approach that allows you to store massive amounts of data in a central location for
+consumption by multiple applications.
+
+Amazon S3 is a common component of a data lake solution on the cloud, and it can complement your other storage
+solutions.
+
+### Performance
+
+There are a number of actions that Amazon S3 takes by default to help you achieve high levels of performance. Amazon S3
+automatically scales to thousands of requests per second per prefix based on your steady state traffic. Amazon S3 will
+automatically partition your prefixes within hours, adjusting to increases in request rates.
+
+### Consideration for Workloads
+
+To optimize the use of Amazon S3 mixed or GET-intensive workloads, you must become familiar with best practices for
+performance optimization.
+
+**Mixed request types** If your requests are typically a mix of GET, PUT, DELETE, and GET Bucket (list objects),
+choosing
+appropriate key names for your objects ensures better performance by providing low-latency access to the Amazon S3
+index.
+
+**GET-intensive workloads** If the bulk of your workload consists of GET requests, you may want to use Amazon
+CloudFront, a
+content delivery service.
+
+### Amazon S3 Transfer Acceleration
+
+Amazon S3 Transfer Acceleration is a feature that optimizes throughput when transferring larger objects across larger
+geographic distances. Amazon S3 Transfer Acceleration uses Amazon CloudFront edge locations to assist you in uploading
+your objects more quickly in cases where you are closer to an edge location than to the region to which you are
+transferring your files.
+
+AWS has edge locations around the world, and you upload your data to the edge location closest to your location.
+
+### Multipart Uploads
+
+When uploading a large object to Amazon S3 in a single-threaded manner, it can take a significant amount of time to
+complete. The multipart upload API enables you to upload large objects in parts to speed up your upload by doing so in
+parallel.
+
+To use multipart upload, you first break the object into smaller parts, parallelize the upload, and then submit a
+manifest file telling Amazon S3 that all parts of the object have been uploaded. Amazon S3 will then assemble all of
+those individual pieces to a single Amazon S3 object.
+
+Multipart upload can be used for objects ranging from 5 MB to 5 TB in size.
+
+### Range GETs
+
+Range GETs are similar to multipart uploads, but in reverse. If you are downloading a large object and tracking the
+offsets, use range GETs to download the object as multiple parts instead of a single part. You can then download those
+parts in parallel and potentially see an improvement in performance.
+
+### Amazon CloudFront
+
+Using a CDN like Amazon CloudFront, you may achieve lower latency and higher-throughput performance. You also will not
+experience as many requests to Amazon S3 because your content will be cached at the edge location. Your users will also
+experience the performance improvement of having cached storage through Amazon CloudFront versus going back to Amazon S3
+for each new GET on an object.
+
+### TCP Window Scaling
+
+Transmission Control Protocol (TCP) window scaling allows you to improve network throughput performance between your
+operating system, application layer, and Amazon S3 by supporting window sizes larger than 64 KB.
+
+### TCP Selective Acknowledgment
+
+TCP selective acknowledgment is designed to improve recovery time after a large number of packet losses. It is supported
+by most newer operating systems, but it might have to be enabled
+
+### Pricing
+
+With Amazon S3, you pay only for what you use. There is no minimum fee, and there is no charge for data transfer into
+Amazon S3.
+
+You pay for the following :
+
+- The storage that you use
+- TThe API calls that you make (PUT, COPY, POST, LIST, GET)
+- Data transfer out of Amazon S3
+
+Amazon S3 pricing differs from the pricing of Amazon EBS volumes in that if you create an Amazon EBS volume and store
+nothing on it, you are still paying for the storage space of the volume that you have allocated. With Amazon S3, you pay
+for the storage space that is being used—not allocated.
+
+## Object Lifecycle Management
+
+A lifecycle configuration is a set of rules that defines actions that Amazon S3 applies to a group of objects.
+
+**Transition actions**
+
+Transition actions define when objects transition to another storage class. For example, you might choose to transition
+objects to the STANDARD_IA storage class 30 days after you created them or archive objects to the GLACIER storage class
+one year after creating them.
+
+**Expiration actions**
+
+Expiration actions define when objects expire. Amazon S3 deletes expired objects on your behalf.
+
+### Configuring a Lifecycle
+
+A lifecycle configuration (an XML file) comprises a set of rules with predefined actions that you need Amazon S3 to
+perform on objects during their lifetime. Amazon S3 provides a set of API operations for managing lifecycle
+configuration on a bucket, and it is stored by Amazon S3 as a lifecycle subresource that is attached to your bucket.
+
+You can also configure the lifecycle by using the Amazon S3 console, the AWS SDKs, or the REST API.
+
+# AWS File Storage Services
+
+AWS offers Amazon Elastic File System (Amazon EFS) for file storage to enable you to share access to files that reside
+on the cloud.
+
+## Amazon Elastic File System
+
+Amazon Elastic File System (Amazon EFS) provides scalable file storage and a standard file system interface for use with
+Amazon EC2. You can create an Amazon EFS file system, configure your instances to mount the file system, and then use
+an Amazon EFS file system as a common data source for workloads and application running on multiple instances.
+
+Amazon EFS can be mounted to multiple Amazon EC2 instances simultaneously.
+
+Consider using Amazon EFS instead of Amazon S3 or Amazon EBS;
+
+- Multi-attach
+- GB/s throughput
+- Multi-AZ availability/durability
+- Automatic scaling (growing/shrinking of storage)
+
+Customers use Amazon EFS for the following use cases today:
+
+- Web Servings
+- Database backups
+- Container storage
+- Home directories
+- Content Management
+- Analytics
+- Media and entertainment workflows
+- Workflow management
+- Shared state management
+
+Amazon EFS is not supported on Windows instances.
+
+## Creating your Amazon EFS File System
+
+### File System
+
+The Amazon EFS file system is the primary resource in Amazon EFS, and it is where you store your files and directories.
+You can create up to 125 file systems per account.
+
+### Mount Target
+
+To access your file system from within a VPC, create mount targets in the VPC. A mount target is a Network File System (
+NFS) endpoint within your VPC that includes an IP address and a DNS name, both of which you use in your mount command.
+
+### Accessing an Amazon EFS File System
+
+There are several different ways that you can access an Amazon EFS file system, including using Amazon EC2 and AWS
+Direct Connect.
+
+#### Using Amazon Elastic Compute Cloud
+
+To access a file system from an Amazon Elastic Compute Cloud (Amazon EC2) instance, you must mount the file system by
+using the standard Linux mount command.
+
+A file system belongs to a region, and your Amazon EFS file system spans all Availability Zones in that region. Once you
+have mounted your file system, data can be accessed from any Availability Zone in the region within your VPC while
+maintaining full consistency.
+
+#### Using AWS Direct Connect
+
+You can also mount your on-premises servers to Amazon EFS in your Amazon VPC using AWS Direct Connect. With AWS Direct
+Connect, you can mount your on-premises servers to Amazon EFS using the same mount command used to mount in Amazon
+EC2.
+
+### Syncing Files Using AWS DataSync
+
+AWS DataSync can synchronize your file data and also file system metadata such as ownership, time stamps, and access
+permissions.
+
+To do this, download and deploy a sync agent from the Amazon EFS console as either a virtual machine (VM) image or an
+AMI.
+
+### Performance
+
+Amazon EFS is designed for a wide spectrum of performance needs, including the following:
+
+- High throughput and parallel I/O
+- Low latency and serial I/O
+
+**General purpose (default)**
+
+General-purpose mode is the default mode, and it is used for latency-sensitive applications and general-purpose
+workloads, offering the lowest latencies for file operations. While there is a trade-off of limiting operations to 7,000
+per second, general-purpose mode is the best choice for most workloads.
+
+**Max I/O**
+
+If you are running large-scale and data-heavy applications, then choose the max I/O performance option, which provides
+you with a virtually unlimited ability to scale out throughput and IOPS, but with a trade-off of slightly higher
+latencies. Use max I/O when you have 10 or more instances accessing your file system concurrently.
+
+![](io-performance-options.png)
+
+The distributed architecture of Amazon EFS results in a small increase in latency for each operation, as the data that
+you are storing gets pushed across multiple servers in multiple Availability Zones.
+
+Amazon EBS can provide lower latency than Amazon EFS, but at the cost of some durability. With Amazon EBS, you provision
+the size of the device, and if you reach its maximum limit, you must increase its size or add more volumes, whereas
+Amazon EFS scales automatically.
+
+![](amazon-ebs-performance-relative-to-amazon-efs.png)
+
+## Security
+
+You can implement security in multiple layers with Amazon EFS by controlling the following:
+
+- Network traffic to and from file systems (mount targets) using the following:
+    - VPC security groups
+    - Network ACLs
+- File and directory access by using POSIX permissions
+- Administrative access (API access) to file systems by using IAM. Amazon EFS supports:
+    - Action-level permissions
+    - Resource-level permissions
