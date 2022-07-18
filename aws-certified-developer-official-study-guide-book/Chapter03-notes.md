@@ -1044,3 +1044,122 @@ You can implement security in multiple layers with Amazon EFS by controlling the
 - Administrative access (API access) to file systems by using IAM. Amazon EFS supports:
     - Action-level permissions
     - Resource-level permissions
+
+# Storage Comparison
+
+This section provides valuable charts that can serve as a quick reference if you are tasked with choosing a storage
+system for a particular project or application.
+
+## Use Case Comparison
+
+![](aws-cloud-storage-products.png)
+
+## Storage Temperature Comparison
+
+Table 3.9 shows a comparison of instance store, Amazon EBS, Amazon S3, and Amazon S3 Glacier.
+
+Understanding Table 3.9 will help you make decisions about latency, size, durability, and cost during the exam.
+
+![](storage-comparison.png)
+
+## Comparison of Amazon EBS and Instance Store
+
+Before considering Amazon EC2 instance store as a storage option, make sure that your data does not meet any of these
+criteria:
+
+- Must persist through instance stops, terminations, or hardware failures
+- Needs to be encrypted at the full volume level
+- Needs to be backed up with Amazon EBS snapshots
+- Needs to be removed from instances and reattached to another
+
+If your data meets any of the previous four criteria, use an Amazon EBS volume. Otherwise, compare instance store and
+Amazon EBS for storage.
+
+Because instance store is directly attached to the host computer, it will have lower latency than an Amazon EBS volume
+attached to the Amazon EC2 instance. Instance store is provided at no additional cost beyond the price of the Amazon EC2
+instance you choose (if the instance has instance store[s] available), whereas Amazon EBS volumes incur an additional
+cost.
+
+## Comparison of Amazon S3, Amazon EBS, and Amazon EFS
+
+Table 3.10 is a useful in helping you to compare performance and storage characteristics for Amazon’s highest-performing
+file, object, and block cloud storage offerings. This compari- son will also be helpful when choosing the right data
+store for the applications that you are developing. It is also important for the exam.
+
+![](storage-service-comparison.png)
+
+# Cloud Data Migration
+
+To determine the best-case scenario for efficiently moving your data, use this formula:
+
+    Number of Days = (Total Bytes)/(Megabits per second * 125 * 1000 * Network Utilization * 60 seconds * 60 minutes * 24 hours)
+
+## AWS Storage Gateway
+
+AWS Storage Gateway is a hybrid cloud storage service that enables your on-premises applications to use AWS cloud
+storage seamlessly. You can use this service for the following:
+
+- Backup and archiving
+- Disaster recovery
+- Cloud bursting
+- Storage tiering
+- Migration
+
+### File Gateway
+
+A file gateway supports a file interface into Amazon S3, and it combines a cloud service with a virtual software
+appliance that is deployed into your on-premises environment as a VM. You can think of file gateway as an NFS mount on
+Amazon S3, allowing you to access your data directly in Amazon S3 from on premises as a file share.
+
+### Volume Gateway
+
+A volume gateway provides cloud-based storage volumes that you can mount as iSCSI devices from your on-premises
+application servers. A volume gateway supports cached mode and stored volume mode configurations.
+Note that the volume gateway represents the family of gateways that support block-based volumes, previously referred to
+as gateway-cached volumes and gateway-stored volumes.
+
+### Cached Mode
+
+In the cached volume mode, your data is stored in Amazon S3, and a cache of the frequently accessed data is maintained
+locally by the gateway. This enables you to achieve cost savings on primary storage and minimize the need to scale your
+storage on premises while retaining low-latency access to your most used data.
+
+### Stored Volume Mode
+
+In the stored volume mode, data is stored on your local storage with volumes backed up asynchronously as Amazon EBS
+snapshots stored in Amazon S3. This provides durable off-site backups.
+
+## Tape Gateway
+
+A tape gateway can be used for backup to migrate off of physical tapes and onto a cost-effective and durable archive
+backup such as Amazon S3 Glacier. For a tape gateway, you store and archive your data on virtual tapes in AWS.
+
+## AWS Import/Export
+
+AWS Import/Export accelerates moving large amounts of data into and out of the AWS Cloud using portable storage devices
+for transport. It transfers your data directly onto and off of storage devices using Amazon’s high-speed internal
+network and bypassing the internet.
+
+- Importing and exporting of data in Amazon S3 buckets
+- Importing data into Amazon EBS snapshots
+
+You cannot export directly from Amazon S3 Glacier. You must first restore your objects to Amazon S3 before exporting
+using AWS Import/Export.
+
+## AWS Snowball
+
+AWS Snowball is a petabyte-scale data transport solution that uses physical storage appliances, bypassing the internet,
+to transfer large amounts of data into and out of Amazon S3.
+
+- High network costs
+- Long transfer times
+- Security concerns
+
+When you transfer your data with AWS Snowball, you do not need to write any code or purchase any hardware.
+
+## AWS Snowball Edge
+
+AWS Snowball Edge is a 100-TB data transfer service with on-board storage and compute power for select AWS capabilities.
+In addition to transferring data to AWS, AWS Snowball Edge can undertake local processing and edge computing workloads. 
+
+
