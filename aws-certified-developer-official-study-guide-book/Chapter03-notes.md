@@ -1160,6 +1160,365 @@ When you transfer your data with AWS Snowball, you do not need to write any code
 ## AWS Snowball Edge
 
 AWS Snowball Edge is a 100-TB data transfer service with on-board storage and compute power for select AWS capabilities.
-In addition to transferring data to AWS, AWS Snowball Edge can undertake local processing and edge computing workloads. 
+In addition to transferring data to AWS, AWS Snowball Edge can undertake local processing and edge computing workloads.
 
+Features of AWS Snowball Edge include the following:
 
+- An endpoint on the device that is compatible with Amazon S3.
+- A file interface with NFS support
+- A cluster mode where multiple AWS Snowball Edge devices can act as a single, scalable storage pool with increased
+  durability.
+- The ability to run AWS Lambda powered by AWS IoT Greengrass functions as data is copied to the device.
+- Encryption taking place on the appliance itself.
+
+There are three types of jobs that can be performed with Snowball Edge appliances:
+
+- Import jobs into Amazon S3
+- Export jobs from Amazon S3
+- Local compute and storage-only jobs
+
+Use AWS Snowball Edge when you need the following:
+
+- Local storage and compute in an environment that might or might not have an internet connection.
+- To transfer large amounts of data into and out of Amazon S3, bypassing the internet
+
+![](AWS-snowball-device-use-cases.png)
+
+AWS Snowmobile is an exabyte-scale data transfer service used to move extremely large amounts of data from on premises
+to AWS. You can transfer up to 100 PB per AWS Snowmobile, a 45-foot long ruggedized shipping container pulled by a
+semi-trailer truck.
+
+AWS Snowmobile makes it easy to move massive volumes of data to the cloud, includ- ing video libraries, image
+repositories, or even a complete data center migration.
+
+ow do you choose between AWS Snowmobile and AWS Snowball? To migrate large datasets of 10 PB or more in a single
+location, you should use AWS Snowmobile. For datasets that are less than 10 PB or distributed in multiple locations, you
+should use AWS Snowball.
+
+## Amazon Kinesis Data Firehose
+
+Amazon Kinesis Data Firehose lets you prepare and load real-time data streams into data stores and analytics tools.
+Although it has much broader uses for loading data continuously for data streaming and analytics, it can be used as a
+one-time tool for data migration into the cloud.
+
+Amazon Kinesis Data Firehose can capture, transform, and load streaming data into Amazon S3 and Amazon Redshift.
+
+![](Amazon-Kinesis-Data-Firehose.png)
+
+Destinations include the following:
+
+- Amazon S3
+- Amazon Redshift
+- Amazon Elasticsearch Service
+- Splunk
+
+You use Amazon Kinesis Data Firehose by creating an Amazon Kinesis data delivery stream and then sending data to it.
+
+A record is the data that your producer sends to a Kinesis data delivery stream, with a maximum size of 1,000 KB.
+
+Data producers send records to Amazon Kinesis data delivery streams. For example, your web server could be configured as
+a data producer that sends log data to an Amazon Kinesis delivery stream.
+
+Amazon Kinesis Data Firehose buffers incoming data to a certain size or for a certain period of time before delivering
+it to destinations. Buffer size is in megabytes, and buffer interval is in seconds.
+
+## AWS Direct Connect
+
+Using AWS Direct Connect, you can establish private connectivity between AWS and your data center, office, or colocation
+environment, which in many cases can reduce your network costs, increase bandwidth throughput, and provide a more
+consistent network experience than internet-based connections.
+
+These benefits can then be applied to storage migration. Transferring large datasets over the internet can be
+time-consuming and expensive. When you use the cloud, you may find that transferring large datasets can be slow because
+your business-critical network traffic is contending for bandwidth with your other internet usage. To decrease the
+amount of time required to transfer your data, increase the bandwidth to your internet service provider. Be aware that
+this frequently requires a costly contract renewal and minimum commitment.
+
+## VPN Connection
+
+You can connect your Amazon VPC to remote networks by using a VPN connection.
+
+![](Amazon-VPC-Connectivity-Options.png)
+
+You can also use AWS Direct Connect to create a dedicated private connection from a remote network to your VPC. You can
+combine this connection with an AWS managed VPN connection to create an IPsec-encrypted connection.
+
+# Summary
+
+AWS cloud computing provides a reliable, scalable, and secure place for your data. Cloud storage is a critical component
+of cloud computing, holding the information used by applications. Big Data analytics, data warehouses, Internet of
+Things, databases, and backup and archive applications all rely on some form of data storage architecture. Cloud storage
+is typically more reliable, scalable, and secure than traditional on-premises storage systems.
+
+Amazon EBS provides highly available, consistent, low-latency, persistent local block storage for Amazon EC2. It helps
+you to tune applications with the right storage capacity, performance, and cost.
+
+Amazon EFS provides a simple, scalable file system interface and file system access semantics to make data available to
+one or more EC2 instances as block storage. Amazon EFS grows and shrinks capacity automatically, and it provides high
+throughput with consistent low latencies. Amazon EFS is designed for high availability and durability, and it provides
+performance for a broad spectrum of workloads and applications.
+
+Amazon S3 is a form of object storage that provides a scalable, durable platform to make data accessible from any
+internet location, and it allows you to store and access any type of data over the internet. Amazon S3 is secure,
+99.999999999 percent durable, and scales past tens of trillions of objects.
+
+Amazon S3 Glacier provides extremely low-cost and highly durable object storage for long-term backup and archiving of
+any type of data. Amazon S3 Glacier is a solution for customers who want low-cost storage for infrequently accessed
+data. It can replace tape, and assist with compliance in highly regulated organizations.
+
+Amazon offers a full portfolio of cloud data migration services to help simplify and accelerate moving data of all
+types and sizes into and out of the AWS Cloud. These include AWS Storage Gateway, AWS Import/Export Disk, AWS Snowball,
+AWS Snowball Edge, AWS Snowmobile, Amazon Kinesis Data Firehose, AWS Direct Connect, and a VPN connection.
+
+# Exam Essentials
+
+**Know the different data dimensions.**
+
+Consider the different data dimensions when choosing which storage option and storage class will be most appropriate
+for your data. This includes velocity, variety, volume, storage temperature (hot, warm, cold, frozen), data value,
+transient, reproducible, authoritative, and critical/regulated data.
+
+**Know the difference between block, object, and file storage.**
+
+Block storage is commonly dedicated, low-latency storage for each host and is provisioned with each instance. Object
+storage is developed for the cloud, has vast scalability, is accessed over the Web, and is not directly attached to an
+instance. File storage enables accessing shared files as a file system.
+
+**Know the AWS shared responsibility model and how it applies to storage.**
+
+AWS is responsible for securing the storage services. You are responsible for securing access to the arti- facts that
+you create or objects that you store.
+
+**Know what Amazon EBS is and for what it is commonly used.**
+
+Amazon EBS provides persistent block storage volumes for use with Amazon EC2 instances. It is designed for application
+workloads that benefit from fine tuning for performance, cost, and capacity. Typical use cases include Big Data
+analytics engines, relational and NoSQL databases, stream and log processing applications, and data warehousing
+applications. Amazon EBS volumes also serve as root volumes for Amazon EC2 instances.
+
+**Know what Amazon EC2 instance store is and what it is commonly used for.**
+
+An instance store provides temporary block-level storage for your instance. It is located on disks that are physically
+attached to the host computer. Instance store is ideal for temporary storage of information that changes frequently,
+such as buffers, caches, scratch data, and other temporary content, or for data that is replicated across a fleet of
+instances, such as a load-balanced pool of web servers. In some cases, you can use instance-store backed volumes. Do
+not use instance store (also known as ephemeral storage) for either production data or data that must be kept durable.
+
+**Know what Amazon S3 is and what it is commonly used for.**
+
+Amazon S3 is object storage built to store and retrieve any amount of data from anywhere. It is secure, durable, and
+highly scalable cloud storage using a simple web services interface. Amazon S3 is commonly used for backup and
+archiving, content storage and distribution, Big Data analytics, static website hosting, cloud-native application
+hosting, and disaster recovery, and as a data lake.
+
+**Know the basic concepts of Amazon S3.**
+
+Amazon S3 stores data as objects within resources called buckets. You can store as many objects as desired within a
+bucket, and write, read, and delete objects in your bucket. Objects contain data and metadata and are identified by a
+user-defined key in a flat file structure. Interfaces to Amazon S3 include a native REST interface, SDKs for many
+languages, the AWS CLI, and the AWS Management Console.
+
+**Know how to create a bucket, how to upload, download, and delete objects, how to make objects public, and how to open
+an object URL.**
+
+**Understand how security works in Amazon S3.**
+
+By default, new buckets are private and nothing is publicly accessible. When you add an object to a bucket, it is
+private by default.
+
+**Know how much data you can store in Amazon S3.**
+
+The total volume of data and number of objects that you can store in Amazon S3 are unlimited. Individual Amazon S3
+objects can range in size from a minimum of 0 bytes to a maximum of 5 TB. The largest object that can be uploaded in a
+single PUT is 5 GB. For objects larger than 100 MB, consider
+using the Multipart Upload capability.
+
+**Know the Amazon S3 service limit for buckets per account.**
+
+One hundred buckets are allowed per account.
+
+**Understand the durability and availability of Amazon S3.**
+
+Amazon S3 standard storage is designed for 11 nines of durability and four nines of availability of objects over a given
+year. Other storage classes differ. Reduced Redundancy Storage (RRS) storage class is less durable than Standard, and it
+is intended for noncritical, reproducible data.
+
+**Know the data consistency model of Amazon S3.**
+
+Amazon S3 is eventually consistent, but it offers read-after-write consistency (read after write consistency for PUT of
+new objects and eventual consistency for overwrite PUT and DELETE).
+
+**Know the Amazon S3 storage classes and use cases for each.**
+
+Standard is used to store general-purpose data that needs high durability, high performance, and low latency access.
+
+- Standard_IA is used for data that is less frequently accessed but that needs the same performance and availability
+  when accessed.
+- OneZone_IA is similar to Standard_IA, but it is stored only in a single Availability Zone, costing 20 percent
+  less. However, data stored with OneZone_IA will be permanently lost in the event of an Availability Zone destruction.
+  Reduced_Redundancy offers lower durability at lower cost for easily-reproducible data.
+- Amazon S3 Glacier is used to store rarely accessed archival data at an extremely low cost, when three- to five-hour
+  retrieval time is acceptable under the standard retrieval option.
+- There are other retrieval options for higher and lower cost at shorter and longer retrieval times, including expedited
+  retrieval (on-demand or provisioned, 1–5 minutes) and bulk retrieval (5–12 hours).
+
+**Know how to enable static web hosting on Amazon S3.**
+
+The steps to enable static web hosting on Amazon S3 require you to do the following:
+
+- Create a bucket with the website hostname.
+- Upload your static content and make it public.
+- Enable static website hosting on the bucket.
+- Indicate the index and error page objects.
+
+**Know how to encrypt your data on Amazon S3.**
+
+For server-side encryption, use SSE-SE (Amazon S3 Managed Keys), SSE-C (Customer-Provided Keys), and SSE-KMS (KMS-
+Managed Keys). For client-side encryption, choose from a client-side master key or an AWS KMS managed customer master
+key.
+
+**Know how to protect your data on Amazon S3.**
+
+Know the different options for protecting your data in flight and in transit.
+
+- Encrypt data in flight using HTTPS and at rest using server-side or client-side encryption.
+- Enable versioning to keep multiple versions of an object in a bucket.
+- Enable MFA Delete to protect against accidental deletion
+- Use ACLs,Amazon S3 bucket policies, and IAM policies for access control.
+- Use presigned URLs for time-limited download access.
+- Use cross-region replication to replicate data to another region automatically.
+
+**Know how to use lifecycle configuration rules.**
+
+Lifecycle rules can be used to manage your objects so that they are stored cost-effectively throughout their lifecycle.
+There are two types of actions. Transition actions define when an object transitions to another storage class.
+Expiration actions define when objects expire and will be deleted on your behalf.
+
+**Know what Amazon EFS is and what it is commonly used for.**
+
+Amazon EFS provides simple, scalable, elastic file storage for use with AWS services and on-premises resources. Amazon
+EFS is easy to use and offers a simple interface that allows you to create and configure file systems quickly and
+easily. Amazon EFS is built to scale elastically on demand without disrupting applications, growing and shrinking
+automatically as you add and remove files, so your applications have the storage that they need, when they need it.
+Amazon EFS is designed for high availability and durability. Amazon EFS can be mounted to multiple Amazon EC2 instances
+at the same time.
+
+**Know the basics of Amazon S3 Glacier as a stand-alone service.**
+
+Data is stored in encrypted archives that can be as large as 40 TB. Archives typically contain TAR and ZIP files. Vaults
+are containers for archives, and vaults can be locked for compliance.
+
+**Know which storage option to choose based on storage temperature.**
+
+For hot to warm storage, use Amazon EC2 instance store, Amazon EBS, or Amazon S3. For cold storage, choose Amazon S3
+Glacier.
+
+**Know which storage option to choose based on latency.**
+
+Amazon EC2 instance store
+and Amazon EBS are designed for millisecond latency. Amazon S3 depends on size, anywhere from milliseconds to seconds to
+minutes. Amazon S3 Glacier is minutes to hours depending on retrieval option.
+
+**Know which storage option to choose based on data volume.**
+
+Amazon EC2 instance store can be from 4 GB to 48 TB. Amazon EBS can be from 1 GiB to 16 TiB. Amazon S3 and Amazon S3
+Glacier have no limit.
+
+**Know which storage option to choose based on item size.**
+
+Amazon EC2 instance store and Amazon EBS depend on the size of the block storage and operating system limits. Amazon S3
+has a 5 TB max size per object, but objects may be split. Amazon S3 Glacier has a 40 TB maximum.
+
+**Know when you should use Amazon EBS, Amazon EFS, Amazon S3, Amazon S3 Glacier, or AWS Storage Gateway for your data.**
+
+For persistent local storage for Amazon EC2, use Amazon EBS. For a file system interface and file system access
+semantics to make data available to one or more Amazon EC2 instances, use Amazon EFS. For a scalable, durable platform
+to make data accessible from any internet location, use Amazon S3. For highly affordable, long-term cold storage, use
+Amazon S3 Glacier. For a hybrid storage cloud augmenting your on-premises environment with Amazon cloud storage, use AWS
+Storage Gateway.
+
+**Know when to choose Amazon EBS or Amazon EC2 instance store.**
+
+Amazon EBS is most often the default option. However, Amazon EC2 instance store may be an option if your data does not
+meet any of the following criteria:
+
+- Must persist through instance stops, terminations, or hardware failures
+- Needs to be encrypted at the full volume level
+- Needs to be backed up with EBS snapshots
+- Needs to be removed from one instance and reattached to another
+
+**Know the different cloud data migration options.**
+
+There are a number of options for migrating your data to the AWS Cloud, or having a hybrid data solution between AWS and
+your data center or on premises. These include (but are not limited to) AWS Storage Gateway, AWS Import/Export, AWS
+Snowball, AWS Snowball Edge, AWS Snowmobile, Amazon Kinesis Data Firehose, AWS Direct Connect, and AWS VPN connections.
+Know when to choose one over the other based on time, cost, or volume.
+
+**Know what AWS Storage Gateway is and how it is used for cloud data migration.**
+
+AWS Storage Gateway is a hybrid cloud storage service that enables your on-premises applications to use AWS cloud
+storage seamlessly. Use this for data migration by means of a gateway that connects to AWS storage services, such as
+Amazon S3, Amazon S3 Glacier, and Amazon EBS.
+
+**Know what AWS Import/Export Disk is and how it is used for cloud data migration.**
+
+AWS Import/Export Disk accelerates moving large amounts of data into and out of the AWS Cloud using portable storage
+devices for transport. It transfers your data directly onto and off of storage devices using Amazon’s high-speed
+internal network and bypassing the internet. For significant data sets, it is often much faster than transferring the
+data via the internet. You provide the hardware.
+
+**Know what AWS Snowball is and how it is used for cloud data migration.**
+
+Snowball is a petabyte-scale data transport solution that uses devices designed to be secure to transfer large amounts
+of data into and out of the AWS Cloud. Using Snowball addresses common challenges with large-scale data transfers
+including high network costs, long transfer times, and security concerns. You can transfer data at as little as
+one-fifth the cost of transferring data via high-speed internet. AWS provides the hardware.
+
+**Know what AWS Snowball Edge is and how it is used for cloud data migration.**
+
+AWS Snowball Edge is a 100-TB data transfer device with on-board storage and compute capabilities. Use it to move
+large amounts of data into and out of AWS, as a temporary storage tier for large local datasets, or to support local
+workloads in remote or offline locations. AWS Snowball Edge is a fast and inexpensive way to transfer large amounts of
+data when migrating to AWS.
+
+**Know what AWS Snowmobile is and how it is used for cloud data migration.**
+
+AWS Snowmobile is an exabyte-scale data transfer service used to move extremely large amounts of data to AWS. You can
+transfer up to 100 PB per Snowmobile, a 45-foot long ruggedized shipping container pulled by a semi-trailer truck.
+Snowmobile makes it easy to move massive volumes of data to the cloud, even a complete data center migration.
+
+**Know what Amazon Kinesis Data Firehose is and how it is used for cloud data migration.**
+
+Amazon Kinesis Data Firehose is the easiest way to load streaming data reliably into data stores and analytics tools. It
+can capture, transform, and load streaming data into Amazon S3, Amazon Redshift, Amazon Elasticsearch Service, and
+Splunk. Kinesis Data Firehose can be used to transform and migrate data from on premises into the cloud.
+
+**Know what AWS Direct Connect is and how it is used for cloud data migration.**
+
+Use AWS Direct Connect to establish private connectivity between AWS and your data center, office, or colocation
+environment, which in many cases can reduce your network costs, increase bandwidth throughput, and provide a more
+consistent network experience than internet-based connections.
+
+**Know what a VPN connection is and how it is used for cloud data migration.**
+
+Connect your Amazon VPC to remote networks by using a VPN connection to increase privacy while migrating your data.
+
+**Know which tool to use for migrating storage to the AWS Cloud based on data size, time-line, and cost.**
+
+There are two ways to migrate data: online and offline.
+
+**Online**
+
+- Use AWS Direct Connect to connect your data center privately and directly to an AWS Region.
+- Use AWS Snowball to transport petabytes of data physically in batches to the cloud.
+- Use Snowball Edge to build hybrid storage that preserves existing on-premises investment and adds AWS services.
+- Use AWS Snowmobile to migrate exabytes of data in batches to the cloud.
+- Use Amazon S3 Transfer Acceleration to work with Amazon S3 over long geographic distances.
+
+**Offline**
+
+- Use AWS Storage Gateway to integrate existing on-premises resources with the cloud.
+- Use AWS Snowball Edge to transport petabytes of data physically in an appliance with on-board storage and compute
+  capabilities.
+- Use Amazon Kinesis Data Firehose to collect and ingest multiple streaming data sources or perform ETL on data while
+  migrating to the AWS Cloud.
