@@ -132,3 +132,142 @@ AWS provides a number of database alternatives for developers. As a managed data
 fully featured relational database while off-loading database administration. By contrast, you can run unmanaged
 databases on Amazon EC2, which gives you more flexibility on the types of databases that you can deploy and configure;
 however, you are responsible for the administration of the unmanaged databases.
+
+## Amazon Relational Database Service
+
+With Amazon Relational Database Service (Amazon RDS), you can set up, operate, and scale a relational database in the
+AWS Cloud. It provides cost-efficient, resizable capacity for open-standard relational database engines. Amazon RDS is
+easy to administer, and you do not need to install the database software. Amazon RDS manages time-consuming database
+administration tasks, which frees you up to focus on your applications and business. For example, Amazon RDS
+automatically patches the database software and backs up your database.
+
+Amazon RDS assumes many of the difficult or tedious management tasks of a relational database:
+
+**Procurement, configuration, and backup tasks**
+
+**Security and availability**
+
+![](Amazon-RDS-host-responsibilities.png)
+
+## Relational Database Engines on Amazon RDS
+
+Amazon RDS provides six familiar database engines: Amazon Aurora, Oracle, Microsoft SQL Server, PostgreSQL, MySQL, and
+MariaDB. Because Amazon RDS is a managed ser- vice, you gain a number of benefits and features built right into the
+Amazon RDS service.
+
+- Automatic software patching
+- Easy vertical scaling
+- Easy storage scaling
+- Read replicas
+- Automatic backups
+- Database snapshots
+- Multi-AZ deployments
+- Encryption
+- IAM DB authentication
+- Monitoring and metrics with Amazon CloudWatch.
+
+### Automatic Software Patching
+
+Periodically, Amazon RDS performs maintenance on Amazon RDS resources. Maintenance mostly involves patching the Amazon
+RDS database underlying operating system (OS)or database engine version. Because this is a managed service, Amazon RDS
+handles the patching for you.
+
+### Vertical Scaling
+
+If your database needs to handle a bigger load, you can vertically scale your Amazon RDS instance. At the time of this
+writing, there are 40 available DB instance classes, which enable you to choose the number of virtual CPUs and memory
+available.
+
+### Easy Storage Scaling
+
+Storage is a critical component for any database. Amazon RDS has the following three storage types:
+
+**General Purpose SSD (gp2)**
+
+This storage type is for cost-effective storage that is ideal for a broad range of workloads. Gp2 volumes deliver
+single-digit millisecond latencies and the ability to burst to 3,000 IOPS for extended periods of time. The volume’s
+size determines the performance of gp2 volumes.
+
+**Provisioned IOPS (io1)**
+
+This storage type is for input/output-intensive workloads that require low input/output (I/O) latency and consistent I/O
+throughput.
+
+**Magnetic Storage**
+
+This storage type is designed for backward compatibility, and AWS recommends that you use General Purpose SSD or
+Provisioned IOPS for any new Amazon RDS workloads.
+
+### Read Replicas (Horizontal Scaling)
+
+There are two ways to scale your database tier with Amazon RDS: vertical scaling and horizontal scaling. Vertical
+scaling takes the primary database and increases the amount of memory and vCPUs allocated for the primary database.
+Alternatively, use horizontal scaling (add another server) to your database tier to improve the performance of
+applications that are read-heavy as opposed to write-heavy.
+
+Read replicas create read-only copies of your master database, which allow you to offload any reads (or SQL SELECT
+statements) to the read replica. The replication from the master database to the read replica is asynchronous. As a
+result, the data queried from the read replica is not the latest data. If your application requires strongly consistent
+reads, consider an alternative option.
+
+At the time of this writing, Amazon RDS MySQL, PostgreSQL, and MariaDB support up to five read replicas, and Amazon
+Aurora supports up to 15 read replicas. Microsoft SQL Server and Oracle do not support read replicas.
+
+## Backing Up Data with Amazon RDS
+
+Amazon RDS has two different ways of backing up data of your database instance: auto-mated backups and database
+snapshots (DB snapshots).
+
+### Automated Backups (Point-in-Time)
+
+With Amazon RDS, automated backups offer a point-in-time recovery of your database. When enabled, Amazon RDS performs a
+full daily snapshot of your data that is taken during your preferred backup window.
+
+You can perform a restore up to the specific second, as long as it’s within your retention period. The default retention
+period is seven days, but it can be a maximum of up to 35 days.
+
+### Database Snapshots (Manual)
+
+Unlike automated backups, database snapshots with Amazon RDS are user-initiated and enable you to back up your database
+instance in a known state at any time. You can also restore to that specific snapshot at any time.
+
+## Multi-AZ Deployments
+
+In a Multi-AZ configuration, you have a primary and a standby DB instance. Updates to the primary database replicate
+synchronously to the standby replica in a different Availability Zone.
+
+The primary benefit of Multi-AZ is realized during certain types of planned maintenance, or in the unlikely event of a
+DB instance failure or an Availability Zone failure.
+
+Amazon RDS automatically fails over to the standby so that you can resume your workload as soon as the standby is
+promoted to the primary.This means that you can reduce your downtime in the event of a failure.
+Because Amazon RDS is a managed service, Amazon RDS handles the fail to the standby. When there is a DB instance
+failure, Amazon RDS automatically promotes the standby to the primary—you will not interact with the standby directly.
+
+Amazon RDS Multi-AZ configuration provides the following benefits:
+
+- Automatic failover; no administration required.
+- Increased durability in the unlikely event of component failure
+- Increased availability in the unlikely event of an Availability Zone failure
+- Increased availability for planned maintenance (automated backups; I/O activity is no longer suspended)
+
+## Encryption
+
+For encryption at rest, Amazon RDS uses the AWS Key Management Service (AWS KMS) for AES-256 encryption.
+You can use a default master key or specify your own for the Amazon RDS DB instance. Encryption is one of the few
+options that must be configured when the DB instance is created.
+You cannot modify an Amazon RDS database to enable encryption. You can, however, create a DB snapshot and then restore
+to an encrypted DB instance or cluster.
+
+Amazon RDS supports using the Transparent Data Encryption (TDE) for Oracle and SQL Server.
+
+For encryption in transit, Amazon RDS generates an SSL certificate for each database instance that can be used to
+connect your application and the Amazon RDS instance.
+
+## IAM DB Authentication
+
+You can authenticate to your DB instance by using IAM. By using IAM, you can manage access to your database resources
+centrally instead of storing the user credentials in each database. The IAM feature also encrypts network traffic to and
+from the database by using SSL.
+
+IAM DB authentication is supported only for MySQL and PostgreSQL.
