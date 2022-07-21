@@ -418,3 +418,100 @@ in the event of a disaster.
 
 You can use the AWS Database Migration Service (AWS DMS) to migrate or replicate your existing databases easily to
 Amazon RDS.
+
+# Nonrelational Databases
+
+Nonrelational databases are commonly used for internet-scale applications that do not require any complex queries.
+
+## NoSQL Database
+
+NoSQL databases are nonrelational databases optimized for scalable performance and schema-less data models. NoSQL
+databases are also widely recognized for their ease of development, low latency, and resilience.
+
+## When to Use a NoSQL Database
+
+NoSQL databases are a great fit for many big data, mobile, and web applications that require greater scale and higher
+responsiveness than traditional relational databases. Because of simpler data structures and horizontal scaling, NoSQL
+databases typically respond faster and are easier to scale than relational databases.
+
+## Comparison of SQL and NoSQL Databases
+
+Relational database management systems (RDBMS) and nonrelational (NoSQL) databases have different strengths and
+weaknesses. In a RDBMS, data can be queried flexibly, but queries are relatively expensive and do not scale well in
+high-traffic situations.
+
+![](SQL-vs-NoSQL-Database-Characteristics.png)
+
+## NoSQL Database Types
+
+There are four types of NoSQL databases: columnar, document, graph, and in-memory key-value. Generally, these databases
+differ in how the data is stored, accessed, and structured, and they are optimized for different use cases and
+applications.
+
+**Columnar databases**
+
+Columnar databases are optimized for reading and writing columns of data as opposed to rows of data. Column-oriented
+storage for database tables is an important factor in analytic query performance because it drastically reduces the
+overall disk I/O requirements and reduces the amount of data that you must load from disk.
+
+**Document databases**
+
+Document databases are designed to store semi-structured data as documents, typically in JSON or XML format. Unlike
+traditional relational databases, the schema for each NoSQL document can vary, giving you more flexibility in organizing
+and storing application data and reducing storage required for optional values.
+
+**Graph databases**
+
+Graph databases store vertices and directed links called edges. Graph databases can be built on both SQL and NoSQL
+databases. Vertices and edges can each have properties associated with them.
+
+**In-memory key-value stores**
+
+In-memory key-value stores are NoSQL databases optimized for read-heavy application workloads (such as social
+networking, gaming, media sharing, and Q&A portals) or compute-intensive workloads (such as a recommendation engine).
+
+## Amazon DynamoDB
+
+Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit
+millisecond latency at any scale. It is a fully managed cloud database, and it supports both document and key-value
+store models. Its flexible data model, reliable performance, and automatic scaling of throughput capacity make it a
+great fit for the following:
+
+- Mobile
+- Gaming
+- Adtech
+- Internet of Things
+- Applications that do not require complex queries
+
+## Core Components of Amazon DynamoDB
+
+In DynamoDB, tables, items and attributes are the common components with which you work.
+A table is a collection of items, and each item is a collection of attributes.
+DynamoDB uses partition keys to identify uniquely each item in a table. Secondary indexes can be used to provide more
+querying flexibility. YOu can use DynamoDB streams to capture data modification events in DynamoDB tables.
+
+## Tables
+
+Similar to other databases systems , DynamoDB stores data in tables. A table is a collection of items.
+For example, a table called People could be used to store personal contact information about friends, family, or anyone
+else of interest.
+
+## Items
+
+An item in DynamoDB is similar in many ways to rows, records, or tuples in other database systems. Each DynamoDB table
+contains zero or more items. An item is a collection of attributes that is uniquely identifiable for each record in that
+table.
+
+## Attributes
+
+Each item is composed of one or more attributes. Attributes in DynamoDB are similar in many ways to fields or columns in
+other database systems.
+
+Some of the items have a nested attribute. DynamoDB supports nested attributes up to 32 levels deep.
+
+## Primary Key
+
+When you create a table, at a minimum, you are required to specify the table name and pri- mary key of the table. The
+primary key uniquely identifies each item in the table. No two items can have the same key within a table.
+
+DynamoDB supports two different kinds of primary keys: partition key and partition key and sort key.
