@@ -271,3 +271,150 @@ centrally instead of storing the user credentials in each database. The IAM feat
 from the database by using SSL.
 
 IAM DB authentication is supported only for MySQL and PostgreSQL.
+
+## Monitoring with Amazon CloudWatch
+
+Use Amazon CloudWatch to monitor your database tier. You can create alarms to notify database administrators when there
+is a failure.
+
+By default, CloudWatch provides some built-in metrics for Amazon RDS with a granularity of 5 minutes (600 seconds).
+
+Amazon RDS integrates with CloudWatch to send it the following database logs:
+
+- Audit log
+- Error log
+- General log
+- Slow query log
+
+## Amazon Aurora
+
+Amazon Aurora is a MySQL- and PostgreSQL-compatible relational database engine that combines the speed and availability
+of high-end commercial databases with the simplicity and cost-effectiveness of open source databases.
+
+### Amazon Aurora DB Clusters
+
+The integration of Aurora with Amazon RDS means that time-consuming administration tasks, such as hardware
+provisioning, database setup, patching, and backups, are automated.
+
+Aurora features a distributed, fault-tolerant, self-healing storage system that automatically scales up to 64 TiB per
+database instance.
+
+Aurora delivers high performance and availability with up to 15 low-latency read replicas, point-in-time recovery,
+continuous backup to Amazon Simple Storage Service (Amazon S3), and replication across three Availability Zones.
+
+When you create an Aurora instance, you create a DB cluster.
+A DB cluster consists of one or more DB instances and a cluster volume that manages the data for those instances.
+
+An Aurora cluster volume is a virtual database storage volume that spans multiple Availability Zones, and each
+Availability Zone has a copy of the DB cluster data.
+
+An Aurora DB cluster has two types of DB instances:
+
+**Primary Instance**
+
+Supports read and write operations and performs all of the data modifications to the cluster volume. Each Aurora DB
+cluster has one primary instance.
+
+**Amazon Aurora Replica**
+
+Supports read-only operations. Each Aurora DB cluster can have up to 15 Amazon Aurora Replicas in addition to the
+primary instance. Multiple Aurora Replicas distribute the read workload, and if you locate Aurora Replicas in separate
+Availability Zones, you can also increase database availability.
+
+Aurora is engineered and architected for the cloud. The primary difference is that there is a separate storage layer,
+called the cluster volume, which is spread across multiple Availability Zones in a single AWS Region. This means that
+the durability of your data is increased.
+
+### Amazon Aurora Global Databases
+
+With Aurora, you can also create a multiregional deployment for your database tier.
+In this configuration, the primary AWS Region is where your data is written.
+
+The secondary AWS Region is used for reading data only. Aurora replicates the data to the secondary AWS Region with
+typical latency of less than a second. Furthermore, you can use the secondary AWS Region for disaster recovery purposes.
+
+- US East (N. Virginia)
+- US East (Ohio)
+- US West (Oregon)
+- EU (Ireland)
+
+Additionally, at the time of this writing, Aurora global databases are available only for MySQL 5.6.
+
+### Amazon Aurora Serverless
+
+Aurora Serverless is an on-demand, automatic scaling configuration for Aurora.
+With Aurora Serverless, the database will automatically start up, shut down, and scale capacity up or down based on your
+application’s needs. T
+
+## Best Practices for Running Databases on AWS
+
+**Follow Amazon RDS basic operational guidelines.**
+
+The Amazon RDS Service Level Agreement requires that you follow these guidelines:
+
+- Monitor your memory, CPU, and storage usage. Amazon CloudWatch can notify you when usage patterns change or when you
+  approach the capacity of your deployment so that you can maintain system performance and availability.
+- Scale up your DB instance when you approach storage capacity limits. Have some buffer in storage and memory to
+  accommodate unforeseen increases in demand from your applications.
+- Enable automatic backups, and set the backup window to occur during the daily low in write IOPS.
+- If your database workload requires more I/O than you have provisioned, recovery after a failover or database failure
+  will be slow. To increase the I/O capacity of a DB instance, do any or all of the following:
+    - Migrate to a DB instance class with high I/O capacity.
+    - Convert from standard storage either to General Purpose or Provisioned IOPS storage, depending on how much of an
+      increase you need.
+    - If you are already using Provisioned IOPS storage, provision additional throughput capacity.
+- If your client application is caching the Domain Name Service (DNS) data of your DB instances, set a time-to-live (
+  TTL) value of less than 30 seconds. Because the underlying IP address of a DB instance can change after a failover,
+  caching the DNS data for an extended time can lead to connection failures if your application tries to connect to an
+  IP address that no longer is in service.
+
+**Allocate sufficient RAM to the DB instance.**
+
+An Amazon RDS performance best practice is to allocate enough RAM so that your working set resides almost completely in
+memory. Check the ReadIOPS metric by using CloudWatch while the DB instance is under load to view the working set. The
+value of ReadIOPS should be small and stable. Scale up the DB instance class until ReadIOPS no longer drops dramatically
+after a scaling operation or when ReadIOPS is reduced to a small amount.
+
+**Implement Amazon RDS security.**
+
+Use IAM accounts to control access to Amazon RDS API actions, especially actions that create, modify, or delete Amazon
+RDS resources, such as DB instances, security groups, option groups, or parameter groups, and actions that perform
+common administrative actions, such as backing up and restoring DB instances, or configuring Provisioned IOPS storage.
+
+- Assign an individual IAM account to each person who manages Amazon RDS resources. Do not use an AWS account user to
+  manage Amazon RDS resources; create an IAM user for everyone, including yourself.
+- Grant each user the minimum set of permissions required to perform his or her duties.
+- Use IAM groups to manage permissions effectively for multiple users.
+- Rotate your IAM credentials regularly.
+
+**Use enhanced monitoring to identify OS issues.**
+
+Amazon RDS provides metrics in real time for the OS on which your DB instance runs. You can view the metrics for your DB
+instance by using the console or consume the Enhanced Monitoring JSON output from CloudWatch Logs in a monitoring system
+of your choice.
+
+**Use metrics to identify performance issues.**
+
+To identify performance issues caused by insufficient resources and other common bottlenecks, you can monitor the
+metrics available for your Amazon RDS DB instance.
+
+**Tune queries.**
+
+One of the best ways to improve DB instance performance is to tune your most commonly used and most resource-intensive
+queries to make them less expensive to run.
+
+You can use the Database Engine Tuning Advisor to get potential index improvements for your DB instance.
+
+**Use DB parameter groups.**
+
+AWS recommends that you apply changes to the DB parameter group on a test DB instance before you apply parameter group
+changes to your production DB instances.
+
+**Use read replicas.**
+
+Use read replicas to relieve pressure on your master node with addi- tional read capacity. You can
+bring your data closer to applications in different regions and promote a read replica to a master for faster recovery
+in the event of a disaster.
+
+You can use the AWS Database Migration Service (AWS DMS) to migrate or replicate your existing databases easily to
+Amazon RDS.
