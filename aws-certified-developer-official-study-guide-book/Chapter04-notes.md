@@ -515,3 +515,169 @@ When you create a table, at a minimum, you are required to specify the table nam
 primary key uniquely identifies each item in the table. No two items can have the same key within a table.
 
 DynamoDB supports two different kinds of primary keys: partition key and partition key and sort key.
+
+**Partition Key(Hash Key)**
+
+A simple primary key, composed of one attribute, is known as the partition key. DynamoDB uses the partition key’s value
+as an input to an internal hash function. The output from the hash function determines the partition (physical storage
+internal to DynamoDB) in which the item is stored
+
+**Partition key and sort key (range attribute)**
+
+A composite primary key is composed of two attributes: partition key and the sort key.
+
+The sort key of an item is also known as its range attribute. The term range attribute derives from the way that
+DynamoDB stores items with the same partition key physically close together, in sorted order, by the sort key value.
+
+## Secondary Indexes
+
+If you want to perform queries on attributes that are not part of the table’s primary key, you can create a secondary
+index. By using a secondary index, you can query the data in the table by using an alternate key, in addition to
+querying against the primary key.
+
+A secondary index contains the following:
+
+- Primary key attributes
+- Alternate key attributes
+- (Optional) A subset of other attributes from the base table (projected attributes)
+
+DynamoDB supports two types of secondary indexes: local secondary indexes and global secondary indexes. You can define
+up to five global secondary indexes and five local secondary indexes per table.
+
+### Local Secondary Index
+
+A local secondary index is an index that has the same partition key as the base table, but a different sort key.
+
+### Global Secondary Index
+
+A global secondary index is an index with a partition key and a sort key that can be different from those on the base
+table.
+
+You can create a global secondary index, not a local secondary index, after table creation.
+
+### Comparison of Local Secondary Indexes and Global Secondary Indexes
+
+![](Comparison-of-Local-and-Global-Secondary-Indexes.png)
+
+## Amazon DynamoDB Streams
+
+Amazon DynamoDB Streams is an optional feature that captures data modification events in DynamoDB tables. The data about
+these events appears in the stream in near real time and in the order that the events occurred.
+
+In addition to triggers, DynamoDB Streams enables other powerful solutions that devel- opers can create, such as the
+following:
+
+- Data replication within and across AWS regions
+- Materialized views of data in DynamoDB tables
+- Data analysis by using Amazon Kinesis materialized views
+
+## Read Consistency
+
+DynamoDB replicates data among multiple Availability Zones in a region. When your application writes data to a DynamoDB
+table and receives an HTTP 200 response (OK), all copies of the data are updated.
+
+### Eventually Consistent Reads
+
+When you read data from a DynamoDB table immediately after a write operation, the response might not reflect the results
+of a recently completed write operation. The response might include some stale data. If you repeat your read request
+after a short time, the response should return the latest data. DynamoDB uses eventually consistent reads, unless you
+specify otherwise.
+
+### Strongly Consistent Reads
+
+When querying data, you can specify whether DynamoDB should return strongly consis- tent reads. When you request a
+strongly consistent read, DynamoDB returns a response with the most up-to-date data, reflecting updates from all prior
+write operations that were successful. A strongly consistent read might not be available if there is a network delay or
+outage.
+
+## Read and Write Throughput
+
+When you create a table or index in DynamoDB, you must specify your capacity requirements for read and write activity.
+By defining your throughput capacity in advance, DynamoDB can reserve the necessary resources to meet the read and write
+activity your application requires, while ensuring consistent, low-latency performance.
+
+DynamoDB provides the following mechanisms for managing throughput as it changes:
+
+**Amazon DynamoDB Auto Scaling**
+
+DynamoDB automatic scaling actively manages throughput capacity for tables and global secondary indexes. With automatic
+scaling, you define a range (upper and lower limits) for read and write capacity unit
+
+**Provisioned throughput**
+
+If you aren’t using DynamoDB auto scaling, you have to define your throughput requirements manually.
+
+**Reserved capacity**
+
+You can purchase reserved capacity in advance, where you pay a one-time upfront fee and commit to a
+minimum usage level over a period of time. You may realize significant cost savings compared to on-demand provisioned
+throughput settings.
+
+**On-demand**
+
+With On-Demand mode, your DynamoDB table will automatically scale up or down to any previously reached traffic level. If
+a workload’s traffic level reaches a new peak, DynamoDB rapidly adapts to accommodate the workload.
+
+## Retrieving Data from DynamoDB
+
+Two primary methods are used to retrieve data from DynamoDB: Query and Scan.
+
+In DynamoDB, you perform Query operations directly on the table or index. To run the Query command, you must specify, at
+a minimum, a primary key.
+
+You can also perform Scan operations on a table or index. The Scan operation returns one or more items and item
+attributes by accessing every item in a table or a secondary index.
+
+## Global Tables
+
+Global tables build upon the DynamoDB global footprint to provide you with a fully managed, multi region, and
+multi-master database that provides fast, local, read-and-write performance for massively scaled, global applications
+
+A global table is a collection of one or more DynamoDB tables, all owned by a single AWS account, identified as replica
+tables.
+
+## Object Persistence Model
+
+The DynamoDB object persistence model enables you to map client-side classes to DynamoDB tables. The instances of these
+classes (objects) map to items in a DynamoDB table.
+
+You can use the object persistence programming interface to connect to DynamoDB; perform create, read, update, and
+delete operations (CRUD); execute queries; and implement optimistic locking with a version number.
+
+## Amazon DynamoDB Local
+
+DynamoDB Local is the downloadable version of DynamoDB that lets you write and test applications by using the Amazon
+DynamoDB API without accessing the DynamoDB web service.
+
+## IAM and Fine-Grained Access Control
+
+You can use AWS IAM to grant or restrict access to DynamoDB resources and API actions.
+
+## Backup and Restore
+
+You can create on-demand backups and enable point-in-time recovery for your DynamoDB tables.
+
+On-demand backups create full backups of your tables or restore them on-demand at any time. These actions execute with
+zero impact on table performance or availability and without consuming any provisioned throughput on the table.
+
+Point-in-time recovery helps protect your DynamoDB tables from accidental write or delete operations. For example,
+suppose that a test script accidentally writes to a production DynamoDB table. With point-in-time recovery, you can
+restore that table to any point in time during the last 35 days. DynamoDB maintains incremental backups of your table.
+These operations will not affect performance or latency.
+
+## Encryption with Amazon DynamoDB
+
+DynamoDB offers fully managed encryption at rest, and it is enabled by default. DynamoDB uses AWS KMS for encrypting the
+objects at rest. By default, DynamoDB uses the AWS-owned customer master key (CMK); however, you can also specify your
+own AWS KMS CMK key that you have created.
+
+## Amazon DynamoDB Best Practices
+
+Amazon DynamoDB Partition Key Recommended Strategies
+
+- User ID, where the application has many users , GOOD
+- Status code, where there are only a few possible status codes , BAD
+- Item creation date, rounded to the nearest time period (for example, day, hour, or minute) , BAD
+- Device ID, where each device accesses data at relatively similar intervals , GOOD
+- Device ID, where even if there are many devices being tracked, one is by far more popular than all the others , BAD
+
