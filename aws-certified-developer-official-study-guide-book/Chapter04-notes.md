@@ -681,3 +681,187 @@ Amazon DynamoDB Partition Key Recommended Strategies
 - Device ID, where each device accesses data at relatively similar intervals , GOOD
 - Device ID, where even if there are many devices being tracked, one is by far more popular than all the others , BAD
 
+# Data Warehouse
+
+If you are performing analytics, you may want to use a data warehouse. A data warehouse is a central repository of
+information that you can analyze to make better-informed decisions.
+
+## Data Warehouse Architecture
+
+A data warehouse architecture consists of three tiers.
+
+- The bottom tier of the architecture is the database server, where data is loaded and stored.
+- The middle tier consists of the analytics engine that is used to access and analyze the data.
+- The top tier is the front-end client that presents results through reporting, analysis, and data mining tools.
+
+## Data Warehouse Benefits
+
+Benefits of using a data warehouse include the following:
+
+- Better decision-making
+- Consolidation of data from many sources
+- Data quality, consistency, and accuracy
+- Historical intelligence
+- Analytics processing that is separate from transactional databases, improving the performance of both systems
+
+## Comparison of Data Warehouses and Databases
+
+A data warehouse is specially designed for data analytics, which involves reading large amounts of data to understand
+relationships and trends across the data. A database is used to capture and store data, such as recording details of a
+transaction.
+
+![](Comparison-of-Data-Warehouse-and-Database-Characteristics.png)
+
+## Comparison of Data Warehouses and Data Lakes
+
+A data warehouse uses a predefined schema that is optimized for analytics. In a data lake, the schema is not defined,
+enabling additional types of analytics, such as big data analytics, full text search, real-time analytics, and machine
+learning.
+
+![](Comparison-of-Local-and-Global-Secondary-Indexes.png)
+
+## Comparison of Data Warehouses and Data Marts
+
+A data mart is a data warehouse that serves the needs of a specific team or business unit, such as finance, marketing,
+or sales. It is smaller, is more focused, and may contain summaries of data that best serve its community of users.
+
+## Amazon RedShift
+
+Amazon Redshift is a fast, fully managed, petabyte-scale data warehouse that makes it simple and cost-effective to
+analyze all your data by using standard SQL and your existing BI tools.
+
+With Amazon Redshift, you can run complex analytic queries against petabytes of structured data using sophisticated
+query optimization, columnar storage on high- performance local disks, and massively parallel query execution.
+
+### Architecture
+
+An Amazon Redshift data warehouse is a collection of computing resources called nodes, which are organized into a group
+called a cluster. Each cluster runs an Amazon Redshift engine and contains one or more databases.
+
+### Client Applications
+
+Amazon Redshift integrates with various data loading and extract, transform, and load (ETL) tools and BI reporting, data
+mining, and analytics tools. It is based on open standard PostgreSQL, so mosty existing SQL client applications will
+integrate with Amazon Redshift with only minimal changes.
+
+### Leader Node
+
+The leader node acts as the SQL endpoint and receives queries from client applications, parses the queries, and develops
+query execution plans. The leader node then coordinates a parallel execution of these plans with the compute nodes and
+aggregates the intermediate results from these nodes.
+
+### Compute Nodes
+
+Compute nodes execute the query execution plan and transmit data among themselves to serve these queries. The
+intermediate results are sent to the leader node for aggregation before being sent back to the client applications.
+
+### Node Slices
+
+A compute node is partitioned into slices. Each slice is allocated a portion of the node's memory and disk space, where
+it processes a portion of the workload assigned to the node.
+
+The leader node manages distributing data to the slices and allocates the workload for any queries or other database
+operations to the slices.
+
+### Databases
+
+A cluster contains one or more databases. User data is stored on the compute nodes.
+
+### Hardware Platform Options
+
+When you launch a cluster, one option you specify is the node type. The node type deter- mines the CPU, RAM, storage
+capacity, and storage drive type for each node.
+
+### Table Design
+
+Each database within an Amazon Redshift cluster can support many tables. Like most SQL-based databases, you can create a
+table using the CREATE TABLE command.
+
+### Compression Encoding
+
+Amazon Redshift uses data compression as one of the key performance optimizations. When you load data for the first time
+into an empty table, Amazon Redshift samples your data automatically and selects the best compression scheme for each
+column.
+
+## Distribution Strategy
+
+When creating a table, you can choose among one of the three distribution styles: EVEN, KEY, or ALL.
+
+**Even distribution**
+
+Rows are distributed across the slices in a round-robin fashion, regardless of the values in any particular column. It
+is an appropriate choice when a table does not participate in joins or when there is not a clear choice between KEY
+distribution or ALL distribution. EVEN is the default distribution type
+
+**KEY distribution**
+
+Rows are distributed according to the values in one column. The leader node attempts to place matching values on the
+same node slice. Use this style when you will be querying heavily against values of a specific column.
+
+**ALL distribution**
+
+A copy of the entire table is distributed to every node. This ensures that every row is collocated for every join in
+which the table participates. This multiplies the storage required by the number of nodes in the cluster, and it takes
+much longer to load, update, or insert data into multiple tables. Use this style only for relatively slow-moving tables
+that are not updated frequently or extensively.
+
+### Sort Keys
+
+Another important decision to make during table creation is choosing the appropriate sort key. Amazon Redshift stores
+your data on disk in sorted order according to the sort key, and the query optimizer uses sort order when it determines
+the optimal query plans.
+
+The following are some general guidelines for choosing the best sort key:
+
+- If recent data is queried most frequently, specify the timestamp column as the leading column for the sort key.
+- If you do frequent range filtering or equality filtering on one column, specify that column as the sort key.
+- If you frequently join a table, specify the join column as both the sort key and the distribution key.
+
+## Loading Data
+
+You can query Amazon Redshift tables by using standard SQL commands, such as using SELECT statements, to query and join
+tables. For complex queries, you are able to analyze the query plan to choose better optimizations for your specific
+access patterns.
+
+## Snapshots
+
+Amazon Redshift supports snapshots, similar to Amazon RDS. You can create automated and manual snapshots, which are
+stored in Amazon S3 by using an encrypted Secure Socket Layer (SSL) connection.
+
+## Security
+
+Securing your Amazon Redshift cluster is similar to securing other databases running in the AWS Cloud. To meet your
+needs, you will use a combination of IAM policies, security groups, and encryption to secure the cluster.
+
+### Encryption
+
+Protecting the data stored in Amazon Redshift is an important aspect of your security design. Amazon Redshift supports
+encryption of data in transit using SSL-encrypted connections.
+
+You can also enable database encryption for your clusters to help protect data at rest.
+
+Amazon Redshift automatically integrates with AWS KMS.
+
+The following are some best practices for securing your Amazon Redshift deployments:
+
+- Enable and use SSL when connecting to the Amazon Redshift database port.
+- Ensure that your data is available only via SSL by setting the require_ssl parameter to true in the parameter group
+  that is associated with the cluster.
+- Use long, random database passwords generated by Amazon Redshift and store them by using a secret management system.
+- Secure the S3 bucket by enabling Amazon S3 encryption and configuring access control for Amazon S3.
+- Secure the ETL system by enacting access control, auditing/logging, patch management, disk encryption/secure deletion,
+  and SSL connectivity to Amazon S3.
+- Secure the BI system by enacting access control, auditing, patching, SSL connectivity to Amazon Redshift, and SSL UI (
+  if applicable).
+- Use cluster or VPC security groups to limit Amazon Redshift access only to the necessary IP addresses (for both
+  inbound and outbound flows).
+
+## Amazon Redshift Spectrum
+
+Amazon Redshift also includes Redshift Spectrum, allowing you to run SQL queries directly against exabytes of
+unstructured data in Amazon S3.
+
+No loading or transformation is required.
+
+To use Redshift Spectrum, you need an Amazon Redshift cluster and a SQL client that’s connected to your cluster so that
+you can execute SQL commands. The cluster and the data files in Amazon S3 must be in the same AWS Region.
