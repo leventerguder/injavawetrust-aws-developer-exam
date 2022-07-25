@@ -865,3 +865,337 @@ No loading or transformation is required.
 
 To use Redshift Spectrum, you need an Amazon Redshift cluster and a SQL client that’s connected to your cluster so that
 you can execute SQL commands. The cluster and the data files in Amazon S3 must be in the same AWS Region.
+
+# In-Memory Data Stores
+
+In-memory data stores are used for caching and real-time workloads. AWS provides a variety of in-memory, key-value
+database options. You can operate your own nonrelational key-value data store in the cloud on Amazon EC2 and Amazon EBS,
+work with AWS solution providers, or take advantage of fully managed nonrelational services such as Amazon ElastiCache.
+
+## Caching
+
+In computing, the data in a cache is generally stored in fast-access hardware, such as random-access memory (RAM), and
+may also be used in correlation with a software component. A cache’s primary purpose is to increase data retrieval
+performance by reducing the need to access the underlying slower storage layer.
+
+### Benefits of Caching
+
+A cache provides high-throughput, low-latency access to commonly accessed application data by storing the data in
+memory. Caching can improve the speed of your application. Caching reduces the response latency, which improves a user’s
+experience with your application.
+
+In summary, the benefits of caching include the following:
+
+- Improve application performance
+- Reduce database cost
+- Reduce load on the backend database tier
+- Facilitate predictable performance
+- Eliminate database hotspots.
+- Increase read throughput (IOPS)
+
+The following types of information or applications can often benefit from caching:
+
+- Results of database queries
+- Results of intensive calculations
+- Results of remote API calls
+- Compute-intensive workloads that manipulate large datasets, such as high- performance computing simulations and
+  recommendation engines
+
+Consider caching your data if the following conditions apply:
+
+- It is slow or expensive to acquire when compared to cache retrieval.
+- It is accessed with sufficient frequency.
+- Your data or information for your application is relatively static
+- Your data or information for your application is rapidly changing and staleness is not significant.
+
+### Caching Strategies
+
+You can implement different caching strategies for your application. Two primary methods are lazy loading and write
+through.
+
+A cache hit occurs when the cache contains the information requested. A cache miss occurs when the cache does not
+contain the information requested.
+
+**Lazy loading** is a caching strategy that loads data into the cache only when necessary. When your
+application requests data, it first makes the request to the cache.
+If the data exists in the cache (a cache hit), it is retrieved; but if it does not or has expired (a cache miss), then
+the data is retrieved from your data store and then stored in the cache.
+
+The disadvantage is that there is a cache miss penalty resulting in three trips:
+
+- The application requests data from the cache.
+- If there is a cache miss, you must query the database.
+- After data retrieval, the cache is updated.
+
+**Write through** The write-through strategy adds data or updates in the cache whenever data is written to the database.
+The
+advantage of write through is that the data in the cache is never stale.
+
+The disadvantage is that there is a write penalty because every write involves two trips: a write to the cache and a
+write to the database. Another disadvantage is that because most data is never read in many applications, the data or
+information that is stored in the cluster is never used.
+
+## In-Memory Key-Value Store
+
+An in-memory key-value store is a NoSQL database optimized for read-heavy application workloads (such as social
+networking, gaming, media sharing, and Q&A portals) or compute-intensive workloads (such as a recommendation engine).
+
+### Benefits of In-Memory Data Stores
+
+The strict performance requirements imposed by real-time applications mandate more efficient databases. Traditional
+databases rely on disk-based storage. A single user action may consist of multiple database calls. As they accumulate,
+latency increases. However, by accessing data in memory, in-memory data stores provide higher throughput and lower
+latency. In fact, in-memory data stores can be one to two orders of magnitude faster than disk-based databases.
+
+NoSQL data stores are built to be scalable. Traditional relational databases use a rigid table-based architecture.
+
+### Benefits of Distributed Cache
+
+A caching layer is a high-speed storage layer that stores a subset of data.
+When a read request is sent, the caching layer checks to determine whether it has the answer. If it doesn’t, the request
+is sent on to the database. Meeting read requests through the caching layer in this manner is more efficient and
+delivers higher performance than what can be had from a traditional database alone.
+
+Instead of provisioning additional instances of your traditional database to accommodate a demand spike, you can drive
+more throughput by adding one node of distributed cache, replacing several database nodes.
+
+## Amazon ElastiCache
+
+Amazon ElastiCache is a web service that makes it easy to deploy, operate, and scale an in-memory cache in the AWS
+Cloud. The service improves the performance of web applications by allowing you to retrieve information from fast,
+managed, in-memory caches instead of relying entirely on slower disk-based databases.
+
+ElastiCache currently supports two different open-source, in-memory, key-value caching engines: Redis and Memcached.
+
+### Redis
+
+Redis is an increasingly popular open-source, key-value store that supports more advanced data structures, such as
+sorted sets, hashes, and lists. Unlike Memcached, Redis has disk persistence built in, meaning that you can use it for
+long-lived data. Redis also supports replication, which can be used to achieve Multi-AZ redundancy, similar to Amazon
+RDS.
+
+### Memcached
+
+Memcached is a widely adopted in-memory key store. It is historically the gold standard of web caching. ElastiCache is
+protocol-compliant with Memcached, and it is designed to work with popular tools that you use today with existing
+Memcached environments. Memcached is also multithreaded, meaning that it makes good use of larger Amazon EC2 instance
+sizes with multiple cores.
+
+### Comparison of Memcached and Redis
+
+Although both Memcached and Redis appear similar on the surface, in that they are both in-memory key stores, they are
+quite different in practice. Because of the replication and persistence features of Redis, ElastiCache manages Redis
+more as a relational database.
+
+Redis ElastiCache clusters are managed as stateful entities that include failover, similar to how Amazon RDS manages
+database failover.
+
+Conversely, because Memcached is designed as a pure caching solution with no persis- tence, ElastiCache manages
+Memcached nodes as a pool that can grow and shrink, similar to an Amazon EC2 Auto Scaling group. Individual nodes are
+expendable, and ElastiCache provides additional capabilities here, such as automatic node replacement and Auto
+Discovery.
+
+Use Memcached if you require one or more of the following:
+
+- Object caching is your primary goal, for example, to offload your database.
+- You are interested in as simple a caching model as possible.
+- You plan to run large cache nodes and require multithreaded performance with the use
+  of multiple cores.
+- You want to scale your cache horizontally as you grow.
+
+Use Redis if you require one or more of the following:
+
+- You are looking for more advanced data types, such as lists, hashes, and sets.
+- Sorting and ranking datasets in memory help you, such as with leaderboards.
+- Your application requires publish and subscribe (pub/sub) capabilities.
+- Persistence of your key store is important.
+- You want to run in multiple Availability Zones (Multi-AZ) with failover.
+- You want transactional support, which lets you execute a group of commands as an isolated and atomic operation.
+
+## Amazon DynamoDB Accelerator
+
+Amazon DynamoDB Accelerator (DAX) is a fully managed, highly available, in-memory cache for DynamoDB that delivers up to
+10 times the performance improvement—from milliseconds to microseconds—even at millions of requests per second. DAX
+does all of the heavy lifting required to add in-memory acceleration to your DynamoDB tables, without requiring
+developers to manage cache invalidation, data population, or cluster management.
+
+With DAX, you can focus on building great applications for your customers without worrying about performance at scale.
+You do not need to modify application logic, because DAX is compatible with existing DynamoDB API calls.
+
+## Graph Databases
+
+AWS provides a variety of graph database options, such as Amazon Neptune, or you can operate your own graph database in
+the cloud on Amazon EC2 and Amazon EBS.
+
+- Social applications
+- Recommendation engines
+- Fraud detection
+- Knowledge graphs
+- Life sciences
+- IT/network
+
+Because the data is highly connected, it is easily represented as a graph, which is a data structure that consists of
+vertices and directed links called edges. Vertices and edges can each have properties associated with them.
+
+### Amazon Neptune
+
+Amazon Neptune is a fast, reliable, fully managed graph database service that makes it easy to build and run
+applications that work with highly connected datasets.
+
+The core of Neptune is a purpose-built, high-performance graph database engine optimized for storing billions of
+relationships and querying the graph with milliseconds latency.
+
+Neptune is highly available and provides the following features:
+
+- Read replicas
+- Point-in-time recovery
+- Continuous backup to Amazon S3
+- Replication across Availability Zones
+- Encryption at rest and in transit
+
+Neptune graph databases include the following use cases:
+
+- Recommendation engines
+- Fraud detection
+- Knowledge graphs
+- Drug discovery
+- Network security
+
+## Cloud Database Migration
+
+Amazon offers a suite of tools to help you move data via networks, roads, and technology partners.
+
+### AWS Database Migration Service
+
+AWS Database Migration Service (AWS DMS) helps you migrate databases to AWS quickly and securely. The source database
+remains fully operational during the migration, minimizing downtime to applications that rely on the database. AWS DMS
+can migrate your data to and from the most widely used commercial and open-source database
+
+The service supports homogenous database migrations, such as Oracle to Oracle, in addition to heterogeneous migrations
+between different database platforms, such as Oracle to Amazon Aurora or Microsoft SQL Server to MySQL.
+
+You can also use AWS DMS for continuous data replication with high availability.
+
+### AWS Schema Conversion Tool
+
+For heterogeneous database migrations, AWS DMS uses the AWS Schema Conversion Tool (AWS SCT). AWS SCT makes
+heterogeneous database migrations predictable by automatically converting the source database schema and a majority of
+the database code objects, including views, stored procedures, and functions, to a format compatible with the target
+database.
+
+After the schema conversion is complete, AWS SCT can help migrate data from a range of data warehouses to Amazon
+Redshift by using built-in data migration agents.
+
+## Running Your Own Database on Amazon Elastic Compute Cloud
+
+### Compliance and Security
+
+AWS includes various methods to provide security for your databases and meet the strictest of compliance standards. You
+can use the following:
+
+- Network isolation through virtual private cloud (VPC)
+- Security groups
+- AWS resource-level permission controls that are IAM-based.
+- Encryption at rest by using AWS KMS or Oracle/Microsoft Transparent Data Encryption (TDE)
+- Secure Sockets Layer (SSL) protection for data in transit
+- Assurance programs for finance, healthcare, government, and
+
+### AWS Identity and Access Management
+
+You can use Identity and Access Management (IAM) to perform governed access to control who can perform actions with
+Amazon Aurora MySQL and Amazon RDS for MySQL.
+
+# Summary
+
+In this chapter, you learned the basic concepts of different types of databases, including relational, nonrelational,
+data warehouse, in-memory, and graph databases. From there, you learned about the various managed database services
+available on AWS. These included Amazon RDS, Amazon DynamoDB, Amazon Redshift, Amazon ElastiCache, and Amazon Neptune.
+
+Finally, you looked at how to perform homogenous database migrations using the AWS Database Migration Service (AWS DMS).
+For heterogeneous database migrations, you learned that AWS DMS can use the AWS Schema Conversion Tool (AWS SCT).
+
+# Exam Essentials
+
+**Know what a relational database is.**
+
+A relational database consists of one or more tables. Communication to and from relational databases usually involves
+simple SQL queries, such as “Add a new record” or “What is the cost of product x?” These simple queries are often
+referred to as online transaction processing (OLTP).
+
+**Know what a nonrelational database is.**
+
+Nonrelational databases do not have a hard-defined data schema. They can use a variety of models for data management,
+such as in-memory key-value stores, graph data models, and document stores. These databases are optimized for
+applications that have a large data volume, require low latency, and have flexible data models. In nonrelational
+databases, there is no concept of foreign keys.
+
+**Understand the database options available on AWS.**
+
+You can run all types of databases on AWS. You should understand that there are managed and unmanaged options available,
+in addition to relational, nonrelational, caching, graph, and data warehouses.
+
+**Understand which databases Amazon RDS supports.**
+
+Amazon RDS currently supports six relational database engines:
+
+- Microsoft SQL Server
+- MySQL
+- Oracle
+- PostgreSQL
+- MariaDB
+- Amazon Aurora
+
+**Understand the operational benefits of using Amazon RDS.**
+
+Amazon RDS is an AWS managed service. AWS is responsible for patching, antivirus, and the management of the
+underlying guest OS for Amazon RDS. Amazon RDS greatly simplifies the process of setting a secondary slave with
+replication for failover and setting up read replicas to offload queries.
+
+**Remember that you cannot access the underlying OS for Amazon RDS DB instances.**
+
+You cannot use Remote Desktop Protocol (RDP) or SSH to connect to the underlying OS. If you need to access the OS,
+install custom software or agents. If you want to use a database engine that Amazon RDS does not support, consider
+running your database on an Amazon EC2 instance instead.
+
+**Understand that Amazon RDS handles Multi-AZ failover for you.**
+
+If your primary Amazon RDS instance becomes unavailable, AWS fails over to your secondary instance in another
+Availability Zone automatically. This failover is done by pointing your existing database endpoint to a new IP address.
+You do not have to change the connection string manually; AWS handles the DNS changes automatically.
+
+**Remember that Amazon RDS read replicas are used for scaling out and increased performance.**
+
+This replication feature makes it easy to scale out your read-intensive databases. Read replicas are currently supported
+in Amazon RDS for MySQL, PostgreSQL, and Amazon Aurora. You can create one or more replicas of a database within a
+single AWS Region or across multiple AWS Regions. Amazon RDS uses native replication to propagate changes made to a
+source DB instance to any associated read replicas. Amazon RDS also supports cross-region read replicas to replicate
+changes asynchronously to another geography or AWS Region.
+
+**Know how to calculate throughput for Amazon DynamoDB.**
+
+Remember that one read capacity unit (RCU) represents one strongly consistent read per second or two eventually
+consistent reads per second for an item up to 4 KB in size. For writing data, know that one write capacity unit (WCU)
+represents one write per second for an item up to 1 KB in size. Be comfortable performing calculations to determine the
+appropriate setting for the RCU and WCU for a table.
+
+**Know that DynamoDB spreads RCUs and WCUs across partitions evenly.**
+
+Recall that when you allocate your total RCUs and WCUs to a table, DynamoDB spreads these across your partitions evenly.
+For example, if you have 1,000 RCUs and you have 10 partitions, then you have 100 RCUs allocated to each partition.
+
+**Know the differences between a local secondary index and a global secondary index.**
+
+Remember that you can create local secondary indexes only when you initially create the table; additionally, know that
+local secondary indexes must share the same partition key as the parent or source table. Conversely, you can create
+global secondary indexes at any time, with different partitions keys or sort keys.
+
+**Know the difference between eventually consistent and strongly consistent reads.**
+
+Know that with eventually consistent reads, your application may retrieve data that is stale; but with strongly
+consistent reads, the data is always up-to-date.
+
+**Understand the purpose of caching data and which related services are available.**
+
+Know why caching is important for your database tier and how it helps to improve your applica- tion performance.
+Additionally, understand the differences between the caching methods (lazy loading and write-through) and the
+corresponding AWS services (Amazon DynamoDB Accelerator (DAX), ElastiCache for Redis, and ElastiCache for Memcached).
