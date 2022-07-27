@@ -164,3 +164,150 @@ If the source data is not encrypted, then this step can be skipped, and SSL can 
 to the Amazon EMR cluster. If the source data is encrypted, then your Hadoop job must decrypt the data as it is
 ingested. If your job flow uses Java and the source data is in Amazon S3, you can use any of the client decryption
 methods described in the previous Amazon S3 sections.
+
+## Option 2: You Control the Encryption Method, AWS Provides the KMI Storage Component, and You Provide the KMI Management Layer
+
+### CloudHSM
+
+To help you decide whether CloudHSM is appropriate for your deployment, it is important to understand the role that an
+HSM plays in encrypting data. You can use an HSM to generate and store key material and perform encryption and
+decryption operations.
+
+### Amazon Virtual Private Cloud
+
+Applications must be able to access your CloudHSM appliance in an Amazon Virtual Private Cloud (Amazon VPC). The
+CloudHSM client interacts with the CloudHSM appliance to encrypt data from your application. You can then send
+encrypted data to any AWS service for storage.
+
+To achieve the highest availability and durability of keys in your CloudHSM appliance, AWS recommends deploying multiple
+CloudHSM applications across different Availability Zones or with an on-premises HSM appliance that you manage.
+
+## Option 3: AWS Controls the Encryption Method and the Entire KMI
+
+AWS provides server-side encryption of your data, transparently managing the encryption method and keys.
+
+### AWS Key Management Service
+
+AWS Key Management Service (AWS KMS) is a managed encryption service that lets you provision and use keys to encrypt
+your data in AWS services and your applications.
+
+Master keys in AWS KMS are used in a similar way to how master keys in an HSM are used.
+
+AWS KMS is natively integrated with other AWS services, including Amazon EBS, Amazon S3, and Amazon Redshift, to
+simplify encryption of your data within those services.
+
+AWS SDKs are integrated with AWS KMS to enable you to encrypt data in your custom applications. For applications that
+must encrypt data, AWS KMS provides global availability, low latency, and a high level of durability for your keys.
+
+AWS KMS and other services that encrypt your data directly use a method called enve- lope encryption to balance
+performance and security.
+
+### Amazon S3
+
+There are three ways to encrypt your data in Amazon S3 using server-side encryption.
+
+**Server-side encryption**
+
+You can set an API flag or use the AWS Management Console
+to encrypt data before it is written to disk in Amazon S3. Each object is encrypted with
+a unique data key. As an additional safeguard, this key is encrypted with a periodically rotated master key managed by
+Amazon S3. Amazon S3 server-side encryption uses 256-bit Advanced Encryption Standard (AES) keys for both object and
+master keys. This feature is offered at no additional cost beyond what you pay for using Amazon S3.
+
+**Server-side encryption using customer-provided keys**
+
+You can use your own encryption key while uploading an object to Amazon S3. Amazon S3 uses this encryption key to
+encrypt your data using AES-256. After the object is encrypted, the encryption key is deleted from the Amazon S3 system
+that used it to protect your data. When you retrieve this object from Amazon S3, you must provide the same encryption
+key in your request. Amazon S3 verifies that the encryption key matches, decrypts the object, and returns the object to
+you. This feature is offered at no additional cost beyond what you pay for using Amazon S3.
+
+**Server-side encryption using AWS KMS**
+
+You can encrypt your data in Amazon S3 by defining an AWS KMS master key within your account. This master key is used to
+encrypt the unique object key that ultimately encrypts your object.
+
+### Amazon EBS
+
+When creating a volume in Amazon EBS, you can choose to encrypt it using an AWS KMS master key within your account that
+encrypts the unique volume key that will ultimately encrypt your EBS volume.
+
+### Amazon EMR
+
+S3DistCp is an Amazon EMR feature that moves large amounts of data from Amazon S3 into HDFS, from HDFS to Amazon S3, and
+between Amazon S3 buckets. With S3DistCp, you can request Amazon S3 to use server-side encryption when it writes Amazon
+EMR data to an Amazon S3 bucket. This feature is offered at no additional cost beyond what you pay for using Amazon S3
+to store your Amazon EMR data.
+
+### Amazon Redshift
+
+When creating an Amazon Redshift cluster, you can choose to encrypt all data in user-created tables. For server-side
+encryption of an Amazon Redshift cluster, you can choose from the following options
+
+**256-bit AES keys**
+
+Data blocks (included backups) are encrypted using random 256-bit AES keys. These keys are themselves encrypted using a
+random 256-bit AES database key, which is encrypted by a 256-bit AES cluster master key that is unique to your cluster.
+
+**CloudHSM cluster master key**
+
+The 256-bit AES cluster master key used to encrypt your database keys is generated in your CloudHSM or by using HSM
+appliance on- premises. This cluster master key is then encrypted by a master key that never leaves your HSM.
+
+**AWS KMS cluster master key**
+
+The 256-bit AES cluster master key used to encrypt your database keys is generated in AWS KMS. This cluster master key
+is then encrypted by a master key within AWS KMS. When the Amazon Redshift cluster starts up, the cluster master key is
+decrypted in AWS KMS and used to decrypt the database key, which is sent to the Amazon Redshift hosts to reside only in
+memory for the life of the cluster.
+
+# Summary
+
+If you take all responsibility for the encryption method and the KMI, you can have granular control over how your
+applications encrypt data. However, that granular control comes at a cost—both in terms of deployment effort and an
+inability to have AWS services tightly integrate with your applications’ encryption methods. As an alternative, you can
+choose a managed service that enables easier deployment and tighter integration with AWS Cloud services. This option
+offers checkbox encryption for several services that store your data, control over your own keys, secured storage for
+your keys, and auditability on all data access attempts.
+
+# Exam Essentials
+
+**Know how to define key management infrastructure (KMI).**
+
+A KMI consists of two infrastructure components. The first component is a storage layer that protects plaintext keys.
+The second component is a management layer that authorizes use of stored keys
+
+**Understand the available options for how you and AWS provide encryption using a KMI.**
+
+With the first option, you control the encryption method in addition to the entire KMI. In the second option, you
+control the encryption method and the management layer of the KMI, and AWS provides the storage layer. In the third
+option, AWS controls the encryption method and both components of the KMI.
+
+**Understand the maintenance trade-offs of each key management option.**
+
+For any options that involve customers managing the components of the KMI or encryption method,maintenance increases
+significantly. The increased maintenance also reduces your ability to take advantage of built-in integrations between
+AWS KMS and other services.For options that involve using built-in AWS functionality, additional maintenance is required
+only when migrating legacy applications to take advantage of new features.
+
+**Understand the encryption options available in Amazon S3.**
+
+Regardless of the key management tools and process, you are able to encrypt any objects before uploading them to an
+Amazon S3 bucket. However, any custom encryption logic adds to processing overhead for the encryption and decryption of
+the data. AWS provides the Amazon S3 encryption client to help streamline this process (available in the Java, Ruby, and
+.NET AWS SDKs). When encrypting data on-premises, AWS has no visibility into the encryption keys or mechanisms used. For
+server-side encryption, Amazon S3 supports AWS-managed keys, customer-managed keys, and encryption using AWS KMS.
+
+**Understand the encryption options available in Amazon EBS.**
+
+Like any on-premises block storage, Amazon EBS supports both block-level and file-system encryption. However, an
+important caveat with block-level and file-system encryption tools, such as TrueCrypt and eCryptfs, is that you cannot
+use them to encrypt the boot volume of an Amazon EC2 instance. Amazon EBS supports encryption by using customer-managed
+keys and AWS KMS.
+
+**Understand the encryption options available in Amazon RDS.**
+
+Because Amazon RDS does not expose the underlying file system of databases, block-level and file-system encryp- tion
+options are not available. However, standard libraries for encryption of database fields are fully supported. It is
+important to evaluate the types of queries that will be run against a database before selecting an encryption process,
+as this could affect the ability to run queries on encrypted data.
