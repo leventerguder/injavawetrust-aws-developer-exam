@@ -132,3 +132,136 @@ is treated as a logical grouping to manage the scaling of instances.
 An Auto Scaling group launches enough Amazon EC2 instances to meet its desired capacity. The Auto Scaling group
 maintains this number of instances by performing periodic health checks on the instances in the group. If an instance
 becomes unhealthy, the group terminates the unhealthy instance and launches another instance to replace it.
+
+# AWS Elastic Beanstalk
+
+AWS Elastic Beanstalk is an AWS service that you can use to deploy applications, services, and architecture. It provides
+provisioned scalability, load balancing, and high availability. It uses common languages, including Java, .NET, PHP,
+Node.js, Python, Ruby, Go, and Docker, on common-type web servers, such as Apache, NGINX, Passenger, and IIS.
+
+- Elastic Beanstalk charges only for the resources you use to run your application.
+- Elastic Beanstalk is a solution that enables the automated deployments and management of applications on the AWS
+  Cloud.
+- Elastic Beanstalk can launch AWS resources automati- cally with Amazon Route 53, AWS Auto Scaling, Elastic Load
+  Balancing, Amazon EC2, and Amazon Relational Database Service (Amazon RDS) instances, and it allows you to customize
+  additional AWS resources.
+
+Deploy applications without worrying about managing the underlying technologies, including the following:
+
+**Components**
+
+- Environments
+- Application versions
+- Environment configurations
+
+**Permission Model**
+
+- Service role
+- Instance profile.
+
+With Elastic Beanstalk, you can also create repeatable environments and reduce redundancy, thus rapidly updating
+environments and facilitating service-managed application stacks. You can deploy multiple environments in minutes and
+use various automated deployment strategies.
+
+AWS Elastic Beanstalk allows you to focus on building your application.
+
+## Implementation Responsibilities
+
+### Developer Teams
+
+Using AWS Elastic Beanstalk, you build full-stack environments for web and worker tiers. The service provides a
+preconfigured infrastructure.
+
+- Single-instance (development, low cost)
+- Load balanced, AWS Auto-Scaling (production)
+
+### Elastic Beanstalk Responsibilities
+
+Elastic Beanstalk provisions the necessary infrastructure resources, such as the load balancer, Auto Scaling group,
+security groups, and database (optional). It also provides a unique domain name for your application (for example,
+yourapp.elasticbeanstalk.com).
+
+## Working with Your Source Repository
+
+By using Elastic Beanstalk with the AWS CodeCommit repository, you extract from a current branch on CodeCommit.
+
+Elastic Beanstalk can either retrieve the source bundle from a source repository or download the bundle from an Amazon
+Simple Storage Service (Amazon S3) bucket.
+
+You can use the IAM role to grant Elastic Beanstalk access to all services.
+
+You can also work with different hosting services, such as GitHub or Bitbucket, with your code source.
+
+## Concepts
+
+### Application
+
+Elastic Beanstalk focuses on managing your applications as environments and all of the resources to run them. Each
+application that launches in the service is a logical collection of environment variables and components, application
+versions, and environment configurations.
+
+### Application Versions
+
+Application versions are iterations of the application’s deployable code. Application versions in Elastic Beanstalk
+point to an Amazon S3 object with the code source package. An application can have many versions, with each version
+being unique. You can deploy and access any application version at any time. For example, you may want to deploy
+different versions for different types of tests.
+
+### Environment
+
+Each Elastic Beanstalk environment is a separate version of the application, and that version’s AWS Cloud components
+deploy onto AWS resources to support that version. Each environment runs one application version at a time, but you can
+run multiple environments, with the same application on each, along with its own customizations and resources.
+
+### Environment Tier
+
+To launch an environment, you must first choose an environment tier. Elastic Beanstalk provisions the required resources
+to support both the infrastructure and types of requests the application will support.
+
+### Environment Configuration
+
+You can change your environment to create, modify, delete, or deploy resources and change the settings for each. Your
+environment configuration saves to a configuration template exclusive to each environment and is accessible by either
+the Elastic Beanstalk application programming interface (API) calls or the service’s command line interface (EB CLI).
+
+### Docker Containers
+
+You can also use Docker containers with Elastic Beanstalk to run your applications from a container.
+A single container deployment launches a single Docker image, and your application uses a single container configuration
+for a single Amazon EC2 instance.
+
+A multicontainer deployment uses the Amazon ECS to launch a cluster of containers with Docker images.
+
+## AWS Elastic Beanstalk Command Line Interface
+
+Elastic Beanstalk has its own command line interface separate from the AWS CLI tool.
+
+**eb init application-name**
+
+Sets default values for Elastic Beanstalk applications with the EB CLI configuration wizard.
+
+**eb create**
+
+Creates a new environment and deploys an application version to it.
+
+**eb deploy**
+
+Deploys the application source bundle from the initialized project directory to the running application.
+
+**eb clone**
+
+Clones an environment to a new environment so that both have identical environment settings.
+
+**eb codesource**
+
+Configures the EB CLI to deploy from an AWS CodeCommit repository, or disables AWS CodeCommit integration and uploads
+the source bundle from your local machine.
+
+## Customizing Environment Configurations
+
+You can use Elastic Beanstalk to customize the platforms used to support your application and your infrastructure. To do
+so, create a configuration file in the ebextensions directory (or .ebextensions) to include with your web application’s
+source code.
+
+Elastic Beanstalk generates logs that you can view to troubleshoot your environments and resources. The logs display
+Amazon EC2 operational logs and logs that are specific to servers running for your applications.
