@@ -265,3 +265,204 @@ source code.
 
 Elastic Beanstalk generates logs that you can view to troubleshoot your environments and resources. The logs display
 Amazon EC2 operational logs and logs that are specific to servers running for your applications.
+
+## Integrating with Other AWS Services
+
+Elastic Beanstalk automatically integrates or manages other AWS services with application code to provision efficient
+working environments.
+
+To grant access between any integrated service and Elastic Beanstalk, you must configure permissions in IAM.
+
+### Amazon S3
+
+You can use Amazon S3 to store static content you want to integrate with your application and point directly to objects
+you store in Amazon S3 from your application or from other resources. In addition to setting permissions in IAM
+policies, take advantage of presigned URLs for controlled Amazon S3 GET and PUT operations.
+
+### Amazon CloudFront
+
+You can integrate your Elastic Beanstalk environment with Amazon CloudFront, which provides content delivery and
+distribution through the use of edge locations throughout the world.
+
+After you deploy your application on Elastic Beanstalk, use the Amazon CloudFront content delivery network (CDN) to
+cache static content from your application.
+
+### AWS Config
+
+With AWS Config, you can visualize configuration history and how configurations evolve over time. Tracking changes helps
+you to fulfill compliance obligations and meet auditing requirements. You can integrate AWS Config directly with your
+application and its versions or your Elastic Beanstalk environment. You can customize AWS Config to record changes per
+resource, per region, or globally.
+
+### Amazon RDS
+
+Elastic Beanstalk can create a database and store and retrieve data for any of your environments. Each service has its
+own features to handle scaling, capacity, performance, and availability.
+
+### Amazon ElastiCache
+
+For caching capabilities, you can integrate Amazon ElastiCache service clusters with the Elastic Beanstalk environment.
+
+## AWS Identity and Access Management Roles
+
+Elastic Beanstalk integrates with AWS Identity and Access Management (IAM) roles to enable access to the services you
+require to run your architecture.
+
+You use IAM roles to automate the management of allocated services for your application through Elastic Beanstalk.
+
+For IAM to manage the policies for the account better, create policies at the account level.
+
+# Deployment Strategies
+
+A deployment is the process of copying content and executing scripts on instances in your deployment group. To
+accomplish this, AWS CodeDeploy performs the tasks outlined in the AppSpec configuration file. For both Amazon EC2
+on-premises instances and AWS Lambda functions, the deployment succeeds or fails based on whether individual AppSpec
+tasks complete successfully.
+
+A serverless application is typically a combination of AWS Lambda and other AWS services.
+
+## All-at-Once and In-Place Deployments
+
+An all-at-once deployment applies updates to all your instances at once. When you execute this strategy, you experience
+downtime, as all instances receive the change at the same time.
+
+This is an appropriate strategy for simple, immediate update requirements when it’s not critical to have your
+application always available, and you’re comfortable with the site being offline for a short duration.
+To enable all-at-once updates, set a deployment policy either in the AWS Management Console or in the command line (
+DeploymentPolicy).
+
+When you perform an in-place deployment, AWS CodeDeploy stops currently running applications on the target instance,
+deploys the latest revision, restarts applications, and validates successful deployment.
+
+AWS Lambda does not support in-place deployments.
+
+## Rolling Deployments
+
+A rolling deployment applies changes to all of your instances by rolling the updates from one instance to another.
+Elastic Beanstalk can deploy configuration changes in batches. This approach reduces possible downtime during
+implementation of the change and allows available instances to run while you deploy.
+
+Rolling updates include changes for Auto Scaling group configurations, Amazon EC2 instance configurations, and Amazon
+VPC settings.
+
+It is an effective method for updating an application version on fleets of instances through the Elastic Beanstalk
+service.
+
+You can select Rolling or Rolling with additional batch. By using Rolling with additional batch, you can launch a new
+batch of instances before you begin to take instances out of service for your rolling updates.
+
+## Blue/Green Deployment
+
+When high availability is critical for applications, you may want to choose a blue/green deployment, where your newer
+environment will be separate from your existing environment.
+
+The running production environment is considered the blue environment, and the newer environment with your update is
+considered the green environment.
+
+When your changes are ready and have gone through all tests in your green environment, you can swap the CNAMEs of the
+environments to redirect traffic to the newer running environment. This strategy provides an instantaneous update with
+typically zero downtime.
+
+When you deploy to AWS Lambda functions, blue/green deployments publish new versions of each function.
+
+## Immutable Deployment
+
+An immutable deployment is best when an environment requires a total replacement of instances, rather than updates to an
+existing part of an infrastructure.
+
+This approach implements a safety feature for updates and rollbacks. Elastic Beanstalk creates a temporary Auto
+Scaling group behind your environment’s load balancer to contain the new instances with the updates you apply. If the
+update fails, the rollback process terminates the Auto Scaling group. Immutable instances implement a number of health
+checks.
+
+During this type of deployment, your capacity doubles for a short dura- tion between the updates and terminations of
+instances. Before you use this strategy, verify that your instances have a low on-demand limit and enough capacity to
+support immutable updates.
+
+![](Deployment-Strategies.png)
+
+## Container Deployments
+
+Elastic Beanstalk enables you to launch your applications with Docker containers. With a Docker container, you can
+create a runtime environment with all of the dependencies, packages, and tools that your application may require to
+run.
+
+By using Docker with Elastic Beanstalk, you have the infrastructure for capacity provisioning, scalability, load
+balancing, and health monitoring for the instances that run on containers.
+
+# Monitoring and Troubleshooting
+
+After you launch your code, check on its performance and availability. You can monitor statistics and view information
+about the health of your application, its environment, and specific services from the AWS Management Console.
+
+AWS Management Console, the AWS Elastic Beanstalk Monitoring page shows aggregated statistics and graphs for your
+applications and resources.
+
+Metrics gathered by the resources in your environment are published to Amazon CloudWatch in five-minute intervals.
+
+By default, Elastic Beanstalk displays Amazon EC2, Auto Scaling, and Elastic Load Balancing metrics for your application
+environments. These metrics are available to you on your AWS Elastic Beanstalk Monitoring page as soon as you deploy
+your application environment.
+
+## Basic Health Monitoring
+
+To access the health status from the AWS Management Console, select the Elastic Beanstalk service and then select the
+tab for your specific application environment.
+
+To access the health status from the EB CLI, enter the eb health command.
+
+## Enhanced Health Monitoring
+
+There are two types of reporting: the default health information about your resources and the enhanced health reporting
+that provides you more information for monitoring health.
+
+You can use the enhanced health reporting feature to gather additional resource data and display graphs and statistics
+of environment health in greater detail. This is important when you deploy multiple versions of your application and
+when you need to analyze factors that could be degrading your application’s availability or performance.
+
+By default, health monitoring on Elastic Beanstalk does not publish metrics to Amazon CloudWatch, so you are not charged
+for the metrics.
+
+Elastic Beanstalk integrates with AWS CloudTrail to capture Elastic Beanstalk API calls as log files that you can store
+in an Amazon S3 bucket.
+
+# Summary
+
+In this chapter, you learned about the features of Elastic Beanstalk, how to automate deployments for your multi-tier
+architectures, and different deployment strategies. You also discovered options for configuring your environments and
+managing your resources with services such as IAM, Amazon VPC, Amazon EC2, and Amazon S3.
+
+# Exam Essentials
+
+**Know how to deploy AWS Elastic Beanstalk.**
+
+Know how to deploy an application AWS Elastic Beanstalk and what platforms it supports. To complete the exam
+successfully, you should also understand how the architectures and services interact with the web, application, and
+database tiers. Focus on foundational services and how you create and work with Elastic Beanstalk.
+
+**Know about ebextensions.**
+
+Understand ebextensions and the part they play in the ser- vice configuration. Be able to recognize the stacks you
+create and how to change them.
+
+**Know about Elastic Beanstalk resources.**
+
+Understand how to manage resources with Elastic Beanstalk, including IAM. Understand the definitions and differentiate
+between the functions of the default IAM service role and the instance profile, which are automatically created.
+Understand permissions for your AWS resources in your environment.
+
+**Know Elastic Beanstalk deployment strategies.**
+
+Understand what deployment strategies you can use, their differences, and which ones would be best for different use
+cases and other resources. Know which strategy offers less downtime and which is best suited for complex changes.
+
+**Know about Elastic Beanstalk components.**
+
+Understand all of the components of Elastic Beanstalk, including applications, environments, versions, configurations,
+and the AWS resources it launches and with which it integrates. Know how to retain or dispose
+of resources as needed.
+
+**Know about Elastic Beanstalk different environment tiers.**
+
+Know the differences between the single-instance tier and the web-server environment tier and when to choose one over
+the other. Understand the services and features used for both.
