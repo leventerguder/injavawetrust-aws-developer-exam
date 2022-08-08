@@ -250,3 +250,146 @@ version control system as the initialization point of your CI/CD pipeline.
 When you select AWS CodeCommit as the source provider, you must provide a repository name and branch. If you use AWS
 CodeCommit, it creates an Amazon CloudWatch Events rule and an IAM role to monitor the repository and branch for
 changes.
+
+### What Is AWS CodeBuild?
+
+AWS CodeBuild enables you to define the build environment to perform build tasks and the actual tasks that it will
+perform. AWS CodeBuild comes with prepackaged build environments for most common workloads and build tools (Apache
+Maven, Grade, and others), and it allows you to create custom environments for any custom tools or processes.
+
+### AWS CodeBuild Concepts
+
+AWS CodeBuild initiates build tasks inside a build project, which defines the environmental settings, build steps to
+perform, and any output artifacts. The build container’s operating system, runtime, and build tools make up the build
+environment.
+
+### Build Projects
+
+Build projects define all aspects of a build. This includes the environment in which to per- form builds, any tools to
+include in the environment, the actual build steps to perform, and outputs to save.
+
+### Build Specification (buildspec.yml)
+
+The buildspec.yml file can provide the build specification to your build projects in the AWS CodeBuild console, the AWS
+CLI, or the AWS SDK when you create the build project, or as part of your source repository in a YAML-formatted
+buildspec.yml file.
+
+### Artifacts
+
+The artifacts mapping specifies where AWS CodeBuild will place output artifacts, if any.
+
+### Cache
+
+If you configure caching for the build project, the cache map specifies which files to upload to Amazon S3 for use in
+subsequent builds.
+
+### Build Environments
+
+A build environment is a Docker image with a preconfigured operating system, programming language runtime, and any
+other tools that AWS CodeBuild uses to perform build tasks and communicate with the service, along with other metadata
+for the environment, such as the compute settings.
+
+### Builds
+
+When you initiate a build, AWS CodeBuild copies the input artifact(s) into the build environ- ment. AWS CodeBuild uses
+the build specification to run the build process, which includes any steps to perform and outputs to provide after the
+build completes. Build logs are made available to Amazon CloudWatch Logs for real-time monitoring.
+
+## AWS CodeBuild Service Limits
+
+- Build projects per region per account* 1000
+- Build timeout 8 hours
+- Concurrently running builds* 20
+
+# Using AWS CodeDeploy to Deploy Applications
+
+AWS CodeDeploy is a service that automates software deployments to a variety of compute services, such as Amazon EC2,
+AWS Lambda, and instances running on-premises.
+
+AWS CodeDeploy makes it easier for you to release new features rapidly, helps you avoid downtime through application
+deployment, and handles the complexity to update your applications.
+
+You can use AWS CodeDeploy to automate software deployments and eliminate the need for error-prone manual operations.
+
+## What Is AWS CodeDeploy?
+
+AWS CodeDeploy standardizes and automates deployments of any types of content or configuration to Amazon EC2 instances,
+on-premises servers, or AWS Lambda functions.
+
+Because of its flexibility, it is not restricted to deploy only application code, and it can perform various
+administrative tasks that are part of your deployment process.
+
+You can automate deployment of AWS CodeDeploy with AWS Lambda functions through traffic switching.
+
+## AWS CodeDeploy Concepts
+
+### Revision
+
+A revision is an artifact that contains both application files to deploy and an AppSpec configuration file.
+Application files can include compiled libraries, configuration files, installation packages, static media, and other
+content.
+
+When you deploy to AWS Lambda, a revision contains only the AppSpec file. It contains information about the functions
+to deploy, as well as the steps to validate that the deployment was successful.
+
+### Deployments
+
+A deployment is the process of copying content and executing scripts on instances in your deployment group. To
+accomplish this, AWS CodeDeploy performs the tasks outlined in the AppSpec configuration file.
+
+There are two types of deployments supported by AWS CodeDeploy: in-place and blue/green.
+
+**In-Place Deployments**
+
+In in-place deployments, revisions deploy to new infrastructure instead of an existing one. After deployment completes
+successfully, the new infrastructure gradually replaces old code in a phased rollout. After all traffic routes to the
+new infrastructure, you can keep the old code for review or discard it.
+
+On-premises instances do not support blue/green deployments.
+
+**Blue/Green Deployments**
+
+When you deploy to AWS Lambda functions, blue/green deployments publish new versions of each function, after which
+traffic shifting routes requests to the new function versions according to the deployment configuration that you
+define.
+
+### Stop Deployments
+
+You can stop deployments via the AWS CodeDeploy console or AWS CLI. If you stop deployments to Amazon EC2 on-premises
+instances, this can result in some deployment groups being left in an undesired deployment state.
+
+### Rollbacks
+
+AWS CodeDeploy achieves automatic rollbacks by redeploying the last working revision to any instances in the deployment
+group (this will generate a new deployment ID).
+
+By default, AWS CodeDeploy will not overwrite any files that were not created as part of a deployment. You can override
+this setting for new deployments.
+
+### Deployment Group
+
+A deployment group designates the Amazon EC2 on-premises instances that a revision deploys.
+When you deploy to AWS Lambda functions, this specifies what functions will deploy new versions.
+
+### Deploy to Amazon EC2 Auto Scaling Groups
+
+When you deploy to Amazon EC2 Auto Scaling groups, AWS CodeDeploy will automatically run the latest successful
+deployment on any new instances created when the group scales out.
+
+### Deployment Configuration
+
+You use deployment configurations to drive how quickly Amazon EC2 on-premises instances update by AWS CodeDeploy. You
+can configure deployments to deploy to all instances in a deployment group at once or subgroups of instances at a time,
+or you can create an entire new group of instances (blue/green deployment).
+
+## Amazon EC2 On-Premises Deployment Configurations
+
+When you deploy to Amazon EC2 on-premises instances, you can configure either in-place or blue/green deployments.
+
+**In-Place deployments** 
+
+These deployments recycle currently running instances and deploy revisions on existing instances.
+
+**Blue/Green deployments**
+
+These deployments replace currently running instances with sets of newly created instances.
