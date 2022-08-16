@@ -127,3 +127,151 @@ Additional setup in the individual accounts is not required.
 
 AWS SSO integrates with Microsoft Active Directory through the Directory Service, enabling you to sign in to the user
 portal using your Active Directory credentials.
+
+# AWS Security Token Service
+
+AWS Security Token Service (AWS STS) creates temporary security credentials and provides trusted users with those
+temporary security credentials. The trusted users then access AWS resources with those credentials. Temporary security
+credentials work similarly to long-term access key credentials, but with the following differences:
+
+- Temporary security credentials consist of an access key ID, a secret access key, and a security token.
+- Temporary security credentials are short-term, and you configure them to remain valid for a duration between a few
+  minutes to several hours. After the credentials expire, AWS no longer recognizes them or allows any kind of access
+  from API requests made with them.
+- Temporary security credentials are not stored with you; they are generated dynamically and provided to you upon
+  request. You can request new credentials before or after the temporary security credentials expire, if you still have
+  permission to do so.
+
+Because of these differences, temporary credentials offer the following advantages:
+
+- You do not have to distribute or embed long-term AWS security credentials with an application.
+- You can provide users access to your AWS resources without defining an AWS identity for them. Temporary credentials
+  are the basis for AWS roles and identity federation.
+- The temporary security credentials have a limited lifetime. You do not have to rotate or explicitly revoke them when
+  the user no longer requires them.
+- After temporary security credentials expire, they cannot be reused. You can specify how long the credentials are
+  valid, up to a maximum limit.
+
+AWS STS IdPs come from different sources, including the following:
+
+- IAM users from another account
+- Microsoft Active Directory
+- Users of IdPs that are SAML 2.0–based
+- Web IdPs
+- Customer identity brokers
+
+Use Amazon Cognito to authenticate for mobile applications. Amazon Cognito supports the same IdPs as AWS STS. However,
+it also supports unauthenticated (or guest) access and provides a means for synchronizing user data between multiple
+devices owned by the same user.
+
+# Amazon Cognito
+
+Amazon Cognito is a service that allows you to manage sign-in and permissions for mobile and web applications through
+two services: Amazon Cognito Sync store and Amazon Cognito Sync.
+
+With Amazon Cognito Sync store, you can authenticate users using third-party social identity providers or create your
+own identity store. With Amazon Cognito Sync, you can synchronize identities across multiple devices and the web.
+
+Amazon Cognito is a managed service, providing scaling, redundancy, and high availability. You provide authentication
+with Amazon Cognito in one of three ways:
+
+- Your own identity store
+- Social identity providers such as Amazon or Facebook
+- SAML-based identity solutions
+
+Amazon Cognito provides a variety of mechanisms to secure the application. You can configure guest access, multifactor
+authentication, and confirmation of account with Short Message Service (SMS) or email, among other mechanisms. Amazon
+Cognito integrates with AWS CloudTrail to track creations, deletions, and configuration changes. You can also use Amazon
+CloudWatch alarms to monitor for a specific activity and receive Amazon Simple Notification Service (Amazon SNS) or
+email notifications, if that activity occurs.
+
+Amazon Cognito uses identity for user pools and identity pools. You use Amazon Cognito to access the AWS Management
+Console, AWS CLI, and AWS SDKs.
+
+## Microsoft Active Directory as Identity Provider
+
+Many enterprises already use Microsoft Active Directory as their identity store. Integrating Active Directory, rather
+than configuring a new identity store, simplifies administrative overhead. AWS Managed Microsoft AD provides multiple
+ways to use Amazon Cloud Directory and Microsoft Active Directory with other AWS services.
+
+AWS Directory Service provides multiple directory choices for customers who want to use an existing Microsoft Active
+Directory or Lightweight Directory Access Protocol (LDAP)–aware applications in the cloud.
+
+There are four different ways to implement Microsoft Active Directory in an AWS infrastructure.
+
+- Run Microsoft Active Directory on Amazon EC2 with an AWS account.
+- Use Active Directory Connector (AD Connector) to connect AWS services with an on- premises Microsoft Active Directory.
+- Create a Simple Active Directory (Simple AD) that provides basic Active Directory compatibility.
+- Deploy AWS Managed Microsoft AD.
+
+## Microsoft Active Directory on Amazon EC2 with AWS Account
+
+AWS provides a comprehensive set of services and tools for deploying Microsoft Windows– based workloads in its secure
+cloud infrastructure. Active Directory Domain Services (AD DS) and Domain Name System (DNS) are core Windows services
+that provide the foundation for many enterprise-class Microsoft-based solutions, including Microsoft SharePoint,
+Microsoft Exchange, and .NET applications.
+
+## Active Directory Connector
+
+Active Directory Connector (AD Connector) connects your existing on-premises Microsoft Active Directory with compatible
+AWS applications.
+
+AD Connector is not compatible with Amazon Relational Database Service (Amazon RDS) SQL Server.
+
+## Simple Active Directory
+
+Simple Active Directory (Simple AD) is a Microsoft Active Directory that is compatible with AWS Directory Service and is
+powered by Samba 4. Simple AD is a standalone directory in the cloud, where you create and manage identities and
+manage access to applications. You can use many familiar Active Directory–aware applications and tools that require
+basic Active Directory features.
+
+## AWS Managed Microsoft AD
+
+AWS Managed Microsoft AD is an actual Microsoft Windows Server Active Directory, managed by AWS in the AWS Cloud. It
+enables you to migrate a broad range of Active Directory–aware applications to the AWS Cloud.
+
+# Summary
+
+This chapter discussed the concepts of identity and authorization and how you can use AWS services to provide them. You
+learned that identity and authorization can operate at different planes of access—the control plane and the data plane.
+You also learned that these planes differ in terms of paths used, protocols configured, services managed, and
+credentials deployed.
+
+In addition, you learned about the various AWS services and where you use identity and authorization, including the
+following:
+
+- AWS SSO
+- AWS STS
+- Amazon Cognito
+- AWS Managed Microsoft AD
+
+# Exam Essentials
+
+**Understand what federation is.**
+
+Know the difference between federation and SSO. Understand when you would use federation and when you would use SSO.
+
+**Understand the role of an identity provider (IdP).**
+
+Know what an IdP does, how it operates, and how it interacts with an identity consumer.
+
+**Know the different federation services that AWS offers.**
+
+Understand which services act as IdPs, which act as identity consumers, and which act as SSO.
+
+**Understand AWS Directory Service options.**
+
+Know the use cases for Microsoft Active Directory, Cloud Directory, and Amazon Cognito.
+
+**Understand how policies work.**
+
+Know the structure of policies and how to apply them.
+
+**Recognize the role of policies in controlling access to AWS resources.**
+
+Know how to use AWS services to control access to non-AWS resources and how to use non-AWS services to control access to
+AWS resources.
+
+**Understand the difference between the data plane and control plane with regard to pro- tocols and commands.**
+
+Know how AWS STS and AWS SSO work and how to implement these services.
