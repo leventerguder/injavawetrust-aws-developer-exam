@@ -88,7 +88,92 @@ access methods include the following:
 
 Uses standard HTTP protocols or language-specific SDKs to deploy API access to backend functionality.
 
-Do not directly expose resources or the API—always use AWS edge ser- vices and the Amazon API Gateway service to
+Do not directly expose resources or the API—always use AWS edge services and the Amazon API Gateway service to
 safeguard your resources and APIs.
 
+## Endpoints
 
+There are three types of endpoints for Amazon API Gateway.
+
+**Regional endpoints**
+
+Live inside the AWS Region, such as us-west-2.
+
+**Edge optimized endpoints**
+
+Use Amazon CloudFront, a content delivery web service with the AWS global network of edge locations as connection points
+for clients, and integrate with your API.
+
+**Private endpoints**
+
+Can live only inside of a virtual private cloud (VPC).
+
+## HTTP Methods
+
+The Internet Engineering Task Force (IETF) is responsible for developing and documenting the HTTP protocol and how it
+operates. Amazon API Gateway uses the HTTP protocol to process these HTTP methods.
+
+## Authorizers
+
+Use Amazon API Gateway to set up authorizers with Amazon Cognito user pools on an AWS Lambda function. This enables you
+to secure your APIs and only allow users to whom you have granted specific access to your API.
+
+## API Keys
+
+With the Amazon API Gateway service, you can generate API keys to provide access to your API for external users, use
+them to sell to your customer base, and use the API call apikey:create to create an API key.
+
+## Integrating with AWS Lambda
+
+With Amazon API Gateway, you can build RESTful APIs without the need to manage a server. Amazon API Gateway gives your
+application a simple way (HTTPS requests) to leverage the innovation of AWS Lambda directly.
+
+## Monitoring Amazon API Gateway with Amazon CloudWatch
+
+Amazon API Gateway also integrates with Amazon CloudWatch. Amazon CloudWatch provides preconfigured metrics to help you
+monitor your APIs and build both dashboards and alarms.
+
+# User Authentication with Amazon Cognito
+
+Amazon Cognito allows for simple and secure user sign-up, sign-in, and access control mechanisms designed to handle web
+application authentication.
+
+- Amazon Cognito user pools, which are secure and scalable user directories
+- Amazon Cognito identity pools (federated identities), which offer social and enterprise identity federation
+- Standards-based Web Identity Federation Authentication through Open Authorization (OAuth) 2.0, Security Assertion
+  Markup Language (SAML) 2.0, and OpenID Connect (OIDC) support
+- Multi-factor authentication
+- Encryption for data at rest and data in transit
+- Access control with AWS Identity and Access Management (IAM) integration
+- Easy application integration (prebuilt user interface)
+
+## Amazon Cognito User Pools
+
+A user pool is a user directory in Amazon Cognito. With a user pool, your users can sign in to your web or mobile app
+through Amazon Cognito. Users can also sign in through social identity providers, such as Facebook or Amazon, and
+through Security Assertion Markup Language (SAML) identity providers.
+
+User pools provide the following:
+
+- Sign-up and sign-in services
+- A built-in, customizable web user interface (UI) to sign in users
+- Social sign-in with Facebook, Google, and Amazon, and sign-in with Security Asser- tion Markup Language (SAML)
+  identity providers from your user pool
+- User directory management and user profiles
+- Security features, such as multi-factor authentication (MFA), check for compromised credentials, account takeover
+  protection, and phone and email verification
+- Customized workflows and user migration through AWS Lambda triggers
+
+After successfully authenticating a user, Amazon Cognito issues JSON Web Tokens (JWT) that you can use to secure and
+authorize access to your own APIs or exchange them for AWS credentials.
+
+## User Interface Customization
+
+An Amazon Cognito user pool includes a prebuilt user interface (UI) that you can use inside of your application to build
+a user authentication flow quickly
+
+## Amazon Cognito SDK
+
+You can start developing for Amazon Cognito using the AWS Mobile SDK.
+In addition to using the higher-level mobile and JavaScript SDKs, you can also use the lower-level APIs available via
+the following AWS SDKs to integrate all Amazon Cognito functionality in your applications:
