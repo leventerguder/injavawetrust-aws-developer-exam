@@ -177,3 +177,206 @@ a user authentication flow quickly
 You can start developing for Amazon Cognito using the AWS Mobile SDK.
 In addition to using the higher-level mobile and JavaScript SDKs, you can also use the lower-level APIs available via
 the following AWS SDKs to integrate all Amazon Cognito functionality in your applications:
+
+# Amazon Aurora Serverless
+
+Amazon Aurora Serverless is an on-demand, auto-scaling configuration for the Aurora MySQL-compatible edition, where the
+database automatically starts, shuts down, and scales up or down as needed by your application.
+
+This allows you to run a traditional SQL database in the cloud without needing to manage any infrastructure or
+instances.
+
+With Amazon Aurora Serverless, you also get the same high availability as traditional Amazon Aurora, which means that
+you get six-way replication across three Availability Zones inside of a region in order to prevent against data loss.
+
+Amazon Aurora Serverless is great for infrequently used applications, new applications, variable workloads,
+unpredictable workloads, development and test databases, and multitenant applications. This is because you can scale
+automatically when you need to and scale down when application demand is not high. This can help cut costs and save you
+the heartache of managing your own database infrastructure.
+
+Amazon Aurora Serverless gives you many of the similar benefits as other serverless technologies, such as AWS Lambda,
+but from a database perspective. Managing databases is hard work, and with Amazon Aurora Serverless, you can utilize a
+database that automatically scales and you don’t have to manage any of the underlying infrastructure.
+
+# AWS Serverless Application Model
+
+The AWS Serverless Application Model (AWS SAM) allows you to create and manage resources in your serverless
+application with AWS CloudFormation to define your serverless application infrastructure as a SAM template.
+
+A SAM template is a JSON or YAML configuration file that describes the AWS Lambda functions, API endpoints, tables, and
+other resources in your application.
+
+With simple commands, you upload this template to AWS CloudFormation, which creates the individual resources and groups
+them into an AWS CloudFormation stack for ease of management. When you update your AWS SAM template, you re-deploy the
+changes to this stack. AWS CloudFormation updates the individual resources for you.
+
+AWS SAM is an extension of AWS CloudFormation. You can define resources by using the AWS CloudFormation in your AWS SAM
+template.
+
+To summarize, AWS SAM allows you to provision serverless resources more rapidly with less code by extending AWS
+CloudFormation.
+
+# AWS SAM CLI
+
+Now that we’ve addressed AWS SAM, let’s take a closer look at the AWS SAM CLI. With AWS SAM, you can define templates,
+in JSON or YAML, which are designed for provisioning serverless applications through AWS CloudFormation.
+
+AWS SAM CLI is a command line interface tool that creates an environment in which you can develop, test, and analyze
+your serverless-based application, all locally.
+
+AWS SAM CLI also allows you to develop and test your code quickly, and this gives you the ability to test it locally,
+which allows you to develop it faster. Previously, you would have had to upload your code each time you wanted to test
+an AWS Lambda function. Now, with the AWS SAM CLI, you can develop faster and get your application out the door more
+quickly.
+
+# AWS Serverless Application Repository
+
+The AWS Serverless Application Repository enables you to deploy code samples, components, and complete applications
+quickly for common use cases, such as web and mobile backends, event and data processing, logging, monitoring, Internet
+of Things (IoT), and more. Each application is packaged with an AWS SAM template that defines the AWS resources.
+Publicly shared applications also include a link to the application’s source code. There is no additional charge to use
+the serverless application repository. You pay only for the AWS resources you use in the applications you deploy.
+
+You can also use the serverless application repository to publish your own applications and share them within your team,
+across your organization, or with the community at large. This allows you to see what other people and organizations are
+developing.
+
+# Summary
+
+This chapter covered the AWS serverless core services, how to store your static files inside of Amazon S3, how to use
+Amazon CloudFront in conjunction with Amazon S3, how to integrate your application with user authentication flows using
+Amazon Cognito, and how to deploy and scale your API quickly and automatically with Amazon API Gateway.
+
+Serverless applications have three main benefits: no server management, flexible scaling, and automated high
+availability. Without server management, you no longer have to provision or maintain servers. With AWS Lambda, you
+upload your code, run it, and focus on your application updates. With flexible scaling, you no longer have to disable
+Amazon EC2 instances to scale them vertically, groups do not need to be auto-scaled, and you do not need to create
+Amazon CloudWatch alarms to add them to load balancers. With AWS Lambda, you adjust the units of consumption (memory and
+execution time), and AWS adjusts the rest of the instance appropriately. Finally, serverless applications have built-in
+availability and fault tolerance. When periods of low traffic occur, you do not spend money on Amazon EC2 instances that
+do not run at their full capacity.
+
+You can use an Amazon S3 web server to create your presentation tier. Within an Amazon S3 bucket, you can store HTML,
+CSS, and JavaScript files. JavaScript can create HTTP requests. These HTTP requests are sent to a REST endpoint service
+called Amazon API Gateway, which allows the application to save and retrieve data dynamically by triggering a Lambda
+function.
+
+After you create your Amazon S3 bucket, you configure it to use static website hosting in the AWS Management Console and
+enter an endpoint that reflects your AWS Region.
+
+Amazon S3 allows you to configure web traffic logs to capture information, such as the number of visitors who access
+your website in the Amazon S3 bucket.
+
+One way to decrease latency and improve your performance is to use Amazon CloudFront with Amazon S3 to move your content
+closer to your end users. Amazon CloudFront is a serverless service.
+
+The Amazon API Gateway is a fully managed service designed to define, deploy, and maintain APIs. Clients integrate with
+the APIs using standard HTTPS requests. Amazon API Gateway can integrate with a service-oriented multitier architecture.
+The Amazon API Gateway provides dynamic data in the logic or app tier.
+
+There are three types of endpoints for Amazon API Gateway: regional endpoints, edge-optimized endpoints, and private
+endpoints.
+
+In the Amazon API Gateway service, you expose addressable resources as a tree of API Resources entities, with the root
+resource (/) at the top of the hierarchy. The root resource is relative to the API’s base URL, which consists of the API
+endpoint and a stage name.
+
+You use Amazon API Gateways to help drive down the total response-time latency of your API. Amazon API Gateway uses the
+HTTP protocol to process these HTTP methods and send/receive data to and from the backend. Serverless data is sent to
+AWS Lambda to process.
+
+You can use Amazon Route 53 to create a more user-friendly domain name instead of using the default host name (Amazon S3
+endpoint). To support two subdomains, you create two Amazon S3 buckets that match your domain name and subdomain.
+
+A stage is a named reference to a deployment, which is a snapshot of the API. Use a
+stage to manage and optimize a particular deployment. You create stages for each of your environments such as DEV, TEST,
+and PROD, so you can develop and update your API and applications without affecting production. Use Amazon API Gateway
+to set up authorizers with Amazon Cognito user pools on an AWS Lambda function. This enables you to secure your APIs.
+
+An Amazon Cognito user pool includes a prebuilt user interface (UI) that you can use inside your application to build a
+user authentication flow quickly. A user pool is a user directory in Amazon Cognito. With a user pool, your users can
+sign in to your web or mobile app through Amazon Cognito. Users can also sign in through social identity providers
+such as Facebook or Amazon and through Security Assertion Markup Language (SAML) identity providers.
+
+Amazon Cognito identity pools allow you to create unique identities and assign permissions for your users to help you
+integrate with authentication providers. With the combination of user pools and identity pools, you can create a
+serverless user authentication system.
+
+You can choose how users sign in with a username, an email address, and/or a phone number and to select attributes.
+Attributes are properties that you want to store about your end users. You can also configure password policies.
+Multi-factor authentication (MFA) prevents anyone from signing in to a system without authenticating through two
+different sources, such as a password and a mobile device–generated token. You create an Amazon Cognito role to send
+Short Message Service (SMS) messages to users.
+
+The AWS Serverless Application Model (AWS SAM) allows you to create and manage resources in your serverless application
+with AWS CloudFormation as a SAM template.
+A SAM template is a JSON or YAML file that describes the AWS Lambda function, API endpoints, and other resources. You
+upload the template to AWS CloudFormation to create a stack. When you update your AWS SAM template, you redeploy the
+changes to this stack, and AWS CloudFormation updates the resources. You can use AWS SAM to create a template of your
+serverless infrastructure, which you can then build into a DevOps pipeline.
+
+The AWS Serverless Application Repository enables you to deploy code samples, components, and complete applications
+for common use cases. Each application is packaged with an AWS SAM template that defines the AWS resources.
+
+Additionally, you learned the differences between the standard three-tier web applica- tions and the AWS serverless
+stack. You learned how to build your infrastructure quickly with AWS SAM and AWS SAM CLI for testing and development
+purposes.
+
+# Exam Essentials
+
+**Know serverless applications’ three main benefits.**
+
+The benefits are as follows:
+
+- No server management
+- Flexible scaling
+- Automated high availability
+
+**Know what no server management means**
+
+Without server management, you no longer have to provision or maintain servers. With AWS Lambda, you upload your code,
+run it, and focus on your application updates.
+
+**Know what flexible scaling means.**
+
+With flexible scaling, you no longer have to disable Amazon Elastic Compute Cloud (Amazon EC2) instances to scale them
+vertically, groups do not need to be auto-scaled, and you do not need to create Amazon CloudWatch alarms to add them
+to load balancers. With AWS Lambda, you adjust the units of consumption (memory and execution time), and AWS adjusts the
+rest of the instances appropriately.
+
+**Know what serverless applications mean.**
+
+Serverless applications have built-in availability and fault tolerance. You do not need to architect for these
+capabilities, as the services that run the application provide them by default. Additionally, when periods of low
+traffic occur on the web application, you do not spend money on Amazon EC2 instances that do not run at their full
+capacity.
+
+**Know what services are serverless.**
+
+On the exam, it is important to understand which Ama- zon services are serverless and which ones are not. The following
+services are serverless:
+
+- Amazon API Gateway
+- AWS Lambda
+- Amazon SQS
+- Amazon SNS
+- Amazon Kinesis
+- Amazon Cognito
+- Amazon Aurora Serverless
+- Amazon S3
+
+**Know how to host a serverless web application.**
+
+Hosting a serverless application means that you need Amazon S3 to host your static website, which comprises your HTML,
+JavaScript, and CSS files.
+
+For your database infrastructure, you can use Amazon DynamoDB or Amazon Aurora Serverless.
+
+For your business logic tier, you can use AWS Lambda.
+
+For DNS services, you can utilize Amazon Route 53.
+
+If you need the ability to host an API, you can use Amazon API Gateway.
+
+Finally, if you need to decrease latency to portions of your application, you can utilize services like Amazon
+CloudFront, which allows you to host your content at the edge.
