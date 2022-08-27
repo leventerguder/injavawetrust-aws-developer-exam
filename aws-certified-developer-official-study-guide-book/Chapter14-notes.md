@@ -121,3 +121,48 @@ attributes that you want to project from the base table into the index. DynamoDB
 along with the primary key attributes from the base table. You can Query or Scan the index like a table.
 
 # Amazon DynamoDB Streams
+
+Amazon DynamoDB Streams captures data modification events in DynamoDB tables. The data about these events appear in the
+stream in near real time and in the order that the events occurred.
+
+Each event represents a stream record. When you enable a stream on a table, DynamoDB captures information about every
+modification to data items in the table.
+
+A stream record contains information about a data modification to a single item in a DynamoDB table including the
+primary key attributes of the items.
+
+Stream records have a lifetime of 24 hours, after which they are deleted automatically from the stream.
+
+A DynamoDB stream is a time-ordered flow of information of item-level modifications (create, update, or delete) to items
+in a DynamoDB table.
+
+DynamoDB Streams does the following:
+
+- Each stream record appears exactly once in the stream.
+- For each item that is modified in a DynamoDB table, the stream records appear in the same sequence as the actual
+  modifications to the item.
+
+## DynamoDB Cross-Region Replication
+
+You can create tables that automatically replicate across two or more AWS Regions with full support for multi-master
+writes. Using cross-region replication, you can build fast, massively scaled applications for a global user base without
+having to manage the replication process.
+
+## DynamoDB Stream Endpoints
+
+AWS maintains separate endpoints for DynamoDB and DynamoDB Streams. To work with database tables and indexes, your
+application must access a DynamoDB endpoint.
+
+## AWS Lambda Triggers in DynamoDB Streams
+
+DynamoDB integrates with AWS Lambda, so you can create triggers (code that executes automatically) that automatically
+respond to events in DynamoDB Streams. With triggers, you can build applications that react to data modifications in
+DynamoDB tables.
+
+## Amazon DynamoDB Auto Scaling
+
+Amazon DynamoDB automatic scaling actively manages throughput capacity for tables and global secondary indexes. With
+automatic scaling, you can define a range (upper and lower limits) for read and write capacity units and define a target
+utilization percentage within that range. DynamoDB automatic scaling seeks to maintain your target utilization, even as
+your application workload increases or decreases.
+
