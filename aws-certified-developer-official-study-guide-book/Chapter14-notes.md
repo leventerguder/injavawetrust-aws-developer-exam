@@ -435,3 +435,108 @@ can manage the ElastiCache infrastructure.
 The ability to configure the cluster and govern the infrastructure is handled independently from access to the actual
 cache cluster endpoint, which is managed by using the IAM service. Using IAM, you can set up policies that determine
 which users can manage the ElastiCache infrastructure
+
+# Amazon S3 Core Concepts
+
+Amazon S3 is a stateless application that does not save client data that generates in one session for use in the next
+session with that client. Each session starts as if it was the first time, and responses are not dependent on data from
+a previous session. This means that the server does not store any state about the client session. Instead, the session
+data is stored on the client and passed to the server as requested.
+
+## Buckets
+
+A bucket is a container for objects stored in Amazon S3. Every object is contained in a bucket.
+
+Buckets serve several purposes:
+
+- They organize the Amazon S3 namespace at the highest level.
+- They identify the account responsible for storage and data transfer charges.
+- They play a role in access control.
+- They serve as the unit of aggregation for usage reporting.
+
+## Creating a Bucket
+
+Amazon S3 provides APIs for creating and managing buckets. By default, you can create up to 100 buckets in each of your
+accounts. If you need more buckets, increase your bucket limit by submitting a service limit increase.
+
+When you create a bucket, provide a name for the bucket, and then choose the AWS Region where you want to create the
+bucket. You can store any number of objects in a bucket.
+
+**Objects**
+
+Objects are the principal items stored in Amazon S3. Objects consist of object data and metadata. The data part is
+opaque to Amazon S3. The metadata is a set of name-value pairs that characterize the object. These include certain
+default metadata, such as the date last modified and standard HTTP metadata, such as Content-Type. It is also possible
+for you to configure custom metadata at the time of object creation.
+
+**Keys**
+
+A key is the unique identifier for an object within a bucket. Every object in a bucket has exactly one key. Because the
+combination of a bucket, key, and version ID uniquely identifies each object, Amazon S3 is like a basic data map between
+bucket + key + version and the object itself.
+
+**Versioning**
+
+Versioning is a way to keep multiple variations of an object in the same bucket. You can use versioning to preserve,
+retrieve, and restore every version of every object stored in your Amazon S3 bucket. With versioning, you can recover
+from both unintended user actions and application failures.
+
+Versioning-enabled buckets allow you to recover objects from accidental deletion or overwrite.
+
+## Accessing a Bucket
+
+Use the Amazon S3 console to access your bucket. You can perform almost all bucket operations without having to write
+any code. If you access a bucket programmatically, Amazon S3 supports the RESTful architecture wherein your buckets and
+objects are resources, each with a resource Uniform Resource Identifier (URI) that uniquely identifies the resource.
+
+## Bucket Restrictions and Limitations
+
+By default, you can create up to 100 buckets in each of your accounts. If you need additional buckets, increase your
+bucket limit by submitting a service limit increase.
+
+- Bucket ownership is not transferable; however, if a bucket is empty, you can delete it.
+- There is no limit to the number of objects that you can store in a bucket and no difference in performance whether
+  you use many buckets or only a few.
+- You cannot create a bucket within another bucket.
+- The high-availability engineering of Amazon S3 is focused on GET, PUT, LIST, and DELETE operations.
+
+## Rules for Naming Buckets
+
+After you create an S3 bucket, you cannot change the bucket name, so choose the name wisely.
+
+The following are the rules for naming S3 buckets in all AWS Regions:
+
+- Bucket names must be unique across all existing bucket names in Amazon S3.
+- Bucket names must comply with DNS naming conventions.
+- Bucket names must be between 3 and 63 characters long.
+- Bucket names must not contain uppercase characters or underscores.
+- Bucket names must start with a lowercase letter or number.
+- Bucket names must be a series of one or more labels. Use a single period (.) to separate adjacent labels. Bucket names
+  can contain lowercase letters, numbers, and hyphens. Each label must start and end with a lowercase letter or a
+  number.
+- Bucket names must not be formatted as an IP address (for example, 192.168.4.5).
+
+## Working with Amazon S3 Buckets
+
+Amazon S3 is cloud storage for the internet. To upload your data, such as images, videos, and documents, you must first
+create a bucket in one of the AWS Regions. You can then upload any number of objects to the bucket.
+
+An Amazon S3 bucket name is globally unique regardless of the AWS Region in which you create the bucket. Configure the
+name at the time that you create the bucket. Amazon S3 creates buckets in a region that you choose. To minimize latency,
+reduce costs, or address regulatory requirements, choose any AWS Region that is geographically close to you.
+
+## Object Lifecycle Management
+
+To manage your objects so that they are stored cost-effectively throughout their life, con- figure their lifecycle
+policy. A lifecycle policy is a set of rules that designates actions that Amazon S3 applies to a group of objects. There
+are two types of actions:
+
+**Transition actions**
+
+Designate when objects transition from one storage class to another. For instance, you might decide to transition
+objects to the STANDARD_IA storage class 45 days after you created them, or archive objects to the GLACIER storage class
+six months after you created them.
+
+**Expiration actions**
+
+Designate when objects expire. Amazon S3 deletes expired objects on your behalf.
