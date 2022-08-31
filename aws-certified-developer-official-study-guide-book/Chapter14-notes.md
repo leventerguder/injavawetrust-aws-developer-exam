@@ -527,7 +527,7 @@ reduce costs, or address regulatory requirements, choose any AWS Region that is 
 
 ## Object Lifecycle Management
 
-To manage your objects so that they are stored cost-effectively throughout their life, con- figure their lifecycle
+To manage your objects so that they are stored cost-effectively throughout their life, configure their lifecycle
 policy. A lifecycle policy is a set of rules that designates actions that Amazon S3 applies to a group of objects. There
 are two types of actions:
 
@@ -540,3 +540,120 @@ six months after you created them.
 **Expiration actions**
 
 Designate when objects expire. Amazon S3 deletes expired objects on your behalf.
+
+## Bucket Policies
+
+Bucket policies are a centralized way to control access to buckets and objects based on numerous conditions, such as
+operations, requesters, resources, and aspects of the request. The policies are written using the IAM policy language
+and enable centralized management of permissions.
+
+## Amazon S3 Storage Classes
+
+Amazon S3 offers a variety of storage classes devised for different scenarios. Among these storage classes are Amazon S3
+STANDARD for general-purpose storage of frequently accessed data; Amazon S3 STANDARD_IA (Infrequent Access) for
+long-lived, but less frequently accessed data; and GLACIER for long-term archival purposes.
+
+### Storage Classes for Frequently Accessed Objects
+
+Amazon S3 provides storage classes for performance-sensitive use cases (millisecond access time) and frequently accessed
+data. Amazon S3 provides the following storage classes:
+
+**STANDARD**
+
+Standard is the default storage class. If you do not specify the storage class when uploading an object, Amazon S3
+assigns the STANDARD storage class.
+
+**REDUCED_REDUNDANCY**
+
+The Reduced Redundancy Storage (RRS) storage class is designed for noncritical, reproducible data that you can store
+with less redundancy than the STANDARD storage class.
+
+### Storage Classes for Infrequently Accessed Objects
+
+The STANDARD_IA and ONEZONE_IA storage classes are designed for data that is long-lived and infrequently accessed.
+STANDARD_IA and ONEZONE_IA objects are available for millisecond access (similar to the STANDARD storage class). Amazon
+S3 charges a fee for retrieving these objects; thus, they are most appropriate for infrequently accessed data.
+
+Possible use cases for STANDARD_IA and ONEZONE_IA are as follows:
+
+- For storing backups
+- For older data that is accessed infrequently but that still requires millisecond access
+
+**STANDARD_IA**
+
+Objects stored using this storage class are stored redundantly across multiple, geographically distinct Availability
+Zones (similar to the STANDARD storage class). STANDARD_IA objects are resilient to data loss of an Availability Zone.
+This storage class provides more availability, durability, and resiliency than the ONEZONE_IA class.
+
+**ONEZONE_IA**
+
+Amazon S3 stores the object data in only one Availability Zone, which makes it less expensive than STANDARD_IA. However,
+the data is not resilient to the physical loss of the Availability Zone resulting from disasters, such as earthquakes
+and floods. The ONEZONE_IA storage class is as durable as STANDARD_IA, but it is less available and less resilient.
+
+To determine when to use a particular storage class, follow these recommendations:
+
+**STANDARD_IA**
+
+Use for your primary copy (or only copy) of data that cannot be regenerated.
+
+### GLACIER Storage Class
+
+You use the GLACIER storage class to archive data where access is infrequent. Objects that you archive are not available
+for real-time access. The GLACIER storage class offers the same durability and resiliency as the STANDARD storage class.
+
+When you store objects in Amazon S3 with the GLACIER storage class, Amazon S3 uses the low-cost Amazon Simple Storage
+Service Glacier (Amazon S3 Glacier) service to store these objects. Though the objects are stored in Amazon S3 Glacier,
+these remain Amazon S3 objects that are managed in Amazon S3, and they cannot be accessed directly through Amazon S3
+Glacier.
+
+At the time that you create an object, it is not possible to specify GLACIER as the stor- age class. The way that
+GLACIER objects are created is by uploading objects first using STANDARD as the storage class. You can transition these
+objects to the GLACIER storage class by using lifecycle management.
+
+### Setting the Storage Class of an Object
+
+Amazon S3 APIs offer support for setting or updating the storage class of objects. When you create a new object,
+configure its storage class. For example, when you create objects with the PUT Object, POST Object, and Initiate
+Multipart Upload APIs, add the x-amz-storageclass request header to configure a storage class. If you do not add this
+header, Amazon S3 uses STANDARD, the default storage class.
+
+## Amazon S3 Default Encryption for S3 Buckets
+
+Amazon S3 default encryption provides a way to set the default encryption behavior for an Amazon S3 bucket. You can set
+default encryption on a bucket so that all objects are encrypted when they are stored in the bucket. The objects are
+encrypted using server-side encryption with either Amazon S3 managed keys (SSE-S3) or AWS KMS managed keys (SSE-KMS).
+
+When you use server-side encryption, Amazon S3 encrypts an object before saving it to disk in its data centers and then
+decrypts the object when you download it.
+
+### Protecting Data Using Encryption
+
+Data protection refers to protecting data while in transit (as it travels to and from Amazon S3), and at rest (while it
+is stored on disks in Amazon S3 data centers). You can protect data in transit by using SSL or by using client-side
+encryption with the following options of protecting data at rest in Amazon S3:
+
+**Use server-side encryption**
+
+You request Amazon S3 to encrypt your object before saving it on disks in its data centers
+and then decrypt the object when you download it.
+
+**Use client-side encryption**
+
+You can encrypt data on the client side and upload the encrypted data to Amazon S3 and then
+manage the encryption process, the encryption keys, and related tools
+
+### Protecting Data Using Server-Side Encryption
+
+Server-side encryption is about data encryption at rest; that is, Amazon S3 encrypts your data at the object level as it
+writes it to disks in its data centers and decrypts it for you when you access it. As long as you authenticate your
+request and you have access permissions, there is no difference in the way that you access encrypted or unencrypted
+objects. For example, if you share your objects using a presigned URL, that URL works the same way for both encrypted
+and unencrypted objects.
+
+**Use server-side encryption with Amazon S3 Managed Keys (SSE-S3)**
+
+Each object is encrypted with a unique key employing strong multifactor encryption. As an additional safeguard, it
+encrypts the key itself with a master key that it regularly rotates. Amazon S3 server-side encryption uses one of the
+strongest block ciphers available, 256-bit Advanced Encryption Standard (AES-256), to encrypt your data.
+
