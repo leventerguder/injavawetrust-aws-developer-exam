@@ -657,3 +657,382 @@ Each object is encrypted with a unique key employing strong multifactor encrypti
 encrypts the key itself with a master key that it regularly rotates. Amazon S3 server-side encryption uses one of the
 strongest block ciphers available, 256-bit Advanced Encryption Standard (AES-256), to encrypt your data.
 
+SSE-KMS also provides you with an audit trail of when your key was used and by whom. Additionally, you can create and
+manage encryption keys yourself or use a default key that is unique to you, the service you are using, and the region in
+which you are working.
+
+**Use server-side encryption with customer-provided keys (SSE-C)**
+
+You manage the encryption keys, and Amazon S3 manages the encryption as it writes to disks. You also manage decryption
+when you access your objects.
+
+## Working with Amazon S3 Objects
+
+Amazon S3 is a simple key-value store designed to store as many objects as you want. Store these objects in one or more
+buckets. An object consists of the following:
+
+**Key**
+
+The key is the name that you assign to an object. The object key is used to retrieve the object.
+
+**Version ID**
+
+Within a bucket, a key and version ID uniquely identify an object. The version ID is a string that Amazon S3 generates
+when you add an object to a bucket.
+
+**Value**
+
+The information being stored. An object value can be any sequence of bytes. Objects can range in size from 0 to 5
+terabytes (TB).
+
+**Metadata**
+
+A set of key-value pairs with which you can store information about the object. You can assign metadata, referred to as
+user-defined metadata, to your objects in Amazon S3. Amazon S3 also assigns system metadata to these objects, which it
+uses for managing objects.
+
+**Subresources**
+
+Amazon S3 uses the subresource mechanism to store object-specific additional information. Because subresources are
+subordinates to objects, they are always associated with an entity, such as an object or a bucket.
+
+**Access control information**
+
+You can control access to the objects that you store in Amazon S3. Amazon S3 supports both the resource-based access
+control, such as an access control list (ACL) and bucket policies, and user-based access control.
+
+## Object Keys and Metadata
+
+Each Amazon S3 object is composed of several parts. These parts include the data, a key, and metadata. An object key (or
+key name) uniquely identifies the object in a bucket. Object metadata is a set of name-value pairs. You can set the
+object metadata at the time that you upload an object. However, after you upload the object, you cannot modify object
+metadata. The only way to modify object metadata after it has been uploaded is to create a copy of the object.
+
+### Uploading Objects
+
+Depending on the size of the data that you are uploading, Amazon S3 provides the following options:
+
+**Upload objects in a single operation**
+
+Use a single PUT operation to upload objects up to 5 GB in size. For objects that are up to 5 TB in size, use the
+multipart upload API.
+
+**Upload objects in parts**
+
+The multipart upload API is designed to improve the upload experience for larger objects. Upload these object parts
+independently, in any order, and in parallel.
+
+## Deleting Objects from a Version-Enabled Bucket
+
+If your bucket is version-enabled, then multiple versions of the same object can exist in the bucket. When working with
+version-enabled buckets, the DELETE API enables the following options:
+
+**Specify a nonversioned delete request**
+
+Specify only the object’s key, not the version ID. In this case, Amazon S3 creates a delete marker and returns its
+version ID in the response. This makes your object disappear from the bucket.
+
+**Specify a versioned delete request**
+
+Specify both the key and a version ID. In this case, the following two outcomes are possible:
+
+- If the version ID maps to a specific object version, then Amazon S3 deletes the specific version of the object.
+- If the version ID maps to the delete marker of that object, Amazon S3 deletes the delete marker. This causes the
+  object to reappear in your bucket.
+
+# Amazon Elastic File System
+
+Amazon Elastic File System (Amazon EFS) provides simple, scalable file storage for use with Amazon EC2. With Amazon EFS,
+storage capacity is elastic, growing and shrinking automatically as you add and remove files so your applications have
+the storage they need when they need it.
+
+Amazon EFS supports the Network File System versions 4.0 and 4.1 (NFSv4) proto-
+col, so the applications and tools that you use today work seamlessly with Amazon EFS. Multiple Amazon EC2 instances can
+access an Amazon EFS file system at the same time, providing a common data source for workloads and applications running
+on more than one instance or server.
+
+The service is highly scalable, highly available, and highly durable. Amazon EFS stores data and metadata across
+multiple Availability Zones in a region, and it can grow to petabyte scale, drive high levels of throughput, and allow
+massively parallel access from Amazon EC2 instances to your data.
+
+Amazon EFS supports two forms of encryption for file systems: encryption in transit and encryption at rest. You can
+enable encryption at rest when creating an Amazon EFS file system. If you do, all of your data and metadata is
+encrypted. You can enable encryption in transit when you mount the file system.
+
+Amazon EFS is designed to provide the throughput, input/output operations per sec- ond (IOPS), and low latency needed
+for a broad range of workloads. With Amazon EFS, throughput and IOPS scale as a file system grows, and file operations
+are delivered with consistent, low latencies.
+
+## How Amazon EFS Works
+
+Amazon EFS provides file storage in the AWS Cloud. With Amazon EFS, you can create a file system, mount the file system
+on an Amazon EC2 instance, and then read and write data to and from your file system. You can mount an Amazon EFS file
+system in your VPC through the NFSv4 protocol.
+
+You can access your Amazon EFS file system concurrently from Amazon EC2 instances in your Amazon VPC so that
+applications that scale beyond a single connection can access a file system. Amazon EC2 instances running in multiple
+Availability Zones within the same region can access the file system so that many users can access and share a common
+data source.
+
+However, there are restrictions. You can mount an Amazon EFS file system on instances in only one VPC at a time. Both
+the file system and VPC must be in the same AWS Region.
+
+To access your Amazon EFS file system in a VPC, create one or more mount targets in the VPC. A mount target provides an
+IP address for an NFSv4 endpoint at which you can mount an Amazon EFS file system.
+
+### How Amazon EFS Works with AWS Direct Connect
+
+Using an Amazon EFS file system mounted on an on-premises server, you can migrate on- premises data into the AWS Cloud
+hosted in an Amazon EFS file system. You can also take advantage of bursting. This means that you can move data from
+your on-premises servers into Amazon EFS, analyze it on a fleet of Amazon EC2 instances in your Amazon VPC, and then
+store the results permanently in your file system or move the results back to your on-premises server.
+
+In Amazon EFS, a file system is the primary resource. Each file system has properties such as ID, creation token,
+creation time, file system size in bytes, number of mount targets created for the file system, and the file system
+state.
+
+## Creating an IAM User
+
+Services in AWS, such as Amazon EFS, require that you provide credentials when you access them so that the service can
+determine whether you have permissions to access its resources. AWS recommends that you do not use the AWS account
+credentials of your account to make requests. Instead, create an IAM user, and grant that user full access. AWS refers
+to these users as administrators. You can use the administrator credentials, instead of AWS account credentials, to
+interact with AWS and perform tasks, such as creating a bucket, creating users, and granting them permissions.
+
+## Creating a File System
+
+You can use the Amazon EFS console, or the AWS CLI, to create a file system. You can also use the AWS SDKs to create
+file systems programmatically.
+
+## Using File Systems
+
+Amazon EFS presents a standard file system interface that supports semantics for full
+file system access. Using NFSv4.1, you can mount your Amazon EFS file system on any Amazon EC2 Linux-based instance.
+Once mounted, you can work with the files and directories as you would with a local file system. You can also use AWS
+DataSync to copy files from any file system to Amazon EFS.
+
+## Managing Access to Encrypted File Systems
+
+Using Amazon EFS, you can create encrypted file systems. Amazon EFS supports two forms of encryption for file systems:
+encryption in transit and encryption at rest. Any key management that you must perform is related only to encryption at
+rest. Amazon EFS auto- matically manages the keys for encryption in transit. If you create a file system that uses
+encryption at rest, data and metadata are encrypted at rest.
+
+Amazon EFS uses AWS KMS for key management. When you create a file system using encryption at rest, specify a customer
+master key (CMK). The CMK can be aws/elasticfilesystem (the AWS managed CMK for Amazon EFS), or it can be a CMK that you
+manage. File data, the contents of your files, is encrypted at rest using the CMK that you specified when you created
+your file system.
+
+## Amazon EFS Performance
+
+Amazon EFS file systems are spread across an unconstrained number of storage servers, allowing file systems to expand
+elastically to petabyte scale. The distribution also allows them to support massively parallel access from Amazon EC2
+instances to your data. Because of this distributed design, Amazon EFS avoids the bottlenecks and limitations inherent
+to conventional file servers.
+
+Amazon EFS data is distributed across multiple Availability Zones, providing a high level of availability and
+durability.
+
+### Performance Modes
+
+**General Purpose performance mode**
+
+AWS recommends the General Purpose performance mode for the majority of your Amazon EFS file systems. General Purpose is
+ideal for latency-sensitive use cases, such as web serving environments, content management systems, home directories,
+and general file serving. If you do not choose a performance mode when you create your file system, Amazon EFS selects
+the General Purpose mode for you by default.
+
+**Max I/O performance mode**
+
+File systems in the Max I/O mode can scale to higher levels of aggregate throughput and operations per second with a
+trade-off of slightly higher latencies for file operations. Highly parallelized applications and workloads, such as
+big data analysis, media processing, and genomics analysis can benefit from this mode.
+
+## Throughput Scaling in Amazon EFS
+
+Throughput on Amazon EFS scales as a file system grows. Because file-based workloads are typically spiky, driving high
+levels of throughput for short periods of time and low levels of throughput the rest of the time, Amazon EFS is designed
+to burst to high throughput levels for periods of time.
+
+All file systems, regardless of size, can burst to 100 MB/s of throughput, and those larger than 1 TB can burst to 100
+MB/s per TB of data stored in the file system. For exam- ple, a 10-TB file system can burst to 1,000 MB/s of
+throughput (10 TB × 100 MB/s/TB). The portion of time a file system can burst is determined by its size, and the
+bursting model is designed so that typical file system workloads will be able to burst virtually any time they need to.
+
+Amazon EFS uses a credit system to determine when file systems can burst. Each file system earns credits over time at a
+baseline rate that is determined by the size of the file sys- tem, and it uses credits whenever it reads or writes data.
+The baseline rate is 50 MB/s per TB of storage (equivalently, 50 KB/s per GB of storage).
+
+# Summary
+
+In this chapter, stateless applications are defined as those that do not require knowledge of previous individual
+interactions and do not store session information locally. Stateless application design is beneficial because it reduces
+the risk of loss of session information or critical data. It also improves user experience by reducing the chances that
+context-specific data is lost if a resource containing session information becomes unavailable. To accomplish this,
+AWS customers can use Amazon DynamoDB, Amazon ElastiCache, Amazon Simple Storage Service (Amazon S3), and Amazon Elastic
+File System (Amazon EFS)
+
+DynamoDB is a fast and flexible NoSQL database service that is used by applications that require consistent,
+single-digit millisecond latency at any scale. In stateless applica- tion design, you can use DynamoDB to store and
+rapidly retrieve session information. This separates session information from application resources responsible for
+processing user interactions. For example, a web application can use DynamoDB to store user shopping carts. If an
+application server becomes unavailable, the users accessing the application do not experience a loss of service.
+
+To further improve speed of access, DynamoDB supports global secondary indexes and local secondary indexes. A secondary
+index contains a subset of attributes from a table and uses an alternate key to support custom queries. A local
+secondary index has the same partition key as a table but uses a different sort key. A global secondary index has
+different partition and sort keys.
+
+DynamoDB uses read and write capacity units to determine cost. A single read capacity unit represents one strongly
+consistent read per second (or two eventually consistent reads per second) for items up to 4 KB in size. A single write
+capacity unit represents one write per second for items up to 1 KB in size. Items larger than these values consume
+additional read or write capacity.
+
+ElastiCache enables you to quickly deploy, manage, and scale distributed in- memory cache environments. With
+ElastiCache, you can store application state information in a shared location by using an in-memory key-value store.
+Caches can be created using either Memcached or Redis caching engines. Read and write operations to a backend database
+can be time-consuming. Thus, ElastiCache is especially effective as a caching layer for heavy-use applications that
+require rapid access to backend data. You can also use ElastiCache to store HTTP sessions, further improving the
+performance of your applications.
+
+ElastiCache offers various scalability configurations that improve access times and avail- ability. For example,
+read-heavy applications can use additional cache cluster nodes to respond to queries. Should there be an increase in
+demand, additional cluster nodes can be scaled out quickly.
+
+There are some differences between the available caching engines. AWS recommends that you use Memcached for simple data
+models that may require scaling and partitioning/ sharding. Redis is recommended for more complex data types, persistent
+key stores, read- replication, and publish/subscribe operations.
+
+In certain situations, storing state information can involve larger file operations (such as file uploads and batch
+processes). Amazon S3 can support millions of operations per second on trillions of objects through a simple web
+service. Through simple integration, developers can take advantage of the massive scale of object storage.
+
+Amazon S3 stores objects in buckets, which are addressable using unique URLs (such
+as http://johnstiles.s3.amazonaws.com/). Buckets enable you to group similar objects and configure access control
+policies for internal and external users. Buckets also serve as the unit of aggregation for usage reporting. There is no
+limit to the number of objects that can be stored in a bucket, and there is no performance difference between using one
+or multiple buckets for your web application. The decision to use one or more buckets is often a consideration of
+access control.
+
+Amazon S3 buckets support versioning and lifecycle configurations to maintain the integrity of objects and reduce cost.
+Versioning ensures that any time an object is modified and uploaded to a bucket, it is saved as a new version.
+Authorized users can access previous versions of objects at any time. In versioned buckets, a delete operation places a
+marker on the object (without deleting prior versions). Conversely, you must use a separate operation to fully remove an
+object from a versioned bucket. Use lifecycle configurations to reduce cost by automatically moving infrequently
+accessed objects to lower-cost storage tiers.
+
+Amazon EFS provides simple, scalable file storage for use with multiple concurrent Amazon EC2 instances or on-premises
+systems. In stateless design, having a shared block storage system removes the risk of loss of data in situations where
+one or more instances become unavailable.
+
+# Exam Essentials
+
+**Understand block storage vs. object storage.**
+
+The difference between block storage and object storage is the fundamental unit of storage. With block storage, each
+file saved to the drive is composed of blocks of a specific size. With object storage, each file is saved as a single
+object regardless of size.
+
+**Understand when to use Amazon Simple Storage Service and when to use Amazon Elastic Block Storage or Amazon Elastic
+File System.**
+
+This is an architectural decision based on the type of data that you are storing and the rate at which you intend to
+update that data. Amazon Simple Storage Service (Amazon S3) can hold any type of data, but Amazon S3 would not be a good
+choice for a database or any rapidly changing data types.
+
+**Understand Amazon S3 versioning.**
+
+Once Amazon S3 versioning is enabled, you cannot disable the feature—you can only suspend it. Also, when versioning is
+activated, items that are deleted are assigned a delete marker and are not accessible. The deleted objects are still in
+Amazon S3, and you will continue to incur charges for storing them.
+
+**Know how to control access to Amazon S3 objects.**
+
+IAM policies specify which actions are allowed or denied on specific AWS resources. Amazon S3 bucket policies are
+attached only to Amazon S3 buckets. Amazon S3 bucket policies specify which actions are allowed or denied for principals
+on the bucket to which the bucket policy is attached.
+
+**Know how to create or select a proper primary key for an Amazon DynamoDB table.**
+
+DynamoDB stores data as groups of attributes, known as items. Items are similar to rows or records in other database
+systems. DynamoDB stores and retrieves each item based on the primary key value, which must be unique. Items are
+distributed across 10 GB storage units, called partitions (physical storage internal to DynamoDB). Each table has one or
+more partitions. DynamoDB uses the partition key value as an input to an internal hash function. The output from the
+hash function determines the partition in which the item is stored. The hash value of its partition key determines the
+location of each item. All items with the same partition key are stored together. Composite partition keys are ordered
+by the sort key value. If the collection size grows bigger than 10 GB, DynamoDB splits partitions by sort key.
+
+**Understand how to configure the read capacity units and write capacity units properly for your tables.**
+
+When you create a table or index in DynamoDB, you must specify your capacity requirements for read and write activity.
+By defining your throughput capacity in advance, DynamoDB can reserve the necessary resources to meet the read and write
+activity your application requires while ensuring consistent, low-latency performance.
+
+**Understand how to configure the read capacity units and write capacity units properly for your tables.**
+
+When you create a table or index in DynamoDB, you must specify your capacity requirements for read and write activity.
+By defining your throughput capacity in advance, DynamoDB can reserve the necessary resources to meet the read and write
+activity your application requires while ensuring consistent, low-latency performance.
+
+**Understand the use cases for DynamoDB streams.**
+
+A DynamoDB stream is an ordered flow of information about changes to items in an DynamoDB table. When you enable a
+stream on a table, DynamoDB captures information about every modification to data items in the table. Whenever an
+application creates, updates, or deletes items in the table, DynamoDB Streams writes a stream record with the primary
+key attributes of the items that were modified. A stream record contains information about a data modification to a
+single item in a DynamoDB table. You can configure the stream so that the stream records capture additional information,
+such as the before and after images of modified items.
+
+**Know what secondary indexes are and when to use a local secondary index versus a global secondary index and the
+differences between the two.**
+
+A global secondary index is an index with a partition key and a sort key that can be different from those on the base
+table.
+
+A global secondary index is considered global because queries on the index can span all of the data in the base table,
+across all partitions. A local secondary index is an index that has the same partition key as the base table, but a
+different sort key. A local secondary index is local in the sense that every partition of a local secondary index is
+scoped to a base table partition that has the same partition key value.
+
+**Know the operations that can be performed using the DynamoDB API.**
+
+now the more common DynamoDB API operations: CreateTable, UpdateTable, Query, Scan, PutItem, GetItem, UpdateItem,
+DeleteItem, BatchGetItem, and BatchWriteItem. Understand the purpose of each operation and be familiar with some of the
+parameters and limitations for the batch operations.
+
+**Be familiar with handling errors when using DynamoDB.**
+
+Understand the differences between 400 error codes and 500 error codes and how to handle both classes of errors. Also,
+understand which techniques to use to mitigate the different errors. In addition, you should understand what causes a
+ProvisionedThrouphputExceededException error and what you can do to resolve the issue.
+
+**Understand how to configure your Amazon S3 bucket to serve as a static website.**
+
+To host a static website, you configure an Amazon S3 bucket for website hosting and then upload your website content to
+the bucket. This bucket must have public read access. It is intentional that everyone has read access to this bucket.
+The website is then available at the AWS Region specific website endpoint of the bucket.
+
+**Be familiar with the Amazon S3 API operations.**
+
+Be familiar with the API operations, such as PUT, GET, SELECT, and DELETE. Understand how having versioning enabled
+affects the behavior of the DELETE operation. You should also be familiar with the situations that require a multipart
+upload and how to use the associated API.
+
+**Understand the differences among the different Amazon S3 storage classes.**
+
+The storage classes are Standard, Infrequent Access (IA), Glacier, and Reduced Redundancy. Understand the differences
+and why you might choose one storage class over the other and knowing the consequences of those choices.
+
+**Know how to use Amazon ElastiCache.**
+
+Improve the performance of your application by deploying ElastiCache clusters as a part of your application and
+offloading read requests for frequently accessed data. Use the lazy loading caching strategy in your solution to first
+check the cache for your query results before checking the database.
+
+**Understand when to choose one specific cache engine over another.**
+
+ElastiCache provides two open source caching engines. You are responsible for choosing the engine that meets your
+requirements. Use Redis when you must persist and restore your data, you need mul- tiple replicas of your data, or you
+are seeking advanced features and functionality, such as sort and rank or leaderboards. Redis supports these features
+natively. Alternatively, you can use Memcached when you need a simpler, in-memory object store that can be easily
+partitioned and horizontally scaled.
