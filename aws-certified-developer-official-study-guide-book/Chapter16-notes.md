@@ -150,6 +150,185 @@ Following are the different options for CPU, memory, and network resources:
 
 # Using Instance Reservations
 
+## AWS Pricing for Reserved Instances
 
+Amazon EC2 Reserved Instances allow you to commit to usage parameters. To unlock an hourly rate that is up to 75 percent
+lower than On-Demand pricing, you can commit to a one-year or three-year duration at the time of purchase.
 
+There are three payment options for Reserved Instances:
 
+- No Upfront
+- Partial Upfront
+- All Upfront
+
+## Amazon EC2 Reservations
+
+Amazon EC2 Reserved Instances provide a reservation of resources and capacity when used in a specific Availability Zone
+within an AWS Region:
+
+- With Reserved Instances, you commit to a period of usage (one or three years) and save up to 75 percent over
+  equivalent On-Demand hourly rates.
+- For applications that have steady state or predictable usage, Reserved Instances can provide significant savings
+  compared to using On-Demand Instances, without requiring a change to your workload.
+
+### Convertible Reserved Instances
+
+Convertible Reserved Instances are provided for a one-year or three-year term, and they enable conversion to different
+families, new pricing, different instance sizes, different platforms, or tenancy during the period.
+
+Use Convertible Reserved Instances when you are uncertain about instance needs in the future, but you are still
+committed to using Amazon EC2 instances for a three-year term in exchange for a significant discount.
+
+### Reserved Instance Marketplace
+
+Use the Reserved Instance Marketplace to sell your unused Reserved Instances and buy Reserved Instances from other AWS
+customers.
+
+# Amazon Relational Database Service Reservations
+
+Reserved DB instances are not physical instances; they are a billing discount applied to the use of certain on-demand DB
+instances in your account. Discounts for reserved DB instances are tied to instance type and AWS Region.
+
+All Reserved Instance types are available for Amazon Aurora, MySQL, MariaDB, PostgreSQL, Oracle, and SQL Server database
+engines.
+
+Reserved Instances can also provide significant cost savings for mission-critical applications that run on Multi-AZ
+database deployments for higher availability and data durability. Reserved Instances can minimize your costs up to 69
+percent over On-Demand rates when used in steady state.
+
+The Reserved Instance discounted rate also applies to usage of both Single-AZ and Multi-AZ configurations for the same
+database engine and instance family.
+
+# Using Spot Instances
+
+Amazon EC2 Spot Instances offer spare compute capacity in the AWS Cloud at steep dis- counts compared to On-Demand
+Instances.
+
+You can use Spot Instances to save up to 90 percent on stateless web applications, big data, containers, continuous
+integration/continuous delivery (CI/CD), high performance computing (HPC), and other fault-tolerant workloads. Or, scale
+your workload throughput by up to 10 times and stay within the existing budget
+
+## Spot Fleets
+
+Use Spot Fleets to request and manage multiple Spot Instances automatically, which provides the lowest price per unit
+of capacity for your cluster or application, such as a batch-processing job, a Hadoop workflow, or an HPC grid
+computing job. You can include the instance types that your application can use. You define a target capacity based on
+your application needs (in units, including instances, vCPUs, memory, storage, or network throughput) and update the
+target capacity after the fleet is launched. Spot Fleets enable you to launch and maintain the target capacity and to
+request resources automatically to replace any that are disrupted or manually terminated.
+
+## Amazon EC2 Fleets
+
+With a single API call, Amazon EC2 Fleet enables you to provision compute capacity across different instance types,
+Availability Zones, and across On-Demand, Reserved Instances, and Spot Instances purchase models to help optimize scale,
+performance, and cost.
+
+## Design for Continuity
+
+With Spot Instances, you avoid paying more than the maximum price you specified. If the Spot price exceeds your maximum
+willingness to pay for a given instance or when capacity is no longer available, your instance is terminated
+automatically (or stopped or hibernated, if you opt for this behavior on a persistent request).
+
+# Using AWS Auto Scaling
+
+Using AWS Auto Scaling, you can scale workloads in your architecture. It automatically increases the number of resources
+during the demand spikes to maintain performance and decreases capacity when demand lulls to reduce cost.
+
+## Amazon EC2 Auto Scaling
+
+Amazon EC2 Auto Scaling helps you scale your Amazon EC2 instances and Spot Fleet capacity up or down automatically
+according to conditions that you define.
+
+AWS Auto Scaling is generally used with Elastic Load Balancing to distribute incoming application traffic across
+multiple Amazon EC2 instances in an AWS Auto Scaling group. AWS Auto Scaling is triggered using scaling plans that
+include policies that define how to scale (manual, schedule, and demand spikes) and the metrics and alarms to monitor in
+Amazon CloudWatch.
+
+You can use Amazon EC2 Auto Scaling to increase the number of Amazon EC2 instances automatically during demand spikes to
+maintain performance and decrease capacity during lulls to reduce costs.
+
+### Dynamic Scaling
+
+The dynamic scaling capabilities of Amazon EC2 Auto Scaling refers to the functionality that automatically increases
+or decreases capacity based on load or other metrics.
+
+### Scheduled Scaling
+
+Scaling based on a schedule allows you to scale your application ahead of known load changes, such as the start of
+business hours, thus ensuring that resources are available when users arrive, or in typical development or test
+environments that run only during defined business hours or periods of time.
+
+### Fleet Management
+
+Fleet management refers to the functionality that automatically replaces unhealthy instances in your application,
+maintains your fleet at the desired capacity, and balances instances across Availability Zones. Amazon EC2 Auto Scaling
+fleet management ensures that your application is able to receive traffic and that the instances themselves are
+working properly. When AWS Auto Scaling detects a failed health check, it can replace the instance automatically.
+
+### Instances Purchasing Options
+
+With Amazon EC2 Auto Scaling, you can provision and automatically scale instances across purchase options, Availability
+Zones, and instance families in a single application to optimize scale, performance, and cost. You can include Spot
+Instances with On-Demand and Reserved Instances in a single AWS Auto Scaling group to save up to 90 percent on compute.
+
+### Golden Images
+
+A golden image is a snapshot of a particular state of a resource, such as an Amazon EC2 instance, Amazon EBS volumes,
+and an Amazon RDS DB instance. You can customize an Amazon EC2 instance and then save its configuration by creating an
+Amazon Machine Image (AMI)
+
+## AWS Auto Scaling
+
+AWS Auto Scaling monitors your applications and automatically adjusts capacity of all scalable resources to maintain
+steady, predictable performance at the lowest possible cost. Using AWS Auto Scaling, you can set up application scaling
+for multiple resources across multiple services in minutes.
+
+AWS Auto Scaling automatically scales resources for other AWS services, including Amazon ECS, Amazon DynamoDB, Amazon
+Aurora, Amazon EC2 Spot Fleet requests, and Amazon EC2 Scaling groups.
+
+The predictive scaling feature uses machine learning algorithms to detect changes in daily and weekly patterns,
+automatically adjusting their forecasts. This removes the need for the manual adjustment of AWS Auto Scaling parameters
+as cyclicality changes over time, making AWS Auto Scaling simpler to configure, and provides more accurate capacity
+provisioning. Predictive scaling results in lower cost and more responsive applications.
+
+## DynamoDB Auto Scaling
+
+DynamoDB automatic scaling uses the AWS Auto Scaling service to adjust provisioned throughput capacity dynamically on
+your behalf in response to actual traffic patterns. This enables a table or a global secondary index to increase its
+provisioned read and write capacity to handle sudden increases in traffic without throttling. When the workload
+decreases, AWS Auto Scaling decreases the throughput so that you don’t pay for unused provisioned capacity.
+
+## Amazon Aurora Auto Scaling
+
+Amazon Aurora automatic scaling dynamically adjusts the number of Aurora Replicas provisioned for an Aurora DB
+cluster. Aurora automatic scaling is available for both Aurora MySQL and Aurora PostgreSQL.
+
+Amazon Aurora Serverless is an on-demand, automatic scaling configuration for the MySQL-compatible edition of Amazon
+Aurora.
+
+# Using Containers
+
+Containers provide a standard way to package your application’s code, configurations, and dependencies into a single
+object. Containers share an operating system installed on the server and run as resource-isolated processes, ensuring
+quick, reliable, and consistent deployments, regardless of environment.
+
+## Containerize Everything
+
+Use Amazon Elastic Container Service (Amazon ECS) to build all types of containerized applications easily, from
+long-running applications and microservices to batch jobs and machine learning applications. You can migrate legacy
+Linux or Windows applications from on-premises to the AWS Cloud and run them as containerized applications using Amazon
+ECS.
+
+Amazon ECS maintains application availability and allows you to scale your containers up or down to meet your
+application’s capacity requirements.
+
+Amazon ECS is integrated with familiar features like Elastic Load Balancing, EBS volumes, virtual private cloud (VPC),
+and AWS Identity and Access Management (IAM). Use APIs to integrate and use your own schedulers or connect Amazon ECS
+into your existing software delivery process.
+
+## Containers without Servers
+
+AWS Fargate technology is available with Amazon ECS. With Fargate, you no longer have to select Amazon EC2 instance
+types, provision and scale clusters, or patch and update each server. You do not have to worry about task placement
+strategies, such as binpacking or host spread, and tasks are automatically balanced across Availability Zones. Fargate
+manages the availability of containers for you.
