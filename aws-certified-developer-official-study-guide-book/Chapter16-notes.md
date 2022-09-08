@@ -694,10 +694,350 @@ table or secondary index. It then filters out values to provide the result you w
 If possible, avoid using a Scan operation on a large table or index with a filter that removes many results. Also, as a
 table or index grows, the Scan operation slows down.
 
+# Monitoring Costs
 
+## Cost Management Tools
 
+AWS provides tools to help you identify those cost-saving opportunities and keep your resources right-sized. Use these
+tools to help you access, organize, understand, control, and optimize your costs.
 
+## AWS Trusted Advisor
 
+AWS Trusted Advisor is an online tool that provides you with real-time guidance to help you provision your resources
+following AWS best practices.
 
+Whether you’re establishing new workflows or developing applications, or as part of ongoing improvements, take advantage
+of the recommendations provided by Trusted Advisor on a regular basis. By reviewing the recommendations, you can look
+for opportunities to save money.
 
+Here are some Trusted Advisor checks that help you determine how to reduce your bill:
 
+- Low utilization of Amazon EC2 instances
+- Idle resources, such as load balancers and Amazon RDS DB instances
+- Underutilized Amazon EBS volumes and Amazon Redshift clusters
+- Unassociated Elastic IP addresses
+- Optimization, lease expiration—Amazon Reserved Instances
+- Inefficiently configured Amazon Route 53 latency record sets
+
+## AWS Cost Explorer
+
+Use the AWS Cost Explorer tool to dive deeper into your cost and usage data to identify trends, pinpoint cost drivers,
+and detect anomalies. It includes Amazon EC2 usage reports, which let you analyze the cost and usage of your Amazon EC2
+instances over the last 13 months.
+
+**Monthly Costs by AWS Service**
+
+Allows you to visualize the costs and usage associated with your top five cost-accruing AWS services and gives you a
+detailed breakdown on all services in the table view. The reports let you adjust the time range to view historical data
+going back up to 12 months to gain an understanding of your cost trends.
+
+**Amazon EC2 Monthly Cost and Usage**
+
+Lets you view all AWS costs over the past two months, in addition to your current month-to-date costs. From there, you
+can drill down into the costs and usage associated with particular linked accounts, regions, tags, and more.
+
+**Monthly Costs by Linked Account**
+
+Allows you to view the distribution of costs across your organization.
+
+**Monthly Running Costs**
+
+Provides an overview of all running costs over the past three months and provides forecasted numbers for the coming
+month with a corresponding confidence interval. This report gives you good insight into how your costs are trending
+and helps you plan ahead.
+
+## AWS Cost Explorer API
+
+Use AWS Cost Explorer API to query your cost and usage data programmatically (using AWS CLI or AWS SDKs). You can query
+for aggregated data such as total monthly costs or total daily usage. You can also query for granular data, such as the
+number of daily write operations for Amazon DynamoDB database tables in your production environment.
+
+You can access your Amazon EC2 Reserved Instance purchase recommendations programmatically through the AWS Cost
+Explorer API. Recommendations for Reserved Instance purchases are calculated based on your past usage and indicate
+opportunities for potential cost savings.
+
+## AWS Budgets
+
+With AWS Budgets, you can set custom budgets that alert you when your costs or usage exceed (or are forecasted to
+exceed) your budgeted amount. You can also use AWS Budgets to set Reserved Instance utilization or coverage targets and
+receive alerts when your utilization drops below the threshold you define. Reserved Instance alerts support Amazon
+EC2, Amazon RDS, Amazon Redshift, and Amazon ElastiCache reservations.
+
+Budgets can be tracked at the monthly, quarterly, or yearly level, and you can customize the start and end dates. You
+can further refine your budget to track costs associated with multiple dimensions, such as AWS service, linked account,
+tag, and others. You can send budget alerts through email or Amazon Simple Notification Service (Amazon SNS) topic.
+
+## AWS Cost and Usage Report
+
+The AWS Cost and Usage Report tracks your AWS usage and provides estimated charges associated with that usage. You can
+configure this report to present the data hourly or daily. It is updated at least once a day until it is finalized at
+the end of the billing period. The AWS Cost and Usage report gives you the most granular insight possible into your
+costs and usage, and it is the source of truth for the billing pipeline. It can be used to develop advanced custom
+metrics using business intelligence, data analytics, and third-party cost optimization tools.
+
+## Amazon CloudWatch
+
+Amazon CloudWatch is a monitoring service for AWS Cloud resources and the applications you run on AWS. You can use
+Amazon CloudWatch to collect and track metrics and log files, set alarms, and automatically react to changes in your AWS
+resources. You can create an alarm to perform one or more of the following actions based on the value of the metric:
+
+- Automatically stop or terminate Amazon EC2 instances that have gone unused or underutilized for too long
+- Stop your instance if it has an EBS volume as its root device
+
+Amazon CloudWatch Events deliver a near real-time stream of system events that describe changes in AWS resources. Using
+simple rules, you can route each type of event to one or more targets, such as Lambda functions, Amazon Kinesis streams,
+and Amazon SNS topics.
+
+## AWS Cost Optimization Monitor
+
+AWS Cost Optimization Monitor is an automated reference deployment solution that processes detailed billing reports to
+provide granular metrics that you can search, analyze, and visualize in a customizable dashboard. The solution uploads
+detailed billing report data automatically to Amazon Elasticsearch Service (Amazon ES) for analysis and leverages its
+built-in support for Kibana, enabling you to visualize the first batch of data as soon as it’s processed.
+
+## Cost Optimization: Amazon EC2 Right Sizing
+
+Amazon EC2 Right Sizing is an automated AWS reference deployment solution that uses managed services to perform a
+right-sizing analysis and offer detailed recommendations for more cost-effective instances. The solution analyzes two
+weeks of utilization data to provide detailed recommendations for right sizing your Amazon EC2 instances.
+
+# Monitoring Performance
+
+After you have implemented your architecture, monitor its performance so that you can remediate any issues before your
+customers are aware of them. Use monitoring metrics to raise alarms when thresholds are breached. The alarm can trigger
+automated action to work around any components with poor performance.
+AWS provides tools that you can use to monitor the performance, reliability, and availability of your resources on the
+AWS Cloud.
+
+## Amazon CloudWatch
+
+Amazon CloudWatch is essential to performance efficiency, which provides system-wide visibility into resource
+utilization, application performance, and operational health.
+
+You can create an alarm to monitor any Amazon CloudWatch metric in your account. For example, you can create alarms on
+an Amazon EC2 instance CPU utilization, Elastic Load Balancing request latency, Amazon DynamoDB table throughput, or
+Amazon SQS queue length.
+
+## AWS Trusted Advisor
+
+AWS Trusted Advisor inspects your AWS environment and makes recommendations that help to improve the speed and
+responsiveness of your applications.
+
+The following are a few Trusted Advisor checks to improve the performance of your service. The Trusted Advisor checks
+your service limits, ensuring that you take advantage of provisioned throughput, and monitors for overutilized
+instances:
+
+- Amazon EC2 instances that are consistently at high utilization can indicate optimized, steady performance, but this
+  check can also indicate that an application does not have enough resources.
+- Provisioned IOPS (SSD) volumes that are attached to an Amazon EC2 instance that is not Amazon EBS–optimized. Amazon
+  EBS volumes are designed to deliver the expected performance only when they are attached to an EBS-optimized instance.
+- Amazon EC2 security groups with a large number of rules.
+- Amazon EC2 instances that have a large number of security group rules.
+- Amazon EBS magnetic volumes (standard) that are potentially overutilized and might benefit from a more efficient
+  configuration.
+- CloudFront distributions for alternate domain names with incorrectly configured DNS settings.
+
+# Summary
+
+In this chapter, you learned about the following:
+
+- Cost-optimizing practices
+- Right sizing your infrastructure
+- Optimizing using Reserved Instances, Spot Instances, and AWS Auto Scaling
+- Optimizing storage and data transfer
+- Optimizing using NoSQL database (Amazon DynamoDB)
+- Monitoring your costs and performance
+- Tools, such as AWS Trusted Advisor, Amazon CloudWatch, and AWS Budgets
+
+Achieving an optimized system is a continual process. An optimized system uses all
+the provisioned resources efficiently and achieves your business goal at the lowest price point. Engineers must know the
+cost of deploying resources and how to architect for cost optimization. Practice eliminating the waste and bring
+accountability in every step of the build process.
+
+Define IAM policies to enforce tag usage, and use tagging tools, such as AWS Config and AWS Tag Editor, to manage tags.
+Be cost-conscious, reduce the usage by terminating unused instances, and delete old snapshots and unused keys.
+
+Right size your infrastructure by matching instance types and sizes, and set periodic checks to ensure that the initial
+provision remains optimum as your business changes over time. With Amazon EC2, you can choose the combination of
+instance types and sizes most appropriate for your applications. Amazon RDS instances are also optimized for memory,
+performance, and I/O.
+
+Amazon EC2 Reserved Instances provide you with a significant discount (up to 75 percent) compared to On-Demand Instance
+pricing. Using Convertible Reserved Instances, you can change instance families, OS types, and tenancies while
+benefitting from Reserved Instance pricing. Reserved Instance Marketplace allows you to sell the unused Reserved
+Instances or buy them from other AWS customers, usually at lower prices and shorter terms. With size flexibility,
+discounted rates for Amazon RDS Reserved Instances are automatically applied to the usage of any size within the
+instance family.
+
+Spot Instances provide an additional option for obtaining compute capacity at a reduced cost and can be used along with
+On-Demand and Reserved Instances. Spot Fleets enable you to launch and maintain the target capacity and to request
+resources automatically to replace any that are disrupted or manually terminated. Using the termination notices and
+persistent requests in your application design help to maintain continuity as the result of interruptions.
+
+AWS Auto Scaling automatically scales if your application experiences variable load and uses one or more scalable
+resources, such as Amazon ECS, Amazon DynamoDB, Amazon Aurora, Amazon EC2 Spot requests, and Amazon EC2 scaling groups.
+Predictive Scaling uses machine learning models to forecast daily and weekly patterns. Amazon EC2 Auto Scaling enables
+you to scale in response to demand and known load schedules. It supports the provisioning of scale instances across
+purchase options, Availability Zones, and instance families to optimize performance and cost.
+
+Containers provide process isolation and improve the resource utilization. Amazon ECS lets you easily build all types of
+containerized applications and launch thousands of containers in seconds with no additional complexity. With AWS
+Fargate technology, you can manage containers without having to provision or manage servers. It enables you to focus on
+building and running applications, not the underlying infrastructure.
+
+AWS Lambda takes care of receiving events or client invocations and then instantiates and runs the code. That means
+there’s no need to manage servers. Serverless services have built-in automatic scaling, availability, and fault
+tolerance. These features allow you to focus on product innovation and rapidly construct applications, such as web
+applications, websites, web-hooked systems, chatbots, and clickstream.
+
+AWS storage services are optimized to meet different storage requirements. Use the Amazon S3 analytics feature to
+analyze storage access patterns to help you decide when to transition the right data to the right storage class and to
+yield considerable savings. Monitor Amazon EBS volumes periodically to identify ones that are unattached or appear to be
+underutilized or overutilized, and adjust provisioning to match actual usage.
+
+Optimizing data transfer ensures that you minimize data transfer costs. Use options such as Amazon CloudFront, Amazon S3
+transfer acceleration, and Amazon Route 53 to let data reach Regions faster and reduce latency issues.
+
+NoSQL database systems like Amazon DynamoDB use alternative models for data man- agement, such as key-value pairs or
+document storage. DynamoDB enables you to offload the administrative burdens of operating and scaling a distributed
+database so that you don’t have to worry about hardware provisioning, setup and configuration, replication, software
+patching, or cluster scaling. Follow best practices, such as distributing data evenly, effec- tive partition and sort
+keys usage, efficient data scanning, and using sparse indexes for maximizing performance and minimizing throughput
+costs, when working with Amazon DynamoDB.
+
+AWS provides several tools to help you identify those cost-saving opportunities and keep your resources right-sized. AWS
+Trusted Advisor inspects your AWS environment to identify idle and underutilized resources and provides real-time
+insight into service usage to help you improve system performance and save money. Amazon CloudWatch collects and tracks
+metrics, monitors log files, sets alarms, and reacts to changes in AWS resources automatically. AWS Cost Explorer checks
+patterns in AWS spend over time, projects future costs, identifies areas that need further inquiry, and provides
+Reserved Instance recommendations.
+
+Optimization is an ongoing process. Always stay current with the pace of AWS new releases, and assess your existing
+design solutions to ensure that they remain cost-effective.
+
+# Exam Essentials
+
+**Know the importance of tagging.**
+
+By using tags, you can assign metadata to AWS resources. This tagging makes it easier to manage, search for, and filter
+resources in billing reports and automation activities and when setting up access controls.
+
+**Know about various tagging tools and how to enforce the tag rules.**
+
+With AWS Tag Editor, you can add tags to multiple resources at once, search for the resources that you want to tag, and
+then add, remove, or edit tags for the resources in your search results. AWS Config identifies resources that do not
+comply with tagging policies. You can use IAM policy conditions to force the usage of tags while creating the resources.
+
+**Know the fundamental practices in reducing the usage.**
+
+Follow the best practices of cost optimization in every step of your build process, such as turning off unused
+resources, spinning up instances only when needed, and spinning them down when not in use. Use tag- ging to help with
+the cost allocation. Use Amazon EC2 Spot Instances, Amazon EC2, and Reserved Instances where appropriate, and use
+alerts, notifications, and cost-management tools to stay on track.
+
+**Know the various usage patterns for right sizing.**
+
+By understanding your business use case and backing up the analysis with performance metrics, you can choose the most
+appropriate options, such as steady state; variable; predictable, but temporary; and development, test, and production
+usage.
+
+**Know the various instance families for right sizing and the corresponding use cases.**
+
+Amazon EC2 provides a wide selection of instances to match capacity needs at the low- est cost and comes with different
+options for CPU, memory, and network resources. The families include General Purpose, Compute Optimized, Memory
+Optimized, Storage Optimized, and Accelerated Computing.
+
+**Know Amazon EC2 Auto Scaling benefits and how this feature can make your solutions more optimized and highly
+available.**
+
+AWS Auto Scaling is a fast, easy way to optimize the performance and costs of your applications. It makes smart scaling
+decisions based on your preferences, automatically maintains performance even when your workloads are periodic,
+unpredictable, and continuously changing.
+
+**Know how to create a single AWS Auto Scaling group to scale instances across different purchase options.**
+
+You can provision and automatically scale Amazon EC2 capacity across different Amazon EC2 instance types, Availability
+Zones, and On-Demand, Reserved Instances, and Spot purchase options in a single AWS Auto Scaling group. You can define
+the desired split between On-Demand and Spot capacity, select which instance types work for your application, and
+specify preferences for how Amazon EC2 Auto Scaling should distribute the AWS Auto Scaling group capacity within each
+purchasing model.
+
+**Know how block, object, and file storages are different.**
+
+Block storage is commonly dedicated, low-latency storage for each host, and it is provisioned with each instance.
+Object storage is developed for the cloud, has vast scalability, is accessed over the web, and is not directly attached
+to an instance. File storage enables accessing shared files as a file system.
+
+**Know key CloudWatch metrics available to measure the Amazon EBS efficiency and how to use them.**
+
+CloudWatch metrics are statistical data that you can use to view, analyze, and set alarms on the operational behavior of
+your volumes. Depending on your needs, set alarms and response actions that correspond to each data point. For example,
+if your I/O latency is higher than you require, check the metric VolumeQueueLength to make sure that your application is
+not trying to drive more IOPS than you have provisioned. Review and learn more about the available metrics that help
+optimize the block storage.
+
+**Know tools and features that help in efficient data transfer.**
+
+Using Amazon CloudFront, you can locate data closer to users and reduce administrative efforts to minimize data transfer
+costs. Amazon S3 Transfer Acceleration enables fast data transfer over an optimized network path. Use the multipart
+upload file option while uploading a large file to improve network throughput.
+
+**Know key differences between RDBMS and NoSQL databases to design efficient solutions using Amazon DynamoDB.**
+
+Schema flexibility and the ability to store related items together make DynamoDB a solution for solving problems
+associated with changing business needs and scalability issues unlike relational databases.
+
+**Know the importance of distributing the data evenly when designing DynamoDB tables.**
+
+Use provisioned throughput more efficiently by making the partition key more distinct. That way, data spreads throughout
+the provisioned space. Use the sort key with the partition key to make a unique key to achieve better performance while
+uploading data simultaneously.
+
+**Know the different ways to read data from DynamoDB tables to avoid scans.**
+
+DynamoDB provides Query and Scan actions to read data from a table and does not support table joins. DynamoDB provides
+the GetItem action for retrieving an item by its primary key. GetItem is highly efficient because it provides direct
+access to the physical location of the item. The scan always scans the entire table and can consume large amounts of
+system resources.
+
+**Know the AWS Cost Management tools and their features.**
+
+AWS provides tools to help you manage, monitor, and, ultimately, optimize your costs. Use AWS Cost Explorer for deeper
+dives into the cost drivers. Use AWS Trusted Advisor to inspect your AWS infrastructure to identify overutilized or
+idle resources. AWS Budgets enables you to set custom cost and usage budgets and receive alerts when budgets approach or
+exceed the limits. There are a wide range of tools to explore, such as AWS Cost Optimization – Amazon EC2 Right Sizing,
+and monitoring tools to identify additional savings opportunities.
+
+**Know how the AWS Trusted Advisor features help in saving costs and improving the performance of your solutions.**
+
+AWS Trusted Advisor scans your AWS environment, compares it to AWS best practices, and makes recommendations for
+saving money, improving system performance, and more. Cost Optimization recommendations highlight unused and
+underutilized resources. Performance recommendations help to improve the speed and responsiveness of your applications.
+
+**Know how to evaluate the reporting details in the AWS Cost Explorer default reports.**
+
+Cost Explorer provides you with default reports: Cost and Usage reports and Reserved Instance reports. Cost and Usage
+reports include your daily costs and monthly costs by service, listing the top five services. These reports help you to
+determine whether you have purchased too many Reserved Instances. The Reserved Instance Coverage reports show how many
+of your instance hours are covered by Reserved Instances, how much you spent on On-Demand Instances, and how much you
+might have saved had you purchased more reservations. This enables you to determine whether you have under-purchased
+Reserved Instances.
+
+**Know how to extract recommendations using AWS Cost Explorer API.**
+
+The Cost Explorer API allows you to use either AWS CLI or SDKs to query your cost and usage data. You can query for
+aggregated data, such as total monthly costs or total daily usage. You can also query for granular data, such as the
+number of daily write operations for DynamoDB database tables in your production environment.
+
+**Know all of the Amazon CloudWatch metrics and how to set alarms.**
+
+With Amazon CloudWatch, you can observe CPU utilization, network throughput, and disk I/O, and match the observed peak
+metrics to a new and cheaper instance type. You choose a CloudWatch metric and threshold for the alarm to watch. The
+alarm turns into the alarm state when the metric breaches the threshold for a specified number of evaluation periods.
+Use the Amazon CloudWatch console, AWS CLI, or AWS SDKs for creating or managing alarms.
+
+**Know how AWS Lambda integrates with other AWS serverless services to build cost-effective solutions.**
+
+AWS Lambda provides the cloud-logic layer and integrates seamlessly with the other serverless services to build
+virtually any type of application or backend service. For example, Amazon S3 automatically triggers Lambda functions
+when an object is created, copied, or deleted. Lambda functions can process Amazon SQS messages.
